@@ -1,0 +1,55 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# 基本設定
+CLEAN_TARGETS   := clean clean-test clean-test-data clean-obj clean-dep clean-temp
+
+###############################################################################
+# 掃除
+clean-test:
+	@-rm -f *.test$(EXE_EXT)
+clean-test-data:
+	@-find $(TESTDIR)/data -regex '$(TESTDIR)/data/[0-9a-f][0-9a-f]' | xargs rm -rf
+	@-find $(TESTDIR)/file -regex '$(TESTDIR)/file/[0-9a-f][0-9a-f]' | xargs rm -rf
+	@-find $(TESTDIR)/thumb -regex '$(TESTDIR)/thumb/[0-9a-f][0-9a-f]' | xargs rm -rf
+clean-dep:
+	@-rm -f *.d
+clean-obj:
+	@-rm -f $(HEADERDIR)/*_flymake.h *_flymake.cpp
+	@-rm -f *.o *.obj *.lo *.exp *.lib *.manifest *.s *.la
+	@-rm -f $(HEADERDIR)/*.gch *.pch *.pchi
+clean-temp:
+	@-rm -f *~ *.BAK
+clean: clean-obj clean-temp
+	@-rm -f *.so *.test$(EXE_EXT) *.exe *.pdb *.tds *.map *.svg
+	@-rm -f gmon.out .pre-compile
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

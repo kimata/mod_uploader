@@ -1,0 +1,70 @@
+/******************************************************************************
+ * Copyright (C) 2008 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+ *
+ * All rights reserved.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any
+ * damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any
+ * purpose, including commercial applications, and to alter it and
+ * redistribute it freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must
+ *    not claim that you wrote the original software. If you use this
+ *    software in a product, an acknowledgment in the product
+ *    documentation would be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must
+ *    not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ * $Id$
+ *****************************************************************************/
+
+#include <winver.h>
+
+#define VER_FILEVERSION             @PACKAGE_VERSION@
+#define VER_FILEVERSION_STR         "@PACKAGE_VERSION@\0"
+
+#define VER_PRODUCTVERSION          @PACKAGE_VERSION@
+#define VER_PRODUCTVERSION_STR      "@PACKAGE_VERSION@\0"
+
+APP_ICON ICON	"mod_uploader.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     VER_FILEVERSION
+PRODUCTVERSION  VER_PRODUCTVERSION
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS       0
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_DLL
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0411, 1200
+    END
+
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041104B0"
+        BEGIN
+            VALUE "CompanyName",      "Tetsuya Kimata\0"
+            VALUE "FileDescription",  "Apache のモジュールとして動作するアップローダ\0"
+            VALUE "FileVersion",      VER_FILEVERSION_STR
+            VALUE "InternalName",     "mod_uploader\0"
+            VALUE "LegalCopyright",   "Copyright (C) 2008 Tetsuya Kimata <kimata@acapulco.dyndns.org>\0"
+            VALUE "OriginalFilename", "mod_uploader.so\0"
+            VALUE "ProductName",      "mod_uploader\0"
+            VALUE "ProductVersion",   VER_PRODUCTVERSION_STR
+        END
+    END
+END
+
+// Local Variables:
+// coding: shift_jis-dos
+// End:

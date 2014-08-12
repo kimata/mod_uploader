@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>README for mod_uploader</title>
+<link rel="stylesheet" href="css/doc.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="readme-for-mod-uploader">
+<h1 class="title">README for mod_uploader</h1>
+<div class="image"><img alt="mod_uploader: Apache のモジュールとして動作する高速アップローダ" height="89" src="img/title.png" width="440" /></div>
+<div class="navi_lang">
+ (言語: 
+  <a href="apache.en.htm"><img src="img/icon_en.png" width="16" height="11" alt="English" /></a> |
+  <a href="apache.de.htm"><img src="img/icon_de.png" width="16" height="11" alt="German" /></a> |
+  <a href="apache.htm"><img src="img/icon_ja.png" width="16" height="11" alt="Japanese" /></a>
+ )
+</div><div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#mod-uploader" id="id35" name="id35">mod_uploader とは?</a></li>
+<li><a class="reference" href="#id1" id="id36" name="id36">機能比較</a></li>
+<li><a class="reference" href="#id2" id="id37" name="id37">動作サンプル</a></li>
+<li><a class="reference" href="#id3" id="id38" name="id38">動作環境</a><ul>
+<li><a class="reference" href="#id4" id="id39" name="id39">各環境で必要になる主なパッケージ</a><ul>
+<li><a class="reference" href="#centos" id="id40" name="id40">CentOS</a></li>
+<li><a class="reference" href="#debian" id="id41" name="id41">Debian</a></li>
+<li><a class="reference" href="#fedoracore" id="id42" name="id42">FedoraCore</a></li>
+<li><a class="reference" href="#freebsd" id="id43" name="id43">FreeBSD</a></li>
+<li><a class="reference" href="#gentoo-linux" id="id44" name="id44">Gentoo Linux</a></li>
+<li><a class="reference" href="#ubuntu-linux" id="id45" name="id45">Ubuntu Linux</a></li>
+<li><a class="reference" href="#opensuse" id="id46" name="id46">openSUSE</a></li>
+<li><a class="reference" href="#mandriva" id="id47" name="id47">Mandriva</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id5" id="id48" name="id48">ライセンス</a></li>
+<li><a class="reference" href="#download" id="id49" name="id49">ダウンロード</a></li>
+<li><a class="reference" href="#cvs" id="id50" name="id50">CVS リポジトリ</a></li>
+<li><a class="reference" href="#id6" id="id51" name="id51">変更履歴</a></li>
+<li><a class="reference" href="#id7" id="id52" name="id52">コンパイル方法</a><ul>
+<li><a class="reference" href="#id8" id="id53" name="id53">各環境での例</a><ul>
+<li><a class="reference" href="#centos-fedoracore-gentoo-linux-ubuntu-linux-opensuse-linux" id="id54" name="id54">CentOS, FedoraCore, Gentoo Linux, Ubuntu Linux, openSUSE Linux</a></li>
+<li><a class="reference" href="#id9" id="id55" name="id55">FreeBSD</a></li>
+<li><a class="reference" href="#mac-osx-tiger-fink" id="id56" name="id56">Mac OSX Tiger + Fink</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id10" id="id57" name="id57">トラブルシューティング</a><ul>
+<li><a class="reference" href="#usr-bin-ld-cannot-find-lxxx" id="id58" name="id58">/usr/bin/ld: cannot find  -lxxx</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id11" id="id59" name="id59">インストール</a></li>
+<li><a class="reference" href="#id12" id="id60" name="id60">設定</a><ul>
+<li><a class="reference" href="#id13" id="id61" name="id61">注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id14" id="id62" name="id62">起動</a><ul>
+<li><a class="reference" href="#id15" id="id63" name="id63">トラブルシューティング</a><ul>
+<li><a class="reference" href="#apache" id="id64" name="id64">Apache が起動しなくなった</a></li>
+<li><a class="reference" href="#server-busy" id="id65" name="id65">進捗情報が常に Server Busy となる</a></li>
+<li><a class="reference" href="#id16" id="id66" name="id66">ダウンロードカウンタがリセットされた</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id17" id="id67" name="id67">お試し実行</a></li>
+<li><a class="reference" href="#id18" id="id68" name="id68">高度な設定</a><ul>
+<li><a class="reference" href="#id19" id="id69" name="id69">アップロードの記録</a></li>
+<li><a class="reference" href="#id20" id="id70" name="id70">直リンクの禁止</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id21" id="id71" name="id71">パフォーマンス</a><ul>
+<li><a class="reference" href="#id22" id="id72" name="id72">高速な表示</a></li>
+<li><a class="reference" href="#id23" id="id73" name="id73">省メモリのアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id24" id="id74" name="id74">テスト結果</a></li>
+<li><a class="reference" href="#api" id="id75" name="id75">API ドキュメント</a></li>
+<li><a class="reference" href="#id26" id="id76" name="id76">ツール</a></li>
+<li><a class="reference" href="#id27" id="id77" name="id77">寄付</a></li>
+<li><a class="reference" href="#id28" id="id78" name="id78">参考文献</a></li>
+</ul>
+</div>
+<p><script type="text/javascript"><!--
+  google_ad_client = "pub-4095857718593292";
+  google_ad_width = 728;
+  google_ad_height = 90;
+  google_ad_format = "728x90_as";
+  google_ad_type = "text_image";
+  google_ad_channel = "4386274577";
+  google_ad_channel = "4386274577";
+  google_color_border = "FFFFFF";
+  google_color_bg = "FFFFFF";
+  google_color_link = "11593C";
+  google_color_text = "000000";
+  google_color_url = "008000";
+  //-->
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+<div class="section" id="mod-uploader">
+<h1><a class="toc-backref" href="#id35" name="mod-uploader">mod_uploader とは?</a></h1>
+<p>mod_uploader は，よくあるアップローダを <a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールとして実
+装したものです．以下のような特長があります．</p>
+<ul class="simple">
+<li><a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールとして C++ で記述されているので，Perl や PHP で
+作られた物に比べて高速．</li>
+<li>独自の簡易スクリプト言語によるテンプレート機能があるので，再コンパイ
+ル無しで手軽に見た目を変更可能．</li>
+<li>アップロード時の進捗状況をリアルタイムに表示可能．</li>
+</ul>
+<div class="image"><img alt="アップロード画面のスクリーンショット" height="145" src="img/upload_window.png" width="683" /></div>
+</div>
+<div class="section" id="id1">
+<h1><a class="toc-backref" href="#id36" name="id1">機能比較</a></h1>
+<p>他のアップローダとの機能比較を下記に示します．</p>
+<div class="image"><img alt="他のアップローダとの機能比較" height="151" src="img/func_comparison.png" width="822" /></div>
+</div>
+<div class="section" id="id2">
+<h1><a class="toc-backref" href="#id37" name="id2">動作サンプル</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org:7070/up/">http://acapulco.dyndns.org:7070/up/</a></p>
+</div>
+<div class="section" id="id3">
+<h1><a class="toc-backref" href="#id38" name="id3">動作環境</a></h1>
+<p>mod_uploader は，UNIX 系 OS で動作します．(<img alt="WIndows" height="16" src="img/icon_windows.png" width="16" /> <a class="reference" href="http://acapulco.dyndns.org/mod_uploader/apache-win.htm">Windows 版はこちら</a>)</p>
+<ul class="simple">
+<li><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.0 以上</li>
+<li><a class="reference" href="http://gcc.gnu.org/">GNU Compiler Collection</a> 3.3 以上，または， <a class="reference" href="http://www.intel.com/cd/software/products/asmo-na/eng/compilers/clin/">Intel C++ Compiler</a>
+for Linux 9.1 以上</li>
+<li><a class="reference" href="http://www.gnu.org/software/make/">GNU Make</a> 3.8 以上</li>
+<li><a class="reference" href="http://www.gnu.org/software/libtool/">GNU Libtool</a> 1.5 以上</li>
+<li><a class="reference" href="http://www.imagemagick.org/">ImageMagick</a> 6.0 以上</li>
+</ul>
+<p>開発は， <a class="reference" href="http://www.gentoo.org/">Gentoo Linux</a> Kernel <strong>2.6.20</strong> ，GCC <strong>3.4.5</strong> ，Apache
+<strong>2.0.58</strong> ，ImageMagick <strong>6.3.3</strong> で行っています．</p>
+<div class="section" id="id4">
+<h2><a class="toc-backref" href="#id39" name="id4">各環境で必要になる主なパッケージ</a></h2>
+<div class="section" id="centos">
+<h3><a class="toc-backref" href="#id40" name="centos">CentOS</a></h3>
+<ul class="simple">
+<li>gcc-c++</li>
+<li>make</li>
+<li>libtool</li>
+<li>httpd-devel</li>
+<li>ImageMagick-c++-devel</li>
+</ul>
+</div>
+<div class="section" id="debian">
+<h3><a class="toc-backref" href="#id41" name="debian">Debian</a></h3>
+<ul class="simple">
+<li>libtool</li>
+<li>apache2-mpm-prefork</li>
+<li>apache2-prefork-dev</li>
+<li>libmagick++6-dev</li>
+</ul>
+</div>
+<div class="section" id="fedoracore">
+<h3><a class="toc-backref" href="#id42" name="fedoracore">FedoraCore</a></h3>
+<ul class="simple">
+<li>gcc-c++</li>
+<li>make</li>
+<li>libtool</li>
+<li>httpd-devel</li>
+<li>ImageMagick-c++-devel</li>
+<li>freetype-devel</li>
+<li>fontconfig-devel</li>
+</ul>
+</div>
+<div class="section" id="freebsd">
+<h3><a class="toc-backref" href="#id43" name="freebsd">FreeBSD</a></h3>
+<ul class="simple">
+<li>www/apache20 or www/apache22</li>
+<li>graphics/ImageMagick</li>
+</ul>
+</div>
+<div class="section" id="gentoo-linux">
+<h3><a class="toc-backref" href="#id44" name="gentoo-linux">Gentoo Linux</a></h3>
+<ul class="simple">
+<li>gcc</li>
+<li>make</li>
+<li>libtool</li>
+<li>apache</li>
+<li>imagemagick</li>
+</ul>
+</div>
+<div class="section" id="ubuntu-linux">
+<h3><a class="toc-backref" href="#id45" name="ubuntu-linux">Ubuntu Linux</a></h3>
+<ul class="simple">
+<li>g++</li>
+<li>make</li>
+<li>libtool</li>
+<li>apache2-mpm-prefork</li>
+<li>apache2-prefork-dev</li>
+<li>libmagick++9-dev</li>
+</ul>
+</div>
+<div class="section" id="opensuse">
+<h3><a class="toc-backref" href="#id46" name="opensuse">openSUSE</a></h3>
+<ul class="simple">
+<li>gcc-c++</li>
+<li>make</li>
+<li>libtool</li>
+<li>apache2-devel</li>
+</ul>
+</div>
+<div class="section" id="mandriva">
+<h3><a class="toc-backref" href="#id47" name="mandriva">Mandriva</a></h3>
+<ul class="simple">
+<li>gcc-c++</li>
+<li>make</li>
+<li>libtool</li>
+<li>apache-mpm-prefork</li>
+<li>apache-devel</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="id5">
+<h1><a class="toc-backref" href="#id48" name="id5">ライセンス</a></h1>
+<p><a class="reference" href="http://www.opensource.org/licenses/zlib-license.php">The zlib/libpng License</a> （ <a class="reference" href="http://japan.linux.com/docs/licenses/zlib-license.shtml">The zlib/libpng License の翻訳</a> ）に従いま
+す．</p>
+</div>
+<div class="section" id="download">
+<h1><a class="toc-backref" href="#id49" name="download">ダウンロード</a></h1>
+<ul class="simple">
+<li><a class="reference" href="http://sourceforge.jp/projects/mod-uploader/downloads/32076/mod_uploader-3.1.0.tgz">mod_uploader-3.1.0.tgz</a></li>
+<li><a class="reference" href="http://sourceforge.jp/projects/mod-uploader/downloads/32077/mod_uploader-3.1.0-1.x86_64.rpm">mod_uploader-3.1.0-1.x86_64.rpm</a>  (for CentOS, FedoraCore 64bit)</li>
+<li><a class="reference" href="http://sourceforge.jp/projects/mod-uploader/downloads/32078/mod_uploader-3.1.0-1.src.rpm">mod_uploader-3.1.0-1.src.rpm</a>  (for CentOS, FedoraCore)</li>
+<li><a class="reference" href="http://sourceforge.jp/projects/mod-uploader/downloads/32121/libapache2-mod-uploader_3.1.0-1_amd64.deb">libapache2-mod-uploader_3.1.0-1_amd64.deb</a>  (for Debian, Ubuntu 64bit)</li>
+</ul>
+</div>
+<div class="section" id="cvs">
+<h1><a class="toc-backref" href="#id50" name="cvs">CVS リポジトリ</a></h1>
+<p>下記のようにすることで check out できます．（パスワードは空）</p>
+<pre class="literal-block">
+$ cvs -d:pserver:anonymous&#64;cvs.sourceforge.jp:/cvsroot/mod-uploader login
+$ cvs -z3 -d:pserver:anonymous&#64;cvs.sourceforge.jp:/cvsroot/mod-uploader checkout -P mod_uploader
+</pre>
+<p>また， <a class="reference" href="http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/">ViewCVS 経由で参照</a>
+することもできます．</p>
+</div>
+<div class="section" id="id6">
+<h1><a class="toc-backref" href="#id51" name="id6">変更履歴</a></h1>
+<p><a class="reference" href="http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup">ChangeLog</a></p>
+</div>
+<div class="section" id="id7">
+<h1><a class="toc-backref" href="#id52" name="id7">コンパイル方法</a></h1>
+<p>コンパイルの前に， <a class="reference" href="#id4">各環境で必要になる主なパッケージ</a> に書かれているパッ
+ケージがインストールされていることを確認してください．</p>
+<p><a class="reference" href="http://gcc.gnu.org/">GNU Compiler Collection</a> でコンパイルする場合は，</p>
+<pre class="literal-block">
+$ ./configure
+$ make
+</pre>
+<p>とします． <a class="reference" href="http://www.intel.com/cd/software/products/asmo-na/eng/compilers/clin/">Intel C++ Compiler</a> でコンパイルする場合は，</p>
+<pre class="literal-block">
+$ env CC=icc ./configure
+$ make
+</pre>
+<p>とします．</p>
+<p>configure は次のオプションを受け付けます．エラーがでた場合は，
+<a class="reference" href="#with-apxs">--with-apxs</a> ， <a class="reference" href="#with-apctl2">--with-apctl2</a> や <a class="reference" href="#with-aprconf">--with-aprconf</a> を試してみてく
+ださい．</p>
+<dl class="docutils">
+<dt><a class="target" id="with-apxs" name="with-apxs">--with-apxs</a> = <cite>APXS</cite></dt>
+<dd><cite>apxs</cite> コマンドのパスを指定します．自動的に検出されない場合に使用して下
+さい．</dd>
+<dt><a class="target" id="with-apctl2" name="with-apctl2">--with-apctl2</a> = <cite>APCTL</cite></dt>
+<dd><cite>apachectl</cite> コマンドのパスを指定します．自動的に検出されない場合に使用
+して下さい．</dd>
+<dt><a class="target" id="with-aprconf" name="with-aprconf">--with-aprconf</a> = <cite>APRCONF</cite></dt>
+<dd><cite>apr-config</cite> コマンドのパスを指定します．自動的に検出されない場合に使
+用して下さい．</dd>
+<dt><a class="target" id="with-libtool" name="with-libtool">--with-libtool</a> = <cite>LIBTOOL</cite></dt>
+<dd><cite>libtool</cite> コマンドのパスを指定します．自動的に検出されない場合に使用
+して下さい．</dd>
+<dt><a class="target" id="with-march" name="with-march">--with-march</a> = <cite>CPU</cite></dt>
+<dd>特定の CPU 向けに最適化したい場合に使用します．例えば，Pentium 4 に最
+適化したい場合は， <a class="reference" href="#with-march">--with-march</a> = pentium4 とします．</dd>
+<dt><a class="target" id="enable-empty-comment" name="enable-empty-comment">--enable-empty-comment</a></dt>
+<dd>空のコメントを受け付ける場合に指定してください．</dd>
+<dt><a class="target" id="enable-empty-password" name="enable-empty-password">--enable-empty-password</a></dt>
+<dd>空のパスワードによる削除を受け付ける場合に指定してください．</dd>
+<dt><a class="target" id="enable-remove-unpopular" name="enable-remove-unpopular">--enable-remove-unpopular</a> 容量が満杯になった場合の挙動を変更します．</dt>
+<dd>指定すると，アップロードされた日時が古いものではなく，最近ダウンロー
+ドされていないものから順番に削除されるようになります．</dd>
+<dt><a class="target" id="enable-thumbnail" name="enable-thumbnail">--enable-thumbnail</a></dt>
+<dd>ファイルのサムネイル画像を生成したい場合に指定してください．</dd>
+<dt><a class="target" id="enable-numname" name="enable-numname">--enable-numname</a> = <cite>NAME</cite></dt>
+<dd>ダウンロード時のファイル名を <cite>NAMEファイル番号.拡張子</cite> のように，ファ
+イル番号を使用したものにします．</dd>
+<dt><a class="target" id="with-mconf" name="with-mconf">--with-mconf</a> = <cite>MCONF</cite></dt>
+<dd><cite>Magick++-config</cite> コマンドのパスを指定します．自動的に検出されない場
+合に使用してください．</dd>
+</dl>
+<div class="section" id="id8">
+<h2><a class="toc-backref" href="#id53" name="id8">各環境での例</a></h2>
+<div class="section" id="centos-fedoracore-gentoo-linux-ubuntu-linux-opensuse-linux">
+<h3><a class="toc-backref" href="#id54" name="centos-fedoracore-gentoo-linux-ubuntu-linux-opensuse-linux">CentOS, FedoraCore, Gentoo Linux, Ubuntu Linux, openSUSE Linux</a></h3>
+<pre class="literal-block">
+$ ./configure
+$ make
+</pre>
+</div>
+<div class="section" id="id9">
+<h3><a class="toc-backref" href="#id55" name="id9">FreeBSD</a></h3>
+<pre class="literal-block">
+$ ./configure
+$ gmake
+</pre>
+</div>
+<div class="section" id="mac-osx-tiger-fink">
+<h3><a class="toc-backref" href="#id56" name="mac-osx-tiger-fink">Mac OSX Tiger + Fink</a></h3>
+<pre class="literal-block">
+$ ./configure
+$ env MACOSX_DEPLOYMENT_TARGET=10.4 make
+</pre>
+</div>
+</div>
+<div class="section" id="id10">
+<h2><a class="toc-backref" href="#id57" name="id10">トラブルシューティング</a></h2>
+<div class="section" id="usr-bin-ld-cannot-find-lxxx">
+<h3><a class="toc-backref" href="#id58" name="usr-bin-ld-cannot-find-lxxx">/usr/bin/ld: cannot find  -lxxx</a></h3>
+<p>必要なライブラリがインストールされていないのが原因です．cannot find -l
+<cite>xxx</cite> というエラーの場合，lib <cite>xxx</cite> がインストールされていません．通常，
+これらのライブラリは，パッケージ管理システムが依存関係に基づいて自動的
+にインストールされるものですが，何らかの事情によりうまくインストールさ
+れなかった場合このエラーが発生します．</p>
+<p>ライブラリを手動でインストールすることでエラーを解決できます．例えば，
+cannot find -lgs というエラーの場合，Ghostscript をインストールします．
+CentOS/FedoraCore では下記のようにします．</p>
+<pre class="literal-block">
+$ su
+# yum install ghostscript
+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="id11">
+<h1><a class="toc-backref" href="#id59" name="id11">インストール</a></h1>
+<p>次のコマンドを実行するだけで OK です．</p>
+<pre class="literal-block">
+$ su
+# make -f GNUmakefile.apache install
+</pre>
+</div>
+<div class="section" id="id12">
+<h1><a class="toc-backref" href="#id60" name="id12">設定</a></h1>
+<p>設定は，Apache の設定ファイル（ <cite>.htaccess</cite> は不可）に，以下のように記
+述します．（ <strong>*</strong> 印がついているものは必須）</p>
+<pre class="literal-block">
+&lt;Location アップローダを設置する場所&gt;
+    SetHandler                     uploader
+    
+    UploaderBaseUrl                アップローダの URL *
+    
+    UploaderDataDirectory          データを保存するフォルダ *
+    UploaderFileDirectory          ファイルを保存するフォルダ *
+    UploaderThumbDirectory         サムネイルを保存するフォルダ *
+    UploaderTempDirectory          一時ファイルを保存するフォルダ *
+    
+    UploaderTotalFileSizeLimit     ファイルサイズの合計の上限 (KB)
+    UploaderTotalFileNumberLimit   ファイルの個数の上限
+    UploaderFileSizeLimit          一回にアップロードできるファイルの最大サイズ (KB)
+    UploaderPerPageItemNumber      1 ページあたりに表示するアイテム数
+    
+    UploaderIndexViewTemplate      トップページのテンプレート *
+    UploaderInfoViewTemplate       アップロード完了通知ページのテンプレート *
+    UploaderProgressViewTemplate   アップロード進捗ページのテンプレート *
+    UploaderDownloadViewTemplate   ダウンロードページのテンプレート *
+    UploaderThumbnailViewTemplate  サムネイルページのテンプレート *
+    UploaderAdminViewTemplate      管理ページのテンプレート *
+    UploaderErrorViewTemplate      エラーページのテンプレート *
+&lt;/Location&gt;
+&lt;Location アップローダを設置する場所/admin&gt;
+    Order                   Deny,Allow
+    Deny                    From All
+    Allow                   From 127.0.0.1
+&lt;/Location&gt;
+</pre>
+<p>テンプレートは，tmpl ディレクトリに入っている <cite>index.htm</cite> ，
+<cite>info.htm</cite> ， <cite>progress.htm</cite> ， <cite>download.htm</cite> ， <cite>thumbnail.htm</cite> ，
+<cite>admin.htm</cite> ， <cite>error.htm</cite> を利用してください．</p>
+<p><cite>http://foo/up/</cite> に設置する場合の設定例は以下のようになります．
+<cite>/up_img</cite> ， <cite>/up_css</cite> ， <cite>/up_js</cite> の Alias は必須ではありません．テン
+プレートを書き換えたくない場合に指定してください．（これはあくまでも例
+です．ディレクトリやファイルのパスは環境よって違ってきます）</p>
+<pre class="literal-block">
+&lt;Location /up&gt;
+    SetHandler                     uploader
+    
+    UploaderBaseUrl                &quot;http://foo/up&quot;
+    UploaderDataDirectory          &quot;/path/to/mod_uploader/test/data&quot;
+    UploaderFileDirectory          &quot;/path/to/mod_uploader/test/file&quot;
+    UploaderThumbDirectory         &quot;/path/to/mod_uploader/test/thumb&quot;
+    UploaderTempDirectory          &quot;/path/to/mod_uploader/test/temp&quot;
+    
+    UploaderTotalFileSizeLimit     10485760
+    UploaderTotalFileNumberLimit   200
+    UploaderFileSizeLimit          1048576
+    UploaderPerPageItemNumber      30
+    
+    UploaderIndexViewTemplate      &quot;/path/to/mod_uploader/tmpl/index.htm&quot;
+    UploaderInfoViewTemplate       &quot;/path/to/mod_uploader/tmpl/info.htm&quot;
+    UploaderProgressViewTemplate   &quot;/path/to/mod_uploader/tmpl/progress.htm&quot;
+    UploaderDownloadViewTemplate   &quot;/path/to/mod_uploader/tmpl/download.htm&quot;
+    UploaderThumbnailViewTemplate  &quot;/path/to/mod_uploader/tmpl/thumbnail.htm&quot;
+    UploaderAdminViewTemplate      &quot;/path/to/mod_uploader/tmpl/admin.htm&quot;
+    UploaderErrorViewTemplate      &quot;/path/to/mod_uploader/tmpl/error.htm&quot;
+&lt;/Location&gt;
+
+&lt;Location /up/admin&gt;
+    Order                   Deny,Allow
+    Deny                    From All
+    Allow                   From 127.0.0.1
+&lt;/Location&gt;
+
+Alias /up_img                  &quot;/path/to/mod_uploader/img&quot;
+Alias /up_css                  &quot;/path/to/mod_uploader/css&quot;
+Alias /up_js                   &quot;/path/to/mod_uploader/js&quot;
+</pre>
+<div class="section" id="id13">
+<h2><a class="toc-backref" href="#id61" name="id13">注意事項</a></h2>
+<ul class="simple">
+<li>Apache の動作に不慣れなうちは，ディレクトリやファイルの指定には絶対パ
+スを使用してください．</li>
+<li><cite>FileDirectory</cite> ， <cite>ThumbDirectory</cite> ， <cite>TempDirectory</cite> の各ディレクト
+リは， Apache が読み書き実行できるパーミッションに設定されている必要
+があります．</li>
+<li><cite>FileDirectory</cite> ， <cite>ThumbDirectory</cite> には mod_uploader が生成するファ
+イル以外を置かないでください．</li>
+<li><cite>&lt;Location&gt;</cite> で指定するパスには「~」を含めないでください．</li>
+<li><cite>&lt;Loadtion&gt;</cite> で設定した mod_uploader の設置場所と同じパスにディレクト
+リやファイルを置かないでください．例えば，DocumentRoot が <cite>/var/www</cite>
+で，`/up` に mod_uploader を設置する場合，`/var/www/up` というディレ
+クトリが存在するとエラー (MESSAGE_ENVIRONMENT_LOCATION_DIR_EXIST) に
+なります．</li>
+<li>設定によっては，テンプレートを一部書き換えないと正常に表示されません．
+適宜書き換えてください．</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id14">
+<h1><a class="toc-backref" href="#id62" name="id14">起動</a></h1>
+<p>Apache を普通に起動すれば OK です．設置した場所にブラウザでアクセス
+してみましょう．</p>
+<div class="section" id="id15">
+<h2><a class="toc-backref" href="#id63" name="id15">トラブルシューティング</a></h2>
+<div class="section" id="apache">
+<h3><a class="toc-backref" href="#id64" name="apache">Apache が起動しなくなった</a></h3>
+<p>Apache のエラーログにエラー内容が出力されているので，内容を確認して設定
+を見直してください．</p>
+</div>
+<div class="section" id="server-busy">
+<h3><a class="toc-backref" href="#id65" name="server-busy">進捗情報が常に Server Busy となる</a></h3>
+<p>UploaderBaseUrl と違うアドレスでアップローダにアクセスした場合に発生し
+ます．例えば，UploaderBaseUrl では <cite>http://localhost/up</cite> と指定している
+のに，ブラウザでは <cite>http://127.0.0.1/up</cite> にアクセスしている場合がこれに
+該当します．</p>
+<p>UploaderBaseUrl で指定したアドレスでアクセスしてください．</p>
+</div>
+<div class="section" id="id16">
+<h3><a class="toc-backref" href="#id66" name="id16">ダウンロードカウンタがリセットされた</a></h3>
+<p>mod_uploader は，高速動作のため，ダウンロードカウンタのカウントアップを
+メモリ上でのみ行っており，Apache の終了時にデータをファイルに書き出すよ
+うになっています．そのため，Apache が正常に終了しなかった場合，ファイル
+への書き出しが行われずダウンロードカウンタが以前の状態にリセットされて
+しまいます．</p>
+</div>
+</div>
+</div>
+<div class="section" id="id17">
+<h1><a class="toc-backref" href="#id67" name="id17">お試し実行</a></h1>
+<p>次のコマンドを入力して，http://localhost:8080/up/ にアクセスすることで
+することでインストールせずに動作を確認できます．</p>
+<p>他のホストからアクセスする場合は， <em>localhost</em> の部分を適当に置き換えて
+ください．</p>
+<pre class="literal-block">
+$ su -
+# make -f GNUmakefile.apache start
+</pre>
+<p>もし， <cite>LoadModule</cite> 関連のエラーが出た場合は，conf/apache.conf を適宜修
+正してください．</p>
+<p>停止は，次のようにします．</p>
+<pre class="literal-block">
+# make -f GNUmakefile.apache stop
+</pre>
+</div>
+<div class="section" id="id18">
+<h1><a class="toc-backref" href="#id68" name="id18">高度な設定</a></h1>
+<div class="section" id="id19">
+<h2><a class="toc-backref" href="#id69" name="id19">アップロードの記録</a></h2>
+<p>mod_uploader はファイルのアップロード時に環境変数 <cite>uploader_upload</cite> を
+定義するので，以下の様な設定を追加することで投稿者の IP アドレスをログ
+に記録する事が出来ます．</p>
+<pre class="literal-block">
+LogFormat &quot;%t HOST: %h ID: %{uploader_item_id}e AGENT: %{User-agent}i&quot; uploader
+CustomLog log/apache.upload_log uploader env=uploader_upload
+</pre>
+<p>uploader_item_id は，ファイルの ID に展開されます．その他の書式について
+は， <a class="reference" href="http://httpd.apache.org/docs/2.0/ja/mod/mod_log_config.html">mod_log_config のドキュメント</a> を参照
+してください．</p>
+<p>なお，ファイルのダウンロード時と削除時にも，環境変数
+<cite>uploader_download</cite> ， <cite>uploader_remove</cite> を定義するので，同様の方法でロ
+グをとることが可能です．</p>
+</div>
+<div class="section" id="id20">
+<h2><a class="toc-backref" href="#id70" name="id20">直リンクの禁止</a></h2>
+<p><a class="reference" href="http://httpd.apache.org/docs/2.0/rewrite/">mod_rewrite</a> というモジュールと組み合わせることでファイルの直リンクを禁
+止することが可能です．以下のような設定を追加します．
+<cite>http://columbia:8080/up/</cite> はアップローダを設置した URL に書き換えてく
+ださい．</p>
+<pre class="literal-block">
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http://columbia:8080/up/ [NC]
+RewriteRule . - [F]
+</pre>
+<p>また，単純にアクセスを禁止するだけでなく，直リンクされた場合に特定の
+URL に飛ばしたい場合は，以下のような設定を追加します．
+<cite>http://www.yahoo.co.jp/</cite> は飛ばしたい URL です．</p>
+<pre class="literal-block">
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http://columbia:8080/up/ [NC]
+RewriteRule ^.*$ http://www.yahoo.co.jp/
+</pre>
+<p>なお，これらの設定を追加することで Apache が起動しなくなった場合，お使
+いの環境で <a class="reference" href="http://httpd.apache.org/docs/2.0/rewrite/">mod_rewrite</a> が利用できないことが原因と考えられます．ます，
+<a class="reference" href="http://httpd.apache.org/docs/2.0/rewrite/">mod_rewrite</a> を使えるようにしてください．</p>
+</div>
+</div>
+<div class="section" id="id21">
+<h1><a class="toc-backref" href="#id71" name="id21">パフォーマンス</a></h1>
+<div class="section" id="id22">
+<h2><a class="toc-backref" href="#id72" name="id22">高速な表示</a></h2>
+<div align="right" class="image align-right"><img align="right" alt="一秒間に処理できるリクエスト数" height="248" src="img/speed.png" width="460" /></div>
+<p>mod_uploader は，表示を非常に高速に行うことができます．</p>
+<p>右に他のアップローダとの速度比較を示します．HTML は，静的な HTML で表示
+を行うもの，Perl および PHP はそれぞれの言語で作られたアップローダを指
+しています．測定には ApacheBench を用い，5 並列で 10,000 リクエスト発行
+した場合の値をプロットしました．</p>
+<p>mod_uploader は Perl の約 100 倍，PHP の約 10 倍高速に動作しています．
+Perl や PHP を使用する場合， <a class="reference" href="http://perl.apache.org/">mod_perl</a> （ModPerl::Registry）や
+<a class="reference" href="http://pecl.php.net/package/APC/">APC</a> を使用すればある程度速度を改善することが可能でが，それでも
+mod_uploader には及びません．</p>
+<!-- 補足： -->
+<!--  -->
+<!-- なんか，使用言語がパフォーマンスのキーになるような書き方になってます -->
+<!-- が，もちろん，言語よりも他の要素に負うところの方が大きいです． -->
+<!-- mod_perl や APC 使っていればなおさらです． -->
+<!--  -->
+<!-- アジテーションが目的の文章ですんで，軽く読み流して頂けると幸いです． -->
+<!-- (やっぱりダメ？) -->
+<p>また，mod_uploader は，静的な HTML を用いるものと比べてもわずかながら高
+速に動作します．これは，表示に静的な HTML を用いる場合でもアップロード
+処理のためには libphp4.so をロードする必要があるので，そのためのオーバー
+ヘッドがかかっているのが原因と思われます．libphp4.so のロードを無くした
+場合，HTML の値は 2,800 を超えて最速になります．</p>
+</div>
+<div class="section" id="id23">
+<h2><a class="toc-backref" href="#id73" name="id23">省メモリのアップロード</a></h2>
+<p>mod_uploader は，巨大なファイルのアップロードにもわずかなメモリしか消費
+しません．</p>
+<p>それに対してアップローダの多くは，アップロードされたデータを一旦全てメ
+モリに入れて処理するため，アップロードにはファイルサイズに比例したサイ
+ズのメモリを消費してしまいます．</p>
+<!-- 補足： -->
+<!--  -->
+<!-- サイズが小さいファイルをアップロードするだけだったら，全部メモリに読 -->
+<!-- み込んで処理するのは良い選択だと思います．でも，数十メガバイト以上の -->
+<!-- サイズを扱うには無理があります． -->
+</div>
+</div>
+<div class="section" id="id24">
+<h1><a class="toc-backref" href="#id74" name="id24">テスト結果</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org/mod_uploader/status/">テスト結果一覧</a></p>
+</div>
+<div class="section" id="api">
+<h1><a class="toc-backref" href="#id75" name="api">API ドキュメント</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org/mod_uploader/api/">http://acapulco.dyndns.org/mod_uploader/api/</a></p>
+</div>
+<div class="section" id="id26">
+<h1><a class="toc-backref" href="#id76" name="id26">ツール</a></h1>
+<p>プログラムの作成にあたってお世話になったツールを紹介します．</p>
+<dl class="docutils">
+<dt><a class="reference" href="http://valgrind.org/">Valgrind</a></dt>
+<dd>メモリの不正な参照や解放し忘れなどをチェックしてくれるツール．デバッ
+グでかなりお世話になりました．</dd>
+</dl>
+</div>
+<div class="section" id="id27">
+<h1><a class="toc-backref" href="#id77" name="id27">寄付</a></h1>
+<p>PayPal 経由での寄付を受け付けています．mod_uploader が気に入った場合は
+よろしくお願いします．いただいたお金は開発のための書籍購入などにあてさ
+せていただきます．</p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+ <input type="hidden" name="cmd" value="_s-xclick" />
+ <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
+ <img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+ <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+ " />
+</form></div>
+<div class="section" id="id28">
+<h1><a class="toc-backref" href="#id78" name="id28">参考文献</a></h1>
+<p>プログラムの作成にあたってお世話になった文献を紹介します．</p>
+<p><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22"><img alt="The Apache Modules Book" class="icon-book" height="155" src="img/saber.png" width="120" /></a> <a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22"><img alt="Apacheモジュール プログラミングガイド" class="icon-book" height="151" src="img/panda.png" width="120" /></a> <a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22"><img alt="Secure Coding in C And C++" class="icon-book" height="151" src="img/secure.png" width="120" /></a></p>
+<dl class="docutils">
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22">The Apache Modules Book: Application Development With Apache</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.x のモジュール作成に必要になるのモジュール作成に必要にな
+る事柄を一通り説明した本．トップダウンで全体を眺めた後，ボトムアップ
+で詳しい説明がされているので非常に理解しやすいです．</dd>
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22">Apacheモジュール プログラミングガイド</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> 1.x のモジュール作成に必要になる事柄を一通り説明した本．痒
+いところに手が届いているので，手元に置いておくと重宝します．</dd>
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22">Secure Coding in C And C++</a></dt>
+<dd>C/C++ でプログラムを作るときにセキュリティホールが発生してしまう原理と
+その対策について詳しく説明した本です．丁寧に書かれているので内容を
+しっかりと理解することができます．</dd>
+<dt><a class="reference" href="http://www.clove.org/~aaron/presentations/apachecon2004/ac2004advancedmodules.ppt">Advanced Topics in Module Design: Threadsafety and Portability</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.0 でモジュールを作成するときに必要になってくるテクニック
+が解説されたパワポ．そんなに長くないので，モジュール書く前にさらっと
+読んでおきましょう．</dd>
+<dt><a class="reference" href="http://zach.chambana.net/apache-cplusplus/">Apache API C++ Cookbook</a></dt>
+<dd>C++ を使って <a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールを作成する際の注意事項について説明
+したサイト．</dd>
+<dt><a class="reference" href="http://dev.ariel-networks.com/apr/apr-tutorial/html/apr-tutorial.html">libapr (apache portable runtime) programming tutorial</a></dt>
+<dd>APR のチュートリアル．サンプルコードおよび，間違いやすい点についての
+記述が多いので重宝します．</dd>
+<dt><a class="reference" href="http://www.inb.uni-luebeck.de/~boehme/libavcodec_update.html">Using libavformat and libavcodec: An Update</a></dt>
+<dd>libavformat と libavcodec を使って動画からフレーム画像を取り出す方法
+を解説したページ．丁寧に書かれています．</dd>
+<dt><a class="reference" href="http://www.wakhok.ac.jp/~sumi/stl/">STL のページ</a></dt>
+<dd>C++ の標準テンプレートライブラリである STL について簡潔にまとめられた
+サイト．</dd>
+<dt><a class="reference" href="http://i.loveruby.net/w/RubyExtensionProgrammingGuide.html">RubyExtensionProgrammingGuide</a></dt>
+<dd>Ruby の拡張ライブラリの書き方を解説したサイト．基本的な事項から少し高
+度な話題まで非常に良くまとまってます．</dd>
+<dt><a class="reference" href="http://rananim.ie.u-ryukyu.ac.jp/~kono/lecture/compiler/">Compiler Construction Lecture</a></dt>
+<dd>コンパイラ作成に関する実践的な内容が簡潔にまとめられたサイト．簡単な
+インタプリタもどきを作るんだったら，このサイトだけで十分かも．</dd>
+</dl>
+<p><script type="text/javascript"><!--
+  google_ad_client = "pub-4095857718593292";
+  google_ad_width = 728;
+  google_ad_height = 90;
+  google_ad_format = "728x90_as";
+  google_ad_type = "text_image";
+  google_ad_channel = "4386274577";
+  google_ad_channel = "4386274577";
+  google_color_border = "FFFFFF";
+  google_color_bg = "FFFFFF";
+  google_color_link = "11593C";
+  google_color_text = "000000";
+  google_color_url = "008000";
+  //-->
+</script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+<hr />
+
+<div class="footer">
+ <p>
+  <a href="http://acapulco.dyndns.org">[HOME]</a>
+ </p>
+ <p class="id">
+  $Id: apache.txt 2109 2006-11-26 23:11:04Z svn $
+ </p>
+
+ <address><img src="img/mail_address.png" width="204" height="16" alt="kimata&#64;acapulco.dyndns.org" /></address>
+
+ <p class="validator">
+  <a href="http://validator.w3.org/check?uri=referer">
+   <img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31" width="88" />
+  </a>
+  <a href="http://jigsaw.w3.org/css-validator/check/referer">
+   <img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" />
+  </a>
+ </p>
+</div><!-- Local Variables: -->
+<!-- mode: rst -->
+<!-- coding: utf-8-unix -->
+<!-- End: -->
+</div>
+</div>
+</body>
+</html>

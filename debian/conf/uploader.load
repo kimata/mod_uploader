@@ -1,0 +1,6 @@
+LoadModule uploader_module /usr/lib/apache2/modules/mod_uploader.so
+
+# Local Variables:
+# mode: apache-conf-generic
+# coding: euc-japan-dos
+# End:

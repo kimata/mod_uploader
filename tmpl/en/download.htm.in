@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+ <head>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=ISO-8859-1" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <title>mod_uploader</title>
+  <link rel="stylesheet" type="text/css" href="${BASE_URL}/../up_css/default.css" media="screen" />
+  <link rel="shortcut icon" href="${BASE_URL}/../up_img/favicon.ico" />
+ </head>
+
+ <body>
+
+  <div>
+   <a href="${BASE_URL}">
+    <img src="${BASE_URL}/../up_img/title.png" width="350" height="56" alt="mod_uploader" class="title" />
+   </a>
+  </div>
+
+  <h1>Download</h1>
+
+  <div class="description">
+   This file required password to download.  Input password to DL pass.
+  </div>
+
+  <form method="post" enctype="multipart/form-data" id="download">
+   <div class="input_download_pass">
+    <label for="download_pass" accesskey="D">DL pass:</label>
+    <input type="password" name="download_pass" value="" size="8" maxlength="8" id="download_pass" />
+    <input type="submit" name="submit" value="Download" class="submit" />
+   </div>
+  </form>
+
+  <table class="file">
+   <tr>
+    <th class="index">NO</th>
+    <th class="name">NAME</th>
+    <th class="comment">COMMENT</th>
+    <th class="size">SIZE</th>
+    <th class="mime">MIME</th>
+    <th class="date">DATE</th>
+    <th class="download_count">COUNT</th>
+   </tr>
+   <tr>
+    <td class="index">${ITEM.index}</td>
+    <td class="name">${ITEM.file_name}</td>
+    <td class="comment">${ITEM.comment}</td>
+    <td onclick="alert('MD5: ${ITEM.file_digest}')" class="size">${ITEM.file_size}</td>
+    <td class="mime">${ITEM.file_mime}</td>
+    <td class="date">${ITEM.date}</td>
+    <td class="download_count">${ITEM.download_count}</td>
+   </tr>
+  </table>
+
+  <div class="navigator">
+   <a href="${BASE_URL}">Back</a>
+  </div>
+
+  <hr class="footer" />
+
+  <div class="footer">
+   Copyright(C) 2006 acapulco.dyndns.org
+  </div>
+
+  <div class="package_info">
+   <a href="http://acapulco.dyndns.org/mod_uploader/">@PACKAGE_NAME@/@PACKAGE_VERSION@ is Free!</a>
+  </div>
+
+  <div class="validator">
+   <a href="http://validator.w3.org/check?uri=referer">
+    <img src="${BASE_URL}/../up_img/icon_valid_xhtml.png" alt="Valid XHTML 1.1!" height="31" width="88" />
+   </a>
+   <a href="http://jigsaw.w3.org/css-validator/check/referer">
+    <img src="${BASE_URL}/../up_img/icon_valid_css.png" alt="Valid CSS!" height="31" width="88" />
+   </a>
+  </div>
+  <div class="rss">
+   <a href="${BASE_URL}/rss/">
+    <img src="${BASE_URL}/../up_img/icon_feed.png" alt="RSS 1.0" height="16" width="16" />
+   </a>
+  </div>
+
+ </body>
+
+</html>

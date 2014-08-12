@@ -1,0 +1,116 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: apache.conf.in 1081 2006-05-27 15:44:24Z svn $
+###############################################################################
+
+###############################################################################
+# このファイルは，モジュールのテスト用の Apache 設定ファイルです
+###############################################################################
+
+ServerRoot                      @PWD@
+
+PidFile                         log/apache.pid
+
+Listen                          8080
+ServerName                      @HOSTNAME@
+DocumentRoot                    @PWD@
+User                            @USER@
+
+ErrorLog                        log/apache.error_log
+LogLevel                        debug
+
+ServerTokens                    full
+ServerSignature                 on
+
+<IfModule !mod_mime.c>
+LoadModule mime_module          @LIBEXECDIR@/mod_mime.so
+</IfModule>
+<IfModule !mod_alias.c>
+LoadModule alias_module         @LIBEXECDIR@/mod_alias.so
+</IfModule>
+<IfModule !mod_@ACCESS_MODULE_NAME@.c>
+LoadModule @ACCESS_MODULE_NAME@_module @LIBEXECDIR@/mod_@ACCESS_MODULE_NAME@.so
+</IfModule>
+<IfModule !mod_setenvif.c>
+LoadModule setenvif_module      @LIBEXECDIR@/mod_setenvif.so
+</IfModule>
+<IfModule !mod_log_config.c>
+LoadModule log_config_module    @LIBEXECDIR@/mod_log_config.so
+</IfModule>
+
+TypesConfig                     conf/mime.types
+
+LoadModule uploader_module      @PWD@/src/mod_uploader.so
+
+<Location /up>
+    SetHandler                      uploader
+
+    UploaderBaseUrl                 "http://@HOSTNAME@:8080/up"
+    UploaderDataDirectory           "@PWD@/test/data"
+    UploaderFileDirectory           "@PWD@/test/file"
+    UploaderThumbDirectory          "@PWD@/test/thumb"
+    UploaderTempDirectory           "@PWD@/test/temp"
+
+    UploaderTotalFileSizeLimit      10485760
+    UploaderTotalFileNumberLimit    200
+    UploaderFileSizeLimit           1048576
+    UploaderPerPageItemNumber       30
+
+    UploaderIndexViewTemplate       "@PWD@/tmpl/index.htm"
+    UploaderInfoViewTemplate        "@PWD@/tmpl/info.htm"
+    UploaderProgressViewTemplate    "@PWD@/tmpl/progress.htm"
+    UploaderDownloadViewTemplate    "@PWD@/tmpl/download.htm"
+    UploaderThumbnailViewTemplate   "@PWD@/tmpl/thumbnail.htm"
+    UploaderAdminViewTemplate       "@PWD@/tmpl/admin.htm"
+    UploaderErrorViewTemplate       "@PWD@/tmpl/error.htm"
+</Location>
+
+<Location /up/mail>
+    Order                   Deny,Allow
+    Deny                    From All
+    Allow                   From 127.0.0.1
+</Location>
+
+<Location /up/admin>
+    Order                   Deny,Allow
+    Deny                    From All
+    Allow                   From 127.0.0.1
+    Allow                   From 192.168.2. # LAN 用
+</Location>
+
+Alias   /up_img     "@PWD@/img"
+Alias   /up_css     "@PWD@/css"
+Alias   /up_js      "@PWD@/js"
+Alias   /up_swf     "@PWD@/swf"
+
+# ログ
+LogFormat "%t HOST: %h ID: %{uploader_item_id}e AGENT: %{User-agent}i" uploader
+CustomLog log/apache.upload_log uploader env=uploader_upload
+CustomLog log/apache.remove_log uploader env=uploader_remove
+
+# Local Variables:
+# mode: apache-conf-generic
+# coding: euc-japan-dos
+# End:

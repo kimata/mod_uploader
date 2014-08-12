@@ -1,0 +1,15 @@
+# mod_uploader magic data
+0       string    mod_uploader       mod_uploader
+>16     string    x                  \b (ver %s)
+>24     lelong    x                  \b id: %d
+>28     lelong    x                  \b, index: %d
+>32     lelong    x                  \b, download_count: %d
+>64     string    x                  \b, date: %s
+>96     string    x                  \b, ip_address: %s
+>136    string    x                  \b, file_name: %s
+>200    string    x                  \b, file_mime: %s
+>264    string    x                  \b, file_ext: %s
+>272    string    x                  \b, file_digest: %s
+>320    string    x                  \b, remove_pass: %s
+>336    string    x                  \b, download_pass: %s
+>352    string    x                  \b, comment: %s

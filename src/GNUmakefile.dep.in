@@ -1,0 +1,224 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# ターゲット
+@PACKAGE_NAME@.so:
+@PACKAGE_NAME@.app$(EXE_EXT):
+
+###############################################################################
+# 依存関係
+@PACKAGE_NAME@.so: mod_uploader.$(OBJ_EXT) UploaderConfig.$(OBJ_EXT)	\
+	UploadItem.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)						\
+	UploadItemListReader.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)				\
+	UploadItemWriter.$(OBJ_EXT) UploadItemReader.$(OBJ_EXT)				\
+	UploadItemManager.$(OBJ_EXT) TemporaryFile.$(OBJ_EXT)				\
+	Auxiliary.$(OBJ_EXT) SourceInfo.$(OBJ_EXT) ApacheLogger.$(OBJ_EXT)	\
+	UploaderTemplate.$(OBJ_EXT) TemplateParser.$(OBJ_EXT)				\
+	TemplateLexer.$(OBJ_EXT) Auxiliary.$(OBJ_EXT)						\
+	UploadItem.$(OBJ_EXT) UploadItemReader.$(OBJ_EXT)					\
+	UploadItemIO.$(OBJ_EXT) TemplateVariableCreator.$(OBJ_EXT)			\
+	UploaderConfig.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)					\
+	UploadItemManager.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)				\
+	UploadItemReader.$(OBJ_EXT) TemporaryFile.$(OBJ_EXT)				\
+	Auxiliary.$(OBJ_EXT) SourceInfo.$(OBJ_EXT)							\
+	UploaderTemplate.$(OBJ_EXT) UploaderConfig.$(OBJ_EXT)				\
+	UploadItem.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)						\
+	UploadItemListReader.$(OBJ_EXT) ThumbnailList.$(OBJ_EXT)			\
+	ThumbnailIterator.$(OBJ_EXT) ThumbnailVariableCreator.$(OBJ_EXT)	\
+	TemplateParser.$(OBJ_EXT) TemplateVariable.$(OBJ_EXT)				\
+	TemplateVariableCreator.$(OBJ_EXT)									\
+	ApacheTemplateExecutor.$(OBJ_EXT) ApacheRFC1867Parser.$(OBJ_EXT)	\
+	uploader_util.$(OBJ_EXT) ApacheRequestReader.$(OBJ_EXT)				\
+	RequestReader.$(OBJ_EXT) MultipartMessageParserBuffer.$(OBJ_EXT)	\
+	MultipartMessageParser.$(OBJ_EXT) DirectoryCleaner.$(OBJ_EXT)		\
+	MessageDigest5.$(OBJ_EXT) ImageFile.$(OBJ_EXT)						\
+	PostDataChecker.$(OBJ_EXT) PostFlowController.$(OBJ_EXT)			\
+	PostProgressList.$(OBJ_EXT) DownloadFlowController.$(OBJ_EXT)		\
+	UploadItemVariableCreator.$(OBJ_EXT) UploadItemIterator.$(OBJ_EXT)	\
+	ApacheResponseWriter.$(OBJ_EXT) ApacheRequestReader.$(OBJ_EXT)		\
+	CharCodeConverter.$(OBJ_EXT) ApacheUploadItemRss.$(OBJ_EXT)			\
+	ApacheRFC2822Parser.$(OBJ_EXT) FileWriter.$(OBJ_EXT)				\
+	ReadWriteLocker.$(OBJ_EXT)
+
+cgi_uploader.app$(EXE_EXT): cgi_uploader.$(OBJ_EXT)						\
+	UploaderConfig.$(OBJ_EXT) UploadItem.$(OBJ_EXT)						\
+	UploadItemList.$(OBJ_EXT) UploadItemListReader.$(OBJ_EXT)			\
+	UploadItemIO.$(OBJ_EXT) UploadItemWriter.$(OBJ_EXT)					\
+	UploadItemReader.$(OBJ_EXT) UploadItemManager.$(OBJ_EXT)			\
+	TemporaryFile.$(OBJ_EXT) Auxiliary.$(OBJ_EXT)						\
+	SourceInfo.$(OBJ_EXT) CGILogger.$(OBJ_EXT)							\
+	UploaderTemplate.$(OBJ_EXT) TemplateParser.$(OBJ_EXT)				\
+	TemplateLexer.$(OBJ_EXT) Auxiliary.$(OBJ_EXT)						\
+	UploadItem.$(OBJ_EXT) UploadItemReader.$(OBJ_EXT)					\
+	UploadItemIO.$(OBJ_EXT) TemplateVariableCreator.$(OBJ_EXT)			\
+	UploaderConfig.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)					\
+	UploadItemManager.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)				\
+	UploadItemReader.$(OBJ_EXT) TemporaryFile.$(OBJ_EXT)				\
+	Auxiliary.$(OBJ_EXT) SourceInfo.$(OBJ_EXT)							\
+	UploaderTemplate.$(OBJ_EXT) UploaderConfig.$(OBJ_EXT)				\
+	UploadItem.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)						\
+	UploadItemListReader.$(OBJ_EXT) ThumbnailList.$(OBJ_EXT)			\
+	ThumbnailIterator.$(OBJ_EXT) ThumbnailVariableCreator.$(OBJ_EXT)	\
+	TemplateParser.$(OBJ_EXT) TemplateVariable.$(OBJ_EXT)				\
+	TemplateVariableCreator.$(OBJ_EXT) CGITemplateExecutor.$(OBJ_EXT)	\
+	CGIRFC1867Parser.$(OBJ_EXT) uploader_util.$(OBJ_EXT)				\
+	CGIRequestReader.$(OBJ_EXT) RequestReader.$(OBJ_EXT)				\
+	MultipartMessageParserBuffer.$(OBJ_EXT)								\
+	MultipartMessageParser.$(OBJ_EXT) DirectoryCleaner.$(OBJ_EXT)		\
+	MessageDigest5.$(OBJ_EXT) ImageFile.$(OBJ_EXT)						\
+	PostDataChecker.$(OBJ_EXT) PostFlowController.$(OBJ_EXT)			\
+	PostProgressList.$(OBJ_EXT) DownloadFlowController.$(OBJ_EXT)		\
+	UploadItemVariableCreator.$(OBJ_EXT) UploadItemIterator.$(OBJ_EXT)	\
+	CGIRequestReader.$(OBJ_EXT) CharCodeConverter.$(OBJ_EXT)			\
+	CGIUploadItemRss.$(OBJ_EXT) CGIRFC2822Parser.$(OBJ_EXT)				\
+	FileWriter.$(OBJ_EXT) ReadWriteLocker.$(OBJ_EXT)					\
+	ConfigReader.$(OBJ_EXT) CGIConfigReader.$(OBJ_EXT)
+
+UploadItem.test$(EXE_EXT): CGILogger.$(OBJ_EXT)				\
+	PostDataChecker.$(OBJ_EXT) CharCodeConverter.$(OBJ_EXT)
+
+UploadItemManager.test$(EXE_EXT): UploadItem.$(OBJ_EXT)	\
+	UploadItemList.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)	\
+	UploadItemWriter.$(OBJ_EXT) ImageFile.$(OBJ_EXT)	\
+	TemporaryFile.$(OBJ_EXT) PostDataChecker.$(OBJ_EXT)
+
+TemplateLexer.test$(EXE_EXT):  
+
+TemplateParser.test$(EXE_EXT): TemplateLexer.$(OBJ_EXT)  
+
+TemplateExecutor.test$(EXE_EXT): TemplateParser.$(OBJ_EXT)				\
+	TemplateLexer.$(OBJ_EXT) UploadItemVariableCreator.$(OBJ_EXT)		\
+	UploadItem.$(OBJ_EXT) PostDataChecker.$(OBJ_EXT)					\
+	UploadItemReader.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)					\
+	TemplateVariableCreator.$(OBJ_EXT)									\
+	ThumbnailVariableCreator.$(OBJ_EXT) UploadItemIterator.$(OBJ_EXT)	\
+	UploaderTemplate.$(OBJ_EXT) UploadItemList.$(OBJ_EXT)				\
+	UploadItemListReader.$(OBJ_EXT) ThumbnailList.$(OBJ_EXT)			\
+	ThumbnailIterator.$(OBJ_EXT) CharCodeConverter.$(OBJ_EXT)			\
+	ReadWriteLocker.$(OBJ_EXT)
+
+UploadItemVariableCreator.test$(EXE_EXT): UploadItemList.$(OBJ_EXT)	\
+	TemplateVariableCreator.$(OBJ_EXT) UploadItem.$(OBJ_EXT)		\
+	UploadItemIterator.$(OBJ_EXT) PostDataChecker.$(OBJ_EXT)		\
+	UploadItemListReader.$(OBJ_EXT) UploadItemIO.$(OBJ_EXT)			\
+	UploadItemReader.$(OBJ_EXT) TemplateParser.$(OBJ_EXT)			\
+	TemplateLexer.$(OBJ_EXT) ThumbnailList.$(OBJ_EXT)				\
+	CharCodeConverter.$(OBJ_EXT) ReadWriteLocker.$(OBJ_EXT)
+
+ThumbnailVariableCreator.test$(EXE_EXT): ThumbnailIterator.$(OBJ_EXT)	\
+	UploadItemList.$(OBJ_EXT) ThumbnailList.$(OBJ_EXT)					\
+	TemplateParser.$(OBJ_EXT) TemplateLexer.$(OBJ_EXT)					\
+	TemplateVariableCreator.$(OBJ_EXT) UploadItemReader.$(OBJ_EXT)		\
+	UploadItemIO.$(OBJ_EXT) UploadItemListReader.$(OBJ_EXT)
+
+UploadItemWriter.test$(EXE_EXT): UploadItem.$(OBJ_EXT)	\
+	UploadItemIO.$(OBJ_EXT) TemporaryFile.$(OBJ_EXT)	\
+	ImageFile.$(OBJ_EXT) PostDataChecker.$(OBJ_EXT)
+
+MmapFileWriter.test$(EXE_EXT): FileWriter.$(OBJ_EXT)
+
+UploadItemList.test$(EXE_EXT): UploadItem.$(OBJ_EXT)		\
+	PostDataChecker.$(OBJ_EXT) CharCodeConverter.$(OBJ_EXT)
+
+BasicFileWriter.test$(EXE_EXT): FileWriter.$(OBJ_EXT)
+
+Base64FileWriter.test$(EXE_EXT): FileWriter.$(OBJ_EXT) @WRITER_NAME@.$(OBJ_EXT)
+
+ZipFileWriter.test$(EXE_EXT): LIBS += -lz
+ZipFileWriter.test$(EXE_EXT): FileWriter.$(OBJ_EXT)
+
+RFC1867Parser.test$(EXE_EXT): DEFS += -DDEBUG_MultipartMessageParser
+RFC1867Parser.test$(EXE_EXT): MultipartMessageParserBuffer.$(OBJ_EXT)	\
+	MultipartMessageParser.$(OBJ_EXT) RequestReader.$(OBJ_EXT)			\
+	CGIRequestReader.$(OBJ_EXT) FileWriter.$(OBJ_EXT)					\
+	@WRITER_NAME@.$(OBJ_EXT) MessageDigest5.$(OBJ_EXT)				    \
+	TemporaryFile.$(OBJ_EXT) DirectoryCleaner.$(OBJ_EXT)
+
+RFC2822Parser.test$(EXE_EXT): DEFS += -DDEBUG_MultipartMessageParser
+RFC2822Parser.test$(EXE_EXT): MultipartMessageParserBuffer.$(OBJ_EXT)	\
+	MultipartMessageParser.$(OBJ_EXT) RequestReader.$(OBJ_EXT)			\
+	CGIRequestReader.$(OBJ_EXT) FileWriter.$(OBJ_EXT)					\
+	@WRITER_NAME@.$(OBJ_EXT) MessageDigest5.$(OBJ_EXT)				    \
+	TemporaryFile.$(OBJ_EXT) DirectoryCleaner.$(OBJ_EXT) 
+
+DownloadFlowController.test$(EXE_EXT): ReadWriteLocker.$(OBJ_EXT)
+
+PostFlowController.test$(EXE_EXT): ReadWriteLocker.$(OBJ_EXT)
+
+CharCodeConverter.test$(EXE_EXT):
+
+ImageFile.test$(EXE_EXT):
+
+ConfigReader.test$(EXE_EXT):  
+
+mod_uploader.$(OBJ_EXT): uploader_handler.cpp
+
+###############################################################################
+# 型ルール
+%.h.gch: %.h
+ifneq ($(findstring g++,$(CXX_ORIG)),)
+ifeq ($(firstword $(sort $(shell $(CC_ORIG) -dumpversion) 3.9.9)),3.9.9)
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX_ORIG) $(DEFS) $(INCLUDES) $(CXXFLAGS) $<
+else
+	@touch $@
+endif
+else
+	@touch $@
+endif
+%.$(OBJ_EXT): %.cpp $(HEADERDIR)/%.h .pre-compile
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) $(OUT_OPT)$@ $<
+%.$(OBJ_EXT): %.cpp .pre-compile
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) $(OUT_OPT)$@ $<
+%.test$(EXE_EXT).$(OBJ_EXT): %.cpp $(HEADERDIR)/%.h .pre-compile
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX) $(DEF_OPT)DEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) $(OUT_OPT)$@ $<
+%.test$(EXE_EXT).$(OBJ_EXT): %.cpp .pre-compile
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX) $(DEF_OPT)DEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) $(OUT_OPT)$@ $<
+%.app$(EXE_EXT): %.$(OBJ_EXT) $(PCH_OBJ)
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+	$(LINK) $(LDFLAGS) $(LIBS) $(sort $^) $(LOUT_OPT)$@
+ifeq ($(NO_DEBUG),)
+%.test$(EXE_EXT): DEFS += $(DEF_OPT)DEBUG $(DEF_OPT)APR_POOL_DEBUG=1
+endif
+%.test$(EXE_EXT): %.test$(EXE_EXT).$(OBJ_EXT) \
+	Auxiliary.$(OBJ_EXT) SourceInfo.$(OBJ_EXT) $(PCH_OBJ)
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+	$(LINK) $(LDFLAGS) $(LIBS) $(sort $^) $(LOUT_OPT)$@
+Auxiliary.test$(EXE_EXT): %.test$(EXE_EXT): %.test$(EXE_EXT).$(OBJ_EXT) \
+	SourceInfo.$(OBJ_EXT) $(PCH_OBJ)
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+	$(LINK) $(LDFLAGS) $(LIBS) $(sort $^) $(LOUT_OPT)$@
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

@@ -1,0 +1,205 @@
+2009-01-10  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* tmpl/index.htm.in: Add feature: file extension selection.
+
+	* src/mod_uploader.cpp: change behavior of debug mode. If debug
+	mode is on, care the time of modification of template when output
+	"Last-Modified".
+
+	* src/TemplateLexer.cpp: Fix bug: treatment of "$"
+
+2008-05-24  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/ApacheResponse.h: Fix bug: Content-Type.
+
+2008-04-28  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/Macro.h: Remove warnings.
+
+2008-04-25  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/TemplateVariableCreator.cpp: Correspond to ARM.
+
+2008-04-12  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: Add "Expires" header.
+
+2008-03-16  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploadItemReader.cpp: Convert date format automatically.
+
+2008-02-16  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* debian: Creade debian package.
+
+2008-02-02  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* util/UploaderConfig/UploaderConfigDialog.cs: set APR_ICONV_PATH enviorment.
+
+2007-12-16  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* configure.in: Support --enable-remove-unpopular.
+
+	* include/UploadItem.h: Change data format.
+
+2007-12-11  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: Add sort command.
+
+2007-12-09  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/WriteLocker.h: Fix bug.
+
+2007-11-18  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/ZipFileWriter.h.in: Able to compress data when upload.
+
+2007-11-17  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: use encoded URL to specify filename.
+
+2007-11-16  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* GNUmakefile.apache.in: Fix for Debain and Ubuntu.
+
+2007-10-24  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* util/UploadClient/org/dyndns/acapulco/UploadClient.java: Add
+	upload client which can upload files larger than 4GB.
+
+2007-10-18  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploaderConfig.cpp: Add infomation template.
+
+2007-10-10  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploadItemListReader.cpp: FIX BUG: last modified time.
+
+2007-08-12  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* tmpl/index.htm.in: Improve UI.
+
+2007-08-11  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/File.h: FIX BUG: constructor.
+
+2007-08-08  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/Auxiliary.cpp: Optimize size_str().
+
+2007-08-06  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* util/UploaderConfig/UploaderConfigDialog.cs: Coordinate with
+	Apache 2.0 and 2.2.
+
+2007-07-01  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/ReadWriteLocker.h: Improve response under heavy load.
+
+2007-06-30  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/UploadItemList.h: FIX BUG: is_full.
+
+2007-06-29  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/ReadWriteLocker.h: Add timeout feature.
+
+	* src/UploadItemManager.cpp: Do not sync counter always.
+
+2007-06-27  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/DownloadFlowController.h: Add DownloadSession class.
+
+2007-05-05  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* doc/apache.de.txt: Add doument in German. Special thanks to
+	Peter Friesen.
+
+2007-04-29  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* js/progress.js: Send some data when request upload progress.
+
+	* doc/apache.en.txt: Write document in English.
+
+2007-04-02  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/Macro.h: デバッグモード以外では例外を送出した場所の出力を
+	止めた．
+
+2007-03-25  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: mod_mime_magick に対応．
+
+	* include/ApacheResponse.h: ダウンロード時のデフォルトの
+	Content-Type を application/octet-stream にした．
+
+2007-03-24  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: ダウンロード時の Content-Type の決定を
+	mod_mime に任せるようにした．
+
+	* src/PostDataChecker.cpp: MIME type の検査を追加．
+
+2007-03-10  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploaderConfig.cpp: 設定項目のチェックを少し強化．
+
+2007-02-15  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: コマンド判定のバグを修正．
+
+2007-02-04  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: 管理管理画面での Last-Modified 出力を止
+	めた．
+
+2007-01-13  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: ダウンロードファイル名のカスタマイズに
+	対応．
+
+	* src/TemplateExecutor.cpp: FASTEST マクロが定義されていない場合に
+	は，実行時チェックを行うように変更．
+
+2007-01-08  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/WriteLocker.h: ネストしたロックを行う際のバグを修正．
+
+	* src/GNUmakefile.tst.in: mod_uploader 本体のテストを追加．
+
+2007-01-07  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploadItemManager.cpp: 同時にファイルがアップロードされた場合
+	ID が重複するバグを修正．
+
+2006-12-31  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* include/ReadWriteLocker.h: APR_HAS_THREADS が 0 の環境に対応．
+
+2006-12-25  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/Auxiliary.cpp: 数字を含んだ拡張子の扱いを修正．
+
+2006-12-24  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/UploadItemRss.cpp: RSS のフォーマット違反を修正．
+
+2006-12-17  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/ApacheResponseWriter.cpp: 4GB 以上のファイルに対応．
+
+2006-12-04  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/RFC2822Parser.cpp: 携帯からのアップロードに対応．
+
+2006-11-29  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/uploader_handler.cpp: サムネイルの表示に対応．
+
+2006-11-28  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/mod_uploader.cpp: 管理ページの実装が完了．
+
+2006-11-26  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* src/mod_uploader.cpp: 基本機能の実装が完了．

@@ -1,0 +1,18 @@
+Source: libapache2-mod-uploader
+Section: web
+Priority: optional
+Maintainer: Tetsuya Kimata <kimata@acapulco.dyndns.org>
+Build-Depends: autoconf, automake, debhelper (>= 5), devscripts, fakeroot, apache2, libmagick++9-dev
+Standards-Version: 3.7.2
+
+Package: libapache2-mod-uploader
+Architecture: amd64
+Depends: libc6, apache2.2-common
+Description: A file upload application works as Apache module
+ mod_uploader is a file upload application works as Apache module.
+ The following features are provided:
+  - It works faster than the thing made with Perl or PHP or Ruby,
+    because it is made with C++ and works as Apache module. 
+  - It includes simple template engine, so you can change page layouts
+    without re-compilation. 
+  - it can show progress report when uploading. 

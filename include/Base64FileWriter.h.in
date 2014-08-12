@@ -1,0 +1,142 @@
+/******************************************************************************
+ * Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+ *
+ * All rights reserved.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any
+ * damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any
+ * purpose, including commercial applications, and to alter it and
+ * redistribute it freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must
+ *    not claim that you wrote the original software. If you use this
+ *    software in a product, an acknowledgment in the product
+ *    documentation would be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must
+ *    not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ * $Id: Base64FileWriter.h.in 2757 2007-12-11 10:59:22Z svn $
+ *****************************************************************************/
+
+#ifndef BASE64_FILE_WRITER_H
+#define BASE64_FILE_WRITER_H
+
+#include "Environment.h"
+
+#include <cstdlib>
+
+#include "apr_file_io.h"
+
+#include "@WRITER_NAME@.h"
+#include "Macro.h"
+#include "Uncopyable.h"
+
+
+class File;
+
+/**
+ * @brief Base64 のデコードを行いながらファイルへデータを書き出すクラス．
+ */
+template<class W=@WRITER_CLASS@ >
+class Base64FileWriter: public Uncopyable
+{
+public:
+    static const apr_int32_t OPEN_FLAG  = W::OPEN_FLAG;
+    /**
+     * コンストラクタ．
+     *
+     * @param[in] pool プール
+     * @param[in] file ファイルハンドラ
+     * @param[in] offset 書き出しを開始する位置
+     */
+    Base64FileWriter(apr_pool_t *pool, apr_file_t *file, apr_size_t offset=0);
+    /**
+     * ファイルへの書き出しを行います．
+     * 実際の書き込み処理は write_impl に委譲します．
+     *
+     * @param[in] buffer 書き出すデータ
+     * @param[in] size 書き出すサイズ
+     * @exception const char * 書き出しに失敗した場合
+     */
+    void write(void *buffer, apr_size_t size)
+    {
+        apr_size_t write_size;
+
+        if (size == 0) {
+            return;
+        }
+
+        write_size = size;
+        write(buffer, &write_size);
+        if (write_size != size) {
+            THROW(MESSAGE_FILE_WRITE_FAILED);
+        }
+    };
+    /**
+     * ファイルへの書き出しを行います．
+     * 実際の書き込み処理は write_impl に委譲します．
+     *
+     * @param[in] buffer 書き出すデータ
+     * @param[in,out] size 書き出すサイズ
+     * @exception const char * 書き出しに失敗した場合
+     */
+    void write(void *buffer, apr_size_t *size)
+    {
+        *size = write_impl(AS_BYTE(buffer), *size);
+    };
+    /**
+     * ファイルを閉じます．
+     *
+     * @exception const char * 閉じるのに失敗した場合
+     */
+    apr_uint64_t get_write_size() const
+    {
+        return writer_impl_.get_write_size();
+    };
+    /**
+     * ファイルを閉じます．
+     *
+     * @exception const char * 閉じるのに失敗した場合
+     */
+    void close()
+    {
+        writer_impl_.close();
+    };
+
+private:
+    typedef W FileWriterClass;
+
+    static const unsigned char ALPHABET[65];
+
+    /**
+     * ファイルへの書き出しを実際に行います．
+     *
+     * @param[in] buffer 書き出すデータ
+     * @param[in, out] size 書き出すサイズ
+     * @return 実際に書き出したサイズ
+     * @exception const char * 書き出しに失敗した場合
+     */
+    apr_size_t write_impl(apr_byte_t *buffer, apr_size_t size);
+
+    FileWriterClass writer_impl_;
+
+    apr_size_t decode_buffer_;
+    apr_size_t decode_buffer_index_;
+
+    char is_alphabet_[256];
+    char alphabet_value_[256];
+};
+
+#endif
+
+// Local Variables:
+// mode: c++
+// coding: utf-8-dos
+// End:

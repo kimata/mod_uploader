@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+ <head>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=ISO-8859-1" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <title>mod_uploader</title>
+  <style type="text/css">
+   <!--
+   body {
+     font-family         : 'Lucida Sans Unicode', Verdana, sans-serif;
+     font-size           : 10pt;
+
+     margin              : 1em   2em   1em   1em;
+     line-height         : 145%;
+     background-color    : #ffffff;
+     color               : #001100;
+   }
+
+   div.title {
+     font-family         : 'Lucida Sans Unicode', Verdana, sans-serif;
+     font-size           : 24pt;
+     margin              : 0.5em   0em   0.5em   0.2em;
+   }
+
+   a
+   {
+     text-decoration     : none;
+   }
+
+   a:link
+   {
+     color               : #003300;
+   }
+
+   a:visited
+   {
+     color               : #003300;
+   }
+
+   a:hover
+   {
+     color               : #336633;
+     text-decoration     : underline;
+   }
+
+   img
+   {
+     border              : 0px;
+   }
+
+   iframe
+   {
+     width               : 0px;
+     height              : 0px;
+     border              : 0px;
+   }
+
+   h1
+   {
+     font-family         : Verdana, sans-serif;
+     font-size           : medium;
+     color               : #ffffff;
+
+     background-color    : #666f66;
+     border-bottom       : 1px solid #333f33;
+     border-left         : 1px solid #666f66;
+
+     padding             : 0.3em 0.1em 0.1em 0.2em;
+   }
+
+   form
+   {
+     margin              : 0em  0em   0em   0em;
+   }
+
+   table
+   {
+     font-size           : 10pt;
+
+     border              : 0px;
+     margin              : 0em   0em   0em   1em;
+   }
+
+   table.file
+   {
+     width               : 96%;
+   }
+
+   th
+   {
+     font-family         : Verdana, sans-serif;
+
+     text-align          : left;
+     vertical-align      : bottom;
+   }
+
+   td
+   {
+     padding             : 0em 0.5em   0em   0em;
+     vertical-align      : bottom;
+   }
+
+   table.file th.download
+   {
+     width               : 1%;
+   }
+
+   table.file th.name
+   {
+     width               : 25%;
+   }
+
+   table.file th.comment
+   {
+     width               : 50%;
+   }
+
+   table.file th.size
+   {
+     width               : 1%;
+   }
+
+   table.file th.mime
+   {
+     width               : 1%;
+   }
+
+   table.file th.date
+   {
+     width               : 1%;
+   }
+
+   table.file th.remove
+   {
+     width               : 1%;
+   }
+
+   table.file td
+   {
+     border-bottom       : 1px solid #cccccc;
+   }
+
+   table.file td.index
+   {
+     text-align          : center;
+   }
+
+   table.file td.download img
+   {
+     vertical-align      : middle;
+   }
+
+   table.file td.download_count
+   {
+     text-align          : center;
+   }
+
+   table.file td.size
+   {
+     text-align          : right;
+     white-space         : nowrap;
+
+     cursor              : pointer;
+   }
+
+   table.file td.mime
+   {
+     white-space         : nowrap;
+   }
+
+   table.file td.date
+   {
+     white-space         : nowrap;
+   }
+
+   table.file td.remove div
+   {
+     cursor              : pointer;
+   }
+
+   input
+   {
+     border              : 1px solid #666666;
+     background-color    : #eeeeee;
+   }
+
+   em
+   {
+     font-style          : normal;
+     font-weight         : bold;
+   }
+
+   div.description
+   {
+     color               : #000000;
+
+     border-bottom       : 1px dashed #000033;
+     margin              : 0.5em 0em   1em   1em;
+   }
+
+   div.page_info
+   {
+     text-align          : center;
+   }
+
+   div.navigator
+   {
+     text-align          : right;
+     margin              : 1em 1em   1em   1em;
+   }
+
+   label
+   {
+     color               : #111111;
+   }
+
+   div.warning
+   {
+     color               : #ff0000;
+     margin              : 1em   0em   1em   0em;
+   }
+
+   hr.footer
+   {
+     color               : #333333;
+
+     height              : 1px;
+   }
+
+   div.package_info
+   {
+     font-weight         : bold;
+     color               : #333399;
+
+     text-align          : right;
+     margin              : 0em   0em 0.1em   0em;
+   }
+
+   div.footer
+   {
+     font-family         : "Century Gothic", sans-serif;
+     color               : #333333;
+
+     text-align          : right;
+     margin              : 0em   0em 0.1em   0em;
+   }
+
+   div.footer a
+   {
+     color               : #000099;
+   }
+   -->
+  </style>
+ </head>
+
+ <body>
+
+  <div class="title">admin tool for mod_uploader</div>
+
+  <h1>File List</h1>
+
+  <div class="description">
+    Total $TOTAL_FILE_SIZE, $TOTAL_FILE_NUMBER files are available.
+    [<a href="javascript:location.reload(true)"><em>Reload</em></a>]
+  </div>
+
+  <div class="page_info">
+   <!--@
+   print "Page: ";
+   i = 0;
+   while (i++ < PAGE_COUNT) {
+       if (i == CURRENT_PAGE) {
+           print "[ <em>", i, "</em> ]";
+       } else {
+           print "[<a href=\"", BASE_URL, "/admin/index/", i, "\">", i, "</a>]";
+       }
+   }
+   @-->
+  </div>
+
+  <table class="file">
+   <tr>
+    <th class="index">NO</th>
+    <th class="name">NAME</th>
+    <th class="download"></th>
+    <th class="comment">COMMENT</th>
+    <th class="size">SIZE</th>
+    <th class="date">DATE</th>
+    <th class="download_count">COUNT</th>
+    <th class="ip_address">IP ADDRESS</th>
+    <th class="remove"></th>
+   </tr>
+<!--@ foreach (item in ITEM_LIST) { @-->
+   <tr>
+    <td class="index">${item.index}</td>
+    <td class="name"><a href="${BASE_URL}/admin/download/${item.id}.${item.file_ext}">${item.file_name}</a></td>
+    <td class="download">
+     <a href="${BASE_URL}/admin/download/${item.id}.${item.file_ext}/attatch">DL</a>
+    </td>
+    <td class="comment">${item.comment}</td>
+    <td onclick="alert('MD5: ${item.file_digest}')" class="size">${item.file_size}</td>
+    <td class="date">${item.date}</td>
+    <td class="download_count">${item.download_count}</td>
+    <td class="ip_address"><a href="http://whois.ansi.co.jp/?key=${item.ip_address}">${item.ip_address}</a></td>
+    <td class="remove">
+     <form method="post" enctype="multipart/form-data" action="${BASE_URL}/admin/remove/">
+      <input type="hidden" name="remove_pass" value="" />
+      <input type="hidden" name="id" value="${item.id}" />
+      <input type="submit" name="submit" value="Remove" />
+     </form>
+    </td>
+   </tr>
+<!--@ } @-->
+  </table>
+
+  <div class="page_info">
+   <!--@
+   print "Page: ";
+   i = 0;
+   while (i++ < PAGE_COUNT) {
+       if (i == CURRENT_PAGE) {
+           print "[ <em>", i, "</em> ]";
+       } else {
+           print "[<a href=\"", BASE_URL, "/admin/index/", i, "\">", i, "</a>]";
+       }
+   }
+   @-->
+  </div>
+
+  <hr class="footer" />
+
+  <div class="footer">
+   Copyright(C) 2006 acapulco.dyndns.org
+  </div>
+
+  <div class="package_info">
+   <a href="http://acapulco.dyndns.org/mod_uploader/">@PACKAGE_NAME@/@PACKAGE_VERSION@ is Free!</a>
+  </div>
+
+ </body>
+
+</html>

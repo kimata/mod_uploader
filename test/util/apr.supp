@@ -1,0 +1,5 @@
+{
+   APR
+   Memcheck:Cond
+   obj:/usr/lib/libapr-*
+}

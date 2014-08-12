@@ -1,0 +1,174 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# 基本設定
+TEST_TARGETS:= test test-run test-status
+
+TIMESTAMP   := $(shell date '+%y%m%d_%H%M')
+TESTDIR     := ../test
+TESTFILEDIR := $(TESTDIR)/file
+TESTTMPLDIR := $(TESTDIR)/tmpl
+TESTCONF    := $(TESTDIR)/conf/sample.conf
+
+TESTPOST    := $(TESTDIR)/data/post.dat
+TESTPOSTB   := '$(shell cat $(TESTDIR)/data/post_b.dat)'
+TESTPOSTD   := $(shell cat $(TESTDIR)/data/post_d.dat)
+
+TESTMAIL    := $(TESTDIR)/data/mail.dat
+TESTMAILD   := $(shell cat $(TESTDIR)/data/mail_d.dat)
+
+TESTSTRING  := "あいうえお"
+
+TEST2CHDAT  := 2ch.dat
+TESTIMAGEW  := 250
+TESTIMAGEH  := 389
+TESTIMAGES  := $(wildcard $(TESTDIR)/data/image.*)
+
+TESTID      := $(basename $(notdir $(shell find $(TESTDIR)/data \
+	-mindepth 2 -type f -not -path '*/.*' -not -path 'CVS/*' | head -n 1)))
+
+TESTS       := UploadItem TemplateLexer TemplateParser TemplateExecutor	\
+	BasicFileWriter MmapFileWriter Base64FileWriter MessageDigest5	\
+	RFC1867Parser DownloadFlowController PostFlowController			\
+	ReadWriteLocker ConfigReader UploadItemVariableCreator UploadItemList \
+	Auxiliary @PACKAGE_NAME@
+
+ifeq (@MAKE_THUMBNAIL@,on)
+TESTS       += ImageFile
+endif
+
+###############################################################################
+# 偽りのターゲット
+test:
+	@for target in $(TESTS); \
+	do \
+		echo; \
+		echo -ne "$(CR_LW)"; \
+		echo "============================================================"; \
+		echo -e "$(CR_NG)Start to compile $(CR_LG)$${target}.test$(EXE_EXT)$(CR_ED)"; \
+		$(MAKE) $${target}.test$(EXE_EXT) || exit; \
+	done
+
+test-run: test
+	@for target in $(TESTS); \
+	do \
+		echo; \
+		echo -ne "$(CR_LW)"; \
+		echo "============================================================"; \
+		echo -e "$(CR_NP)Start to run $(CR_LP)$${target}.test$(EXE_EXT)$(CR_ED)"; \
+		$(MAKE) $${target}.run; \
+	done
+	$(MAKE) test-status CC=$(CC_ORIG)
+
+test-status:
+	@echo -ne "$(CR_LW)"
+	@echo "************************************************************"
+	@printf 'All Test Status%44s\n' "ver @PACKAGE_VERSION@"
+	@echo "------------------------------------------------------------"
+	@echo "* $(OS)"
+	@echo "* $(COMPILER)"
+	@echo "* $(APACHE)"
+	@printf '%59s\n' "`date '+%y/%m/%d %H:%M:%S'`"
+	@echo "------------------------------------------------------------"
+	@echo -ne "$(CR_ED)"
+	@total_test=0; fail_test=0; \
+	for target in $(TESTS); \
+	do \
+		total_test=`expr $${total_test} + 1`; \
+	    if [ `cat $(TESTDIR)/log/$${target}.status` = OK ]; then \
+			printf '* %-54s ' $${target}.test$(EXE_EXT); \
+			echo -e "$(CR_LG)OK$(CR_ED)"; \
+		else \
+			printf '* %-54s ' $${target}.test$(EXE_EXT); \
+			echo -e "$(CR_LR)NG$(CR_ED)"; \
+			fail_test=`expr $${fail_test} + 1`; \
+		fi \
+	done; \
+	echo -ne "$(CR_LW)"; \
+	echo "------------------------------------------------------------"; \
+	printf '%59s\n' "`expr $${total_test} - $${fail_test}` / $${total_test}"
+	@echo "************************************************************"
+	@echo -ne "$(CR_ED)"
+
+###############################################################################
+# 動作テスト
+@PACKAGE_NAME@.test$(EXE_EXT): @PACKAGE_NAME@.so
+	@touch $@
+@PACKAGE_NAME@.run: %.run: ../test/util/test_simple.pl %.test$(EXE_EXT)
+	@echo -e "$(CR_LB)Running $(CR_LR)$<$(CR_ED)"
+	@@APACHE_BIN@ -f @PWD@/conf/apache.conf -k stop > /dev/null 2>&1 || true
+	@@APACHE_BIN@ -f @PWD@/conf/apache.conf -DUPLOADER_DEBUG
+	@sleep 3
+	@echo $<
+	@mkdir -p $(TESTDIR)/log/$*/$(TIMESTAMP)
+	@exec 3>&1; \
+		stat=$$({ { $^ 2>&1 3>&- 4>&-; echo $$? 1>&4 3>&- 4>&-;} | \
+		@NKF@ -e 3>&- 4>&- | \
+		@TEE@ $(TESTDIR)/log/$*/$(TIMESTAMP)/run.log 1>&3 3>&- 4>&-; } 4>&1); \
+		if [ $$stat = 0 ]; then echo 'OK'; else echo 'NG'; fi \
+		> $(TESTDIR)/log/$*/$(TIMESTAMP)/run.status
+	@-rm -f $(TESTDIR)/log/$*.log
+	@-rm -f $(TESTDIR)/log/$*.status
+	@-ln -sf $*/$(TIMESTAMP)/run.log $(TESTDIR)/log/$*.log
+	@-ln -sf $*/$(TIMESTAMP)/run.status $(TESTDIR)/log/$*.status
+	@@APACHE_BIN@ -f @PWD@/conf/apache.conf -k stop
+
+###############################################################################
+# 型ルール
+%.run: %.test$(EXE_EXT)
+	@echo -e "$(CR_LB)Running $(CR_LR)$^$(CR_ED)"
+	@echo ./$< $(ARGUMENTS)
+	@mkdir -p $(TESTDIR)/log/$*/$(TIMESTAMP)
+	@@IPCS@ -s | @GREP@ $$USER 2>&1 > $(TESTDIR)/log/$*/$(TIMESTAMP)/sem.before | true
+	@exec 3>&1; \
+		stat=$$({ { ./$< $(ARGUMENTS) 2>&1 3>&- 4>&-; echo $$? 1>&4 3>&- 4>&-;} | \
+		@NKF@ -e 3>&- 4>&- | \
+		@TEE@ $(TESTDIR)/log/$*/$(TIMESTAMP)/run.log 1>&3 3>&- 4>&-; } 4>&1); \
+		if [ $$stat = 0 ]; then echo 'OK'; else echo 'NG'; fi \
+		> $(TESTDIR)/log/$*/$(TIMESTAMP)/run.status
+	@-rm -f $(TESTDIR)/log/$*.log
+	@-rm -f $(TESTDIR)/log/$*.status
+	@-ln -sf $*/$(TIMESTAMP)/run.log $(TESTDIR)/log/$*.log
+	@-ln -sf $*/$(TIMESTAMP)/run.status $(TESTDIR)/log/$*.status
+	@@IPCS@ -s | @GREP@ $$USER 2>&1 > $(TESTDIR)/log/$*/$(TIMESTAMP)/sem.after | true
+	@@DIFF@ -u $(TESTDIR)/log/$*/$(TIMESTAMP)/sem.before \
+			   $(TESTDIR)/log/$*/$(TIMESTAMP)/sem.after \
+		> $(TESTDIR)/log/$*/$(TIMESTAMP)/sem.diff; \
+		if [ $$? -ne 0 ]; then \
+			echo -e "$(CR_LR)Semaphore is not released.$(CR_ED)"; \
+		fi
+
+%.dbg: %.test$(EXE_EXT)
+	@echo -e "$(CR_LB)Debugging $(CR_LR)$^$(CR_ED)"
+	@echo $(DGB) $(DBG_OPT) ./$^ $(ARGUMENTS)
+	@$(DGB) $(DBG_OPT) ./$^ $(ARGUMENTS)
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

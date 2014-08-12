@@ -1,0 +1,30 @@
+<jnlp spec="1.0+" codebase="http://acapulco.dyndns.org/mod_uploader/UploadClient"
+      href="UploadClient.jnlp">
+  <information>
+    <title>UploadClient</title>
+    <vendor>Tetsuya Kimata</vendor>
+    <homepage>http://acapulco.dyndns.org/mod_uploader/</homepage>
+    <offline-allowed />
+  </information>
+
+  <security>
+    <all-permissions />
+  </security>
+  
+  <resources>
+    <j2se version="1.8" />
+    <j2se version="1.7" />
+    <j2se version="1.6" />
+    <j2se version="1.5" />
+    <j2se version="1.4" />
+    <jar href="UploadClient.jar" />
+  </resources>
+  <application-desc main-class="org.dyndns.acapulco.UploadClient" />
+</jnlp>
+
+<!--
+Local Variables:
+mode: xml
+coding: utf-8-unix
+End:
+-->

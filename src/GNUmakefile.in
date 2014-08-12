@@ -1,0 +1,266 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# 基本設定
+top_builddir:= ..
+
+ifneq ($(WITH_COLOR),)
+CR_LB       := \033[1;34m
+CR_LC       := \033[1;36m
+CR_LG       := \033[1;32m
+CR_LP       := \033[1;35m
+CR_LR       := \033[1;31m
+CR_LW       := \033[1;37m
+CR_NC       := \033[0;36m
+CR_NG       := \033[0;32m
+CR_NP       := \033[0;35m
+CR_ED       := \033[0m
+endif
+
+ifneq ($(findstring linux,@target_os@),)
+ifneq (@LSB_RELEASE@,lsb_release)
+OS          := $(subst Description:	,,$(shell @LSB_RELEASE@ --d))
+else
+OS          := Linux
+endif
+else
+ifneq ($(findstring freebsd,@target_os@),)
+OS          := $(shell uname -rs)
+
+else
+OS          := $(shell uname)
+endif
+endif
+CC          := @CC@
+CXX         := @CXX@
+
+CC_ORIG     := $(CC)
+CXX_ORIG    := $(CXX)
+
+DEBUG_OPT   := -g
+
+LIBTOOL     := @LIBTOOL@
+
+HEADERDIR   := ../include
+# -isystem は -MMD で余計な依存関係を生成させないため．ただし，Apache
+# のヘッダーは Mac OSX Tiger で不都合が出たので指定しない．
+INCLUDES    := -I$(HEADERDIR) \
+	-I $(shell @APXS@ -q INCLUDEDIR) \
+	$(shell @MCONF@ --cppflags) \
+	-isystem $(shell @APRCONF@ --includedir)
+
+CFLAGS      := -O3 -MMD \
+	-Wall -Wextra -Wformat=2 -Wdisabled-optimization -Wfloat-equal -Wpointer-arith \
+	-Wcast-align -Wno-unused-parameter -fno-rtti -pipe \
+	$(shell @APRCONF@ --cflags)
+CXXFLAGS    = $(CFLAGS)
+LDFLAGS     := -Wall \
+	$(shell @APRCONF@ --ldflags) $(shell @MCONF@ --ldflags)
+LIBS        := -lm $(shell @APRCONF@ --link-ld --libs ) \
+	$(shell @MCONF@ --libs) -lstdc++ @LIB_ICONV@
+
+ifneq ($(findstring freebsd,@target_os@),)
+# iconv 用
+INCLUDES    += -isystem /usr/local/include
+LIBS        += -L /usr/local/lib
+endif
+
+# gzip 圧縮
+ifeq (@WRITER_NAME@,ZipFileWriter)
+LIBS        += -lz
+endif
+
+DEPENDS     := $(wildcard *.d)
+
+DEF_OPT     := -D
+
+OUT_OPT     := -o 
+LOUT_OPT    := -o 
+NOLINK_OPT  := -c
+
+OBJ_EXT	    := o
+EXE_EXT     :=
+
+DGB         := gdb
+DBG_OPT     := --args
+
+VAL_OPT     := --leak-check=full
+
+###############################################################################
+# コンパイラ
+ifeq ($(CC_ORIG),icc)
+COMPILER    := Intel C++ Compiler ver $(shell $(CC_ORIG) -dumpversion)
+override CXX:= icpc
+CXX_ORIG    := $(CXX)
+LINK        := $(CXX)
+CFLAGS      := $(filter-out -Wall, $(CFLAGS)) -ipo -O3 -w1 -fPIC
+LDFLAGS     := $(LDFLAGS) -ipo
+LIBS        := $(filter-out -lstdc++, $(LIBS))
+else
+# DEFS        := -DFORTIFY_SOURCE=2
+ifneq ($(findstring g++,$(CXX_ORIG)),)
+override CC := $(LIBTOOL) --silent --mode=compile --tag=CC $(CC_ORIG) -prefer-pic
+override CXX:= $(LIBTOOL) --silent --mode=compile --tag=CXX $(CXX_ORIG) -prefer-pic
+LINK        := $(LIBTOOL) --silent --mode=link --tag=CXX $(CXX_ORIG)
+CFLAGS      += -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion \
+	-Wpointer-arith -Wfloat-equal -Wstrict-aliasing -ftracer -fforce-addr
+DEBUG_OPT   += -ggdb
+ifeq ($(firstword $(sort $(shell $(CC_ORIG) -dumpversion) 3.9.9)),3.9.9)
+# GCC 4.0 以上の場合
+CFLAGS      += -fvisibility=hidden
+LDFLAGS     += -fvisibility=hidden
+# ifneq ($(findstring mudflap,$(shell $(CC_ORIG) -v 2>&1)),)
+# LDFLAGS     += -fmudflap
+# LIBS        += -lmudflap
+# endif
+endif
+else
+CFLAGS      += -fPIC
+LINK        := $(CXX)
+endif
+endif
+
+###############################################################################
+# 言語
+ifneq ($(findstring ja_JP,$(LANG)),)
+DEFS        += -DLOCALE_JA -DCONV_CHAR_CODE
+endif
+
+# デバッグ
+ifeq (@DEBUG@,on)
+DEFS        += -DDEBUG
+CFLAGS      += $(DEBUG_OPT) -Werror
+endif
+
+# Linux 用
+ifneq ($(findstring linux,@target_os@),)
+LDFLAGS     += -Wl,-z,now,-z,relro
+endif
+
+###############################################################################
+# 情報
+APACHE      := $(shell @APACHE_BIN@ -version | grep Apache | awk '{print $$3}')
+COMPILER    := GNU Compiler Collection ver $(shell $(CC_ORIG) -dumpversion)
+
+###############################################################################
+# 依存関係
+include GNUmakefile.dep
+ifneq ($(DEPENDS),)
+include $(DEPENDS)
+endif
+
+$(HEADERDIR)/Environment.h.gch: CFLAGS := $(filter-out -Werror, $(CFLAGS)) -fPIC
+$(HEADERDIR)/Environment.h.gch: $(wildcard $(HEADERDIR)/*.h)
+.pre-compile: $(HEADERDIR)/Environment.h.gch
+	@touch $@
+
+$(HEADERDIR)/MessageJA.h: $(HEADERDIR)/MessageJA.h.in
+	@echo -e "$(CR_NC)Generating $(CR_LC)$<$(CR_ED)"
+	../util/unpack_literal.pl < $< > $@
+
+###############################################################################
+# テスト
+include GNUmakefile.tst
+
+###############################################################################
+# 引数
+include GNUmakefile.arg
+
+###############################################################################
+# パーサテスト
+%.dot: $(TESTDIR)/tmpl/%.txt TemplateParser.test$(EXE_EXT)
+	@./TemplateParser.test$(EXE_EXT) $(TESTDIR)/tmpl/$*.txt 4 2>/dev/null > $@
+
+###############################################################################
+# 掃除
+include GNUmakefile.cln
+
+clean-sem: # 取扱注意
+	@if [ $$USER = root ]; then \
+		echo -e "$(CR_LR)root can not exec clean-sem. it's dangerous.$(CR_ED)"; \
+		exit -1; \
+	fi
+	@echo -e "$(CR_LG)Remove all semaphores. OK? [N/y]$(CR_ED)"; \
+	read answer; \
+	if [ $$answer == 'y' -o $$answer == 'Y' ]; then \
+		for i in `@IPCS@ -s | @GREP@ $$USER | @AWK@ '{print $$2}' | \
+			@ENV@ GREP_OPTIONS= @GREP@ -E '[[:digit:]]+'`; do \
+			@IPCRM@ -s $$i; \
+		done \
+	fi
+
+###############################################################################
+# 型ルール
+%.so: DEFS += -DUPLOADER_TYPE_APACHE -DEAPI
+%.so: %.$(OBJ_EXT)
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+ifneq ($(findstring g++,$(CXX_ORIG)),)
+	$(LINK) $(LDFLAGS) $(LIBS) \
+		-export-dynamic -module -avoid-version \
+		-rpath $(shell @APXS@ -q LIBEXECDIR) \
+		$(LOUT_OPT)$(subst .so,.la,$@) $(sort $(subst .$(OBJ_EXT),.lo,$^))
+	@cp -f .libs/$@ .
+else
+	$(LINK) -fPIC -shared $(LDFLAGS) $(LIBS) $(LOUT_OPT)$@ $(sort $^)
+endif
+%.s: CFLAGS += -g
+
+%.app$(EXE_EXT): CFLAGS += $(DEBUG_OPT) -pg
+%.app$(EXE_EXT): LDFLAGS += $(DEBUG_OPT) -pg
+%.app$(EXE_EXT): DEFS += -DUPLOADER_TYPE_CGI
+%.test$(EXE_EXT): CFLAGS += $(DEBUG_OPT) -pg
+%.test$(EXE_EXT): LDFLAGS += $(DEBUG_OPT) -pg
+
+%.s: %.cpp $(HEADERDIR)/%.h
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX_ORIG) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
+%.s: %.cpp
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX_ORIG) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
+%.test$(EXE_EXT).s: %.cpp $(HEADERDIR)/%.h
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX_ORIG) -DDEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
+%.test$(EXE_EXT).s: %.cpp
+	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	$(CXX_ORIG) -DDEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
+
+%.svg: %.dot
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+	@DOT@ -Tsvg -o$@ $<
+
+###############################################################################
+# その他
+.SUFFIXES: .c .cpp .d .in .h.gch .h .$(OBJ_EXT) .test$(EXE_EXT).$(OBJ_EXT) \
+	.app .so .test$(EXE_EXT) .run .dot .pdf .dbg .val
+.PRECIOUS: %.test$(EXE_EXT) %.test$(EXE_EXT).$(OBJ_EXT) %.$(OBJ_EXT) %.dot
+.PHONY: all compile $(TEST_TARGETS) $(CLEAN_TARGETS) clean-sem 
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

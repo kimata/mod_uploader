@@ -1,0 +1,282 @@
+/******************************************************************************
+ * Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+ *
+ * All rights reserved.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any
+ * damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any
+ * purpose, including commercial applications, and to alter it and
+ * redistribute it freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must
+ *    not claim that you wrote the original software. If you use this
+ *    software in a product, an acknowledgment in the product
+ *    documentation would be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must
+ *    not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ * $Id: MultipartMessageParser.h.in 2757 2007-12-11 10:59:22Z svn $
+ *****************************************************************************/
+
+#ifndef MULTIPART_MESSAGE_PARSER_H
+#define MULTIPART_MESSAGE_PARSER_H
+
+#include "Environment.h"
+
+#include <cstdlib>
+
+#include "apr_pools.h"
+#include "apr_tables.h"
+
+#include "MultipartMessageParserBuffer.h"
+#include "@WRITER_NAME@.h"
+#include "MessageDigest5.h"
+
+#define AS_CONTENT(pointer) reinterpret_cast<content_t *>(pointer)
+
+
+/**
+ * @brief マルチパートメッセージをパースするクラス．
+ */
+template<class R, class W=@WRITER_CLASS@ >
+class MultipartMessageParser
+{
+public:
+    /** マルチパートの内容のタイプ */
+    enum content_type {
+        NONE,       // 不明
+        TEXT,       // テキスト
+        FILE        // ファイル
+    };
+
+    /** ファイルタイプの内容 */
+    typedef struct FileContent {
+        /** ファイルの名前 */
+        const char *name;
+        /** 一時ファイルのパス */
+        const char *temp_path;
+        /** ファイルの MIME タイプ */
+        const char *mime;
+        /** ファイルの MD5 ハッシュ値 */
+        const char *digest;
+        /** ファイルのサイズ */
+        apr_uint64_t size;
+
+        FileContent(const char *name=NULL, const char *temp_path=NULL,
+                    const char *mime=NULL, const char *digest=NULL,
+                    apr_uint64_t size=0)
+            : name(name),
+              temp_path(temp_path),
+              mime(mime),
+              digest(digest),
+              size(size)
+        {
+
+        }
+    } file_content_t;
+
+    /** マルチパートの内容 */
+    typedef struct Content {
+        /** 名前 */
+        const char *name;
+        /** タイプ */
+        content_type type;
+
+        // file をポインタにしたくないので union にはしない
+
+        /** テキストタイプの内容 */
+        const char *text;
+        /** ファイルタイプの内容 */
+        file_content_t file;
+        Content()
+          : type(NONE),
+            text(NULL),
+            file()
+        {
+
+        }
+    } content_t;
+
+    /**
+     * コンストラクタです．
+     *
+     * @param[in] pool プール
+     * @param[in] reader POST リクエストを読み込むオブジェクト
+     * @param[in] boundary 区切り文字
+     * @param[in] file_dir_path 一時ファイルを作成するディレクトリ
+     * @param[in] max_text_size テキストの最大サイズ
+     * @param[in] max_file_size ファイルの最大サイズ
+     * @param[in] max_item_num マルチパートのの最大個数
+     * @param[in] file_offset ファイルを書き込む際のオフセット
+     */
+    MultipartMessageParser(apr_pool_t *pool, R& reader,
+                           const char *file_dir_path, apr_size_t max_text_size,
+                           apr_uint64_t max_file_size, apr_size_t max_item_num,
+                           apr_size_t file_offset=0);
+    virtual ~MultipartMessageParser();
+
+    static content_t *get_content(apr_array_header_t *content_array,
+                                  const char *name);
+    static content_t *get_text_content(apr_array_header_t *content_array,
+                                       apr_size_t index=0);
+    static content_t *get_file_content(apr_array_header_t *content_array,
+                                       apr_size_t index=0);
+    static void dump_content_array(apr_array_header_t *content_array);
+
+protected:
+    typedef R PostReaderClass;
+    typedef W FileWriterClass;
+
+    /**
+     * データを読み込む単位．
+     *
+     * 連続したヘッダーのサイズの合計がこの値よりも大きいと，読み込みに
+     * 失敗します．
+     */
+    static const apr_size_t READ_BLOCK_SIZE;
+    /**
+     * データ読み込みのタイムアウト時間．
+     *
+     * アップロードされたファイルがこの時間よりも長く更新されないと，アッ
+     * プロードが異常終了した物と見なされ，一時ファイルが削除されます．
+     *
+     * @note 複数ファイルのアップロードを扱うとき注意．
+     */
+    static const apr_size_t READ_TIMEOUT_SEC;
+    static const char CR_LF[];
+    static const char CR_LF_CR_LF[];
+    static const char CONTENT_TYPE[];
+    static const char CONTENT_DISPOSITION[];
+    static const char BOUNDARY_PARAM[];
+    static const char BOUNDARY_PREFIX[];
+    static const char ASSIGN;
+    static const char QUOTE;
+    static const char DELIMITER;
+    static const char NAME_PARAM[];
+    /** 一時ファイルの名前のテンプレート */
+    static const char FILE_NAME_TEMPLATE[];
+
+    /**
+     * テキストタイプのマルチパートを読み込みます．
+     *
+     * @param[out] content テキスト情報
+     */
+    void get_text_content(content_t *content);
+    /**
+     * ファイルタイプのマルチパートを読み込みます．
+     *
+     * @param[out] content ファイル情報
+     */
+    void get_file_content(content_t *content);
+    /**
+     * マルチパートが終了したかどうかを返します．
+     *
+     * @retval true 終了した
+     * @retval false 終了していない
+     */
+    bool is_end();
+    /**
+     * バッファ中のデータサイズが READ_BLOCK_SIZE 以上になるまで，バッ
+     * ファへデータを読み込みます．
+     */
+    apr_size_t fill();
+    /**
+     * バッファへデータを読み込みます．
+     *
+     * @param[in] size 読み込むサイズ
+     * @return 読み込んだサイズ
+     */
+    apr_size_t read(apr_size_t size=READ_BLOCK_SIZE);
+    /**
+     * 次の形式の入力を解析します．
+     *
+     *   - name=value   (value には空白文字は含まれない)
+     *   - name="value" (value には「"」は含まれない)
+     *
+     * name の前にある，空白文字及び「;」は読み飛ばされます．入力中に
+     * NULL 文字が含まれている場合は正しく動作しません．
+     *
+     * @param[in] input_start 入力文字列
+     * @param[in] input_end 入力文字列の終端
+     * @param[in] name name
+     * @param[out] value value
+     * @retval NULL name が引数で指定された物と違ったり，name の直後に「=」がない場合
+     * @retval value["] の次の位置 正しく解析できた場合
+     */
+    const char *get_param(const char *input_start,
+                          const char *input_end,
+                          const char *name, const char **value);
+    /**
+     * 入力文字列中の文字列 pattern を読み飛ばします．
+     *
+     * pattern は入力の先頭にある必要があります．入力中に NULL 文字が含
+     * まれている場合は正しく動作しません．
+     *
+     * @param[in] input_start 入力文字列
+     * @param[in] pattern 読み飛ばす文字列
+     * @param[in] is_must 必ず読み飛ばす必要があるかどうか
+     */
+    const char *skip(const char *input_start, const char *pattern,
+                     bool is_must=true);
+    /**
+     * CRLF の次の位置まで読み飛ばします．
+     *
+     * 入力中に NULL 文字が含まれている場合は正しく動作しません．
+     *
+     * @param[in] input_start 入力文字列
+     * @return CRLF の次の位置
+     */
+    const char *skip_line(const char *input_start);
+    const char *skip_header(const char *input_start);
+    static void write_text(char **text, apr_size_t *text_length,
+                           MultipartMessageParserBuffer& buffer,
+                           apr_size_t barrier_len);
+    static void write_file(FileWriterClass& writer, MessageDigest5& digest,
+                           MultipartMessageParserBuffer& buffer,
+                           apr_size_t size);
+    static bool start_with(const char *str, const char *pattern,
+                           apr_size_t pattern_length);
+    static bool start_with(const char *str, const char *pattern)
+    {
+        return start_with(str, pattern, strlen(pattern));
+    };
+    static void dump_content(content_t *content);
+    static void dump_input(MultipartMessageParserBuffer& buffer);
+
+    apr_pool_t *pool_;
+
+    PostReaderClass reader_;
+    MultipartMessageParserBuffer buffer_;
+
+    /** 区切り文字 */
+    const char *boundary_;
+    /** 区切り文字の長さ */
+    apr_size_t boundary_len_;
+    apr_size_t barrier_len_;
+
+    const char *file_dir_path_;
+    /** 一時ファイルを作成するディレクトリ */
+    /** テキストの最大サイズ */
+    const apr_size_t max_text_size_;
+    /** ファイルの最大サイズ */
+    const apr_uint64_t max_file_size_;
+    /** マルチパートのの最大個数 */
+    const apr_size_t max_item_num_;
+    /** ファイルを書き込む際のオフセット */
+    const apr_size_t file_offset_;
+};
+
+#endif
+
+
+// Local Variables:
+// mode: c++
+// coding: utf-8-dos
+// End:

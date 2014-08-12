@@ -1,0 +1,304 @@
+@charset "EUC-JP";
+
+body { 
+  font-family         : 'Lucida Sans Unicode', Verdana, '�ҥ饮�γѥ� Pro W3', '�ҥ饮�γѥ�3', sans-serif;
+  font-size           : 10pt;
+
+  margin              : 1em   2em   1em   1em;
+  line-height         : 145%;
+  background-color    : #ffffff;
+  color               : #001100;
+}
+
+a
+{
+  text-decoration     : none;
+}
+
+a:link
+{
+  color               : #003300;
+}
+
+a:visited
+{
+  color               : #003300;
+} 
+
+a:hover
+{
+  color               : #336633;
+  text-decoration     : underline;
+} 
+
+img
+{
+  border              : 0px;
+}
+
+iframe
+{
+  width               : 0px;
+  height              : 0px;
+  border              : 0px;
+}
+
+div.thumbnail img
+{
+  border              : 1px solid #333333;;  
+  margin              : 0.5em 0.5em 0.5em 0.5em;
+}
+
+h1
+{
+  font-family         : '�ҥ饮�γѥ� Pro W6', '�ҥ饮�γѥ�6', Verdana, sans-serif;
+  font-size           : medium;
+  color               : #ffffff;
+
+  background-color    : #666f66;
+  border-bottom       : 1px solid #333f33;
+  border-left         : 1px solid #666f66;
+
+  padding             : 0.3em 0.1em 0.1em 0.2em;
+}
+
+form
+{
+  margin              : 0em  0em   0em   0em;
+}
+
+table
+{
+  font-size           : 10pt;
+
+  border              : 0px;
+  margin              : 0em   0em   0em   1em;
+}
+
+table.file
+{
+  width               : 96%;
+}
+
+th
+{
+  font-family         : '�ҥ饮�γѥ� Pro W6', '�ҥ饮�γѥ�6', Verdana, sans-serif;
+
+  text-align          : left;
+  vertical-align      : bottom;
+}
+
+td
+{
+  padding             : 0em 0.5em   0em   0em;
+  vertical-align      : bottom;
+}
+
+table.file th.url
+{
+  width               : 2%;
+}
+
+table.file th.download
+{
+  width               : 1%;
+}
+
+table.file th.name
+{
+  width               : 25%;
+}
+
+table.file th.comment
+{
+  width               : 50%;
+}
+
+table.file th.size
+{
+  width               : 1%;
+}
+
+table.file th.mime
+{
+  width               : 1%;
+}
+
+table.file th.ip_address
+{
+  width               : 1%;
+}
+
+table.file th.date
+{
+  width               : 1%;
+}
+
+table.file th.remove
+{
+  width               : 1%;
+}
+
+table.file td
+{
+  border-bottom       : 1px solid #cccccc;
+}
+
+table.file td.index
+{
+  text-align          : center;
+}
+
+table.file td.download img
+{
+  vertical-align      : middle;
+}
+
+table.file td.download_count
+{
+  text-align          : center;
+}
+
+table.file td.url
+{
+  font-size           : 120%;
+}
+
+table.file td.size
+{
+  text-align          : right;
+  white-space         : nowrap;
+
+  cursor              : pointer;
+}
+
+table.file td.mime
+{
+  white-space         : nowrap;
+}
+
+table.file td.date
+{
+  white-space         : nowrap;
+}
+
+table.file td.remove div
+{
+  cursor              : pointer;
+}
+
+table.file td.remove form
+{
+  margin              : 0em   0em   0em   0em;
+}
+
+em
+{
+  font-style          : normal;
+  font-weight         : bold;
+}
+
+div.description
+{
+  color               : #000000;
+
+  border-bottom       : 1px dashed #000033;
+  margin              : 0.5em 0em   1em   1em;
+}
+
+#progress_info
+{
+  font-size           : 120%;
+  color               : #003300;
+}
+
+div.bar_graph
+{
+  height              : 16px;
+}
+
+div.progress
+{
+  margin              : 0.5em 0em   0em   1em;
+}
+
+div.page_info
+{
+  text-align          : center;
+}
+
+div.navigator
+{
+  text-align          : right;
+  margin              : 1em 1em   1em   1em;
+}
+
+div.input_download_pass
+{
+  color               : #000000;
+
+  text-align          : center;
+  margin              : 2em   0em   0em   0em;
+}
+
+label
+{
+  color               : #111111;
+}
+
+img.warning
+{
+  vertical-align      : middle;
+}
+
+div.warning
+{
+  color               : #ff0000;
+  font-size           : 150%;
+  vertical-align      : middle;
+
+  margin              : 1em   0em   1em   0em;
+}
+
+hr.footer
+{
+  color               : #333333;
+
+  height              : 1px;
+}
+
+div.package_info
+{
+  font-weight         : bold;
+  color               : #333399;
+
+  text-align          : right;
+  margin              : 0em   0em 0.1em   0em;
+}
+
+div.footer
+{
+  font-family         : "Century Gothic", sans-serif;
+  color               : #333333;
+
+  text-align          : right;
+  margin              : 0em   0em 0.1em   0em;
+}
+
+div.footer a
+{
+  color               : #000099;
+}
+
+div.rss
+{
+  text-align          : right;
+  margin              : 0.5em 0em   0em   0em;
+}
+
+div.validator
+{
+  text-align          : right;
+  margin              : 0.5em   -5px   0em   0em;
+}
+

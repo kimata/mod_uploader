@@ -1,0 +1,13 @@
+<!--@ foreach (item in ITEM_LIST) { @-->
+id            : ${item.id}
+index         : ${item.index}
+download_count: ${item.download_count}
+file_size     : ${item.file_size}
+date          : ${item.date}
+file_name     : ${item.file_name}
+file_mime     : ${item.file_mime}
+file_ext      : ${item.file_ext}
+file_digest   : ${item.file_digest}
+comment       : ${item.comment}
+============================================================
+<!--@ } @-->

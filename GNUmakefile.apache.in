@@ -1,0 +1,74 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 726 2005-09-24 14:19:32Z svn $
+###############################################################################
+#
+# * 動作
+#   - make start    : Apache を実行させます．
+#   - make restart  : Apache を再実行させます．
+#   - make stop     : Apache を停止させます．
+#
+###############################################################################
+
+###############################################################################
+# 言語
+ifneq ($(findstring ja_JP,$(LANG)),)
+CONF_FILE   := @PWD@/conf/apache.conf
+else
+CONF_FILE   := @PWD@/conf/en/apache.conf
+endif
+
+###############################################################################
+# ターゲット
+all: start
+
+start:
+	@APACHE_BIN@ -f $(CONF_FILE) -k start
+
+restart:
+	@APACHE_BIN@ -f $(CONF_FILE) -k restart
+
+stop:
+	@APACHE_BIN@ -f $(CONF_FILE) -k stop
+
+install:
+	@mods_available="/etc/apache2/mods-available"; \
+	mods_enabled="/etc/apache2/mods-enabled"; \
+	if [ -e $$mods_available -a -e $$mods_enabled ]; then \
+		@APXS@ -i -n "uploader" @PACKAGE_NAME@.so; \
+		echo "LoadModule uploader_module @LIBEXECDIR@/@PACKAGE_NAME@.so" > \
+			$$mods_available/uploader.load; \
+		ln -s ../mods-available/uploader.load $$mods_enabled/uploader.conf; \
+	else \
+		@APXS@ -i -a -n "uploader" @PACKAGE_NAME@.so; \
+	fi
+
+.SUFFIXES: 
+.PHONY: start restart stop install
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

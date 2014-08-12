@@ -1,0 +1,504 @@
+======================================================================
+README for mod_uploader
+======================================================================
+
+.. image:: img/title.png
+   :width: 440
+   :height: 89
+   :alt: mod_uploader: file upload application works as Apache module
+
+.. raw:: html
+
+  <div class="navi_lang">
+   (Language: 
+    <a href="apache.en.htm"><img src="img/icon_en.png" width="16" height="11" alt="English" /></a> |
+    <a href="apache.de.htm"><img src="img/icon_de.png" width="16" height="11" alt="German" /></a> |
+    <a href="apache.htm"><img src="img/icon_ja.png" width="16" height="11" alt="Japanese" /></a>
+   )
+  </div>
+
+.. contents::
+
+|GoogleAdSense|
+
+
+What is mod_uploader
+----------------------------------------------------------------------
+
+mod_uploader is a file upload application works as `Apache`_ module.  The
+following features are provided:
+
+* It works faster than the thing made with Perl or PHP or Ruby,
+  because it is made with C++ and works as `Apache`_ module.
+
+* It includes simple template engine, so you can change page layouts
+  without re-compilation.
+
+* it can show progress report when uploading.
+
+.. image:: img/upload_window.png
+   :width: 683
+   :height: 145
+   :alt: Screenshot of progress report
+
+
+Demo
+----------------------------------------------------------------------
+
+http://acapulco.dyndns.org:7070/up/ (in Japanese)
+
+
+Preparing system
+----------------------------------------------------------------------
+
+.. |IconWindows| image:: img/icon_windows.png
+   :width: 16
+   :height: 16
+   :alt: Windows
+
+mod_uploader works on Unix-like systems such as Linux, FreeBSD, and Max OSX.
+(|IconWindows| `Windows edition is here <http://acapulco.dyndns.org/mod_uploader/apache-win.htm>`_)
+
+* `Apache`_ 2.0 or later
+
+* `GNU Compiler Collection`_ 3.3 or later, or `Intel C++ Compiler`_
+  for Linux 9.1 or later
+
+* `GNU Make`_ 3.8 or later
+
+* `GNU Libtool`_ 1.5 or later
+
+* `ImageMagick`_ 6.0 or later
+  
+mod_uploader is developed under `Gentoo Linux`_ Kernel **2.6.20** , GCC **3.4.5** , Apache
+**2.0.58**, and ImageMagick **6.3.3**. 
+
+Package requirement
+``````````````````````````````````````````````````````````````````````
+
+CentOS
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* httpd-devel
+* ImageMagick-c++-devel
+
+Debian
+......................................................................
+
+* libtool
+* apache2-mpm-prefork
+* apache2-prefork-dev
+* libmagick++6-dev
+
+FedoraCore
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* httpd-devel
+* ImageMagick-c++-devel
+* freetype-devel
+* fontconfig-devel
+
+FreeBSD
+......................................................................
+
+* www/apache20 or www/apache22
+* graphics/ImageMagick
+
+Gentoo Linux
+......................................................................
+
+* gcc
+* make
+* libtool
+* apache
+* imagemagick
+
+Ubuntu Linux
+......................................................................
+
+* g++
+* apache2-mpm-prefork
+* apache2-prefork-dev
+* libmagick++9-dev
+
+
+License
+----------------------------------------------------------------------
+
+mod_uploader is distributed under the terms of `The zlib/libpng License`_.
+
+
+Download
+----------------------------------------------------------------------
+
+* `mod_uploader-3.1.0.tgz <http://sourceforge.jp/projects/mod-uploader/downloads/32076/mod_uploader-3.1.0.tgz>`_
+
+
+Getting a CVS checkout 
+----------------------------------------------------------------------
+
+You can checkout mod_uploader from SoutceForge.  To do so, simply use the following commands:
+
+::
+
+  $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader checkout -P mod_uploader
+
+And, you can `Browse the CVS repository of this project
+<http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/>`_
+with your web browser.
+
+ChangeLog
+----------------------------------------------------------------------
+
+`ChangeLog <http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup>`_
+
+
+Building
+----------------------------------------------------------------------
+
+If you use `GNU Compiler Collection`_, use the following commands:
+
+::
+
+ $ ./configure
+ $ make
+
+If you use `Intel C++ Compiler`_, use the following commands:
+
+::
+
+  $ env CC=icc ./configure
+  $ make
+
+
+Configure options
+``````````````````````````````````````````````````````````````````````
+If configure is failed, try `--with-apxs`_ , `--with-apctl2`_, or `--with-aprconf`_ option.
+
+_`--with-apxs` = `APXS`
+  Specify the path to `apxs` command.
+
+_`--with-apctl2` = `APCTL`
+  Specify the path to `apachectl` command.
+
+_`--with-aprconf` = `APRCONF`
+  Specify the path to `apr-config` command.
+
+_`--with-libtool` = `LIBTOOL`
+  Specify the path to `libtool` command.
+
+_`--with-march` = `CPU`
+  If you want to optimize code for particular CPU, specify this
+  option.  For example, if you want to optimize for Pentium 4, specify
+  `--with-march=pentium4`.
+
+_`--enable-empty-comment`
+  If you want to accept file with empty comment, specify this option.
+
+_`--enable-empty-password`
+  If you want to accept empty password to remove files, specify this option.
+
+_`--enable-thumbnail`
+  If you want to make thumbnail of image files, specify this option.
+
+_`--with-mconf` = `MCONF`
+  Specify the path to `Magick++-config` command.
+
+Command examples
+``````````````````````````````````````````````````````````````````````
+
+CentOS, FedoraCore, Gentoo Linux, Ubuntu Linux
+......................................................................
+
+::
+
+  $ ./configure
+  $ make
+
+FreeBSD
+......................................................................
+
+::
+
+  $ ./configure
+  $ gmake
+
+Mac OSX Tiger + Fink
+......................................................................
+
+::
+
+  $ ./configure
+  $ env MACOSX_DEPLOYMENT_TARGET=10.4 make
+
+
+Installation
+----------------------------------------------------------------------
+
+::
+
+  $ su
+  # make -f GNUmakefile.apache install
+
+
+Setting
+----------------------------------------------------------------------
+
+Add the following setting to the apache configuration file
+(`.htaccess` is not permitted).
+
+::
+
+  <Location "Place where uploader is set up (URL path, not file system path)">
+      SetHandler                     uploader
+      
+      UploaderDataDirectory          Path of the direcory where meta data is saved
+      UploaderFileDirectory          Path of the direcory where file is saved
+      UploaderThumbDirectory         Path of the direcory where thumbnail image is saved
+      UploaderTempDirectory          Path of the direcory where temporary file is saved
+
+      UploaderTotalFileSizeLimit     Limit of total file size (KB)
+      UploaderTotalFileNumberLimit   Limit of number of files
+      UploaderFileSizeLimit          Limit of size per file (KB)
+      UploaderPerPageItemNumber      Number of files showed in one page
+      
+      UploaderIndexViewTemplate      Template of top page (use index.htm)
+      UploaderInfoViewTemplate       Template of info page (use info.htm)
+      UploaderProgressViewTemplate   Template of progress reporting page (use progress.htm)
+      UploaderDownloadViewTemplate   Template of download page (use download.htm)
+      UploaderThumbnailViewTemplate  Template of thumbnail page (use thumbnail.htm)
+      UploaderAdminViewTemplate      Template of administration page (use admin.htm)
+      UploaderErrorViewTemplate      Template of error page (use error.htm)
+  </Location>
+  <Location "Place where uploader is set up (URL path, not file system path)"/admin>
+      Order                   Deny,Allow
+      Deny                    From All
+      Allow                   From 127.0.0.1
+  </Location>
+  
+  UploaderBaseUrl             The URL of uploader
+
+Please use `index.htm`, `info.htm`, `progress.htm`, `download.htm`,
+`thumbnail.htm`, `admin.htm`, and `error.htm` that exists in the
+tmpl/en directory as template file.
+
+For example, if you want to set up mod_uploader at `http://foo/up/`,
+use the following setting.  Alias of `/up_img`, `/up_css`, and
+`/up_js` is not indispensable. If you do not want to edit template
+file, use those aliases.
+
+::
+
+  <Location /up>
+      SetHandler                     uploader
+      
+      UploaderBaseUrl                "http://foo/up"
+      UploaderDataDirectory          "/path/to/mod_uploader/test/data"
+      UploaderFileDirectory          "/path/to/mod_uploader/test/file"
+      UploaderThumbDirectory         "/path/to/mod_uploader/test/thumb"
+      UploaderTempDirectory          "/path/to/mod_uploader/test/temp"
+      
+      UploaderTotalFileSizeLimit     10485760
+      UploaderTotalFileNumberLimit   200
+      UploaderFileSizeLimit          1048576
+      UploaderPerPageItemNumber      30
+      
+      UploaderIndexViewTemplate      "/path/to/mod_uploader/tmpl/en/index.htm"
+      UploaderInfoViewTemplate       "/path/to/mod_uploader/tmpl/en/info.htm"
+      UploaderProgressViewTemplate   "/path/to/mod_uploader/tmpl/en/progress.htm"
+      UploaderDownloadViewTemplate   "/path/to/mod_uploader/tmpl/en/download.htm"
+      UploaderThumbnailViewTemplate  "/path/to/mod_uploader/tmpl/en/thumbnail.htm"
+      UploaderAdminViewTemplate      "/path/to/mod_uploader/tmpl/en/admin.htm"
+      UploaderErrorViewTemplate      "/path/to/mod_uploader/tmpl/en/error.htm"
+  </Location>
+  
+  <Location /up/admin>
+      Order                   Deny,Allow
+      Deny                    From All
+      Allow                   From 127.0.0.1
+  </Location>
+  
+  Alias /up_img                  "/path/to/mod_uploader/img"
+  Alias /up_css                  "/path/to/mod_uploader/css"
+  Alias /up_js                   "/path/to/mod_uploader/js"
+
+
+Notes
+``````````````````````````````````````````````````````````````````````
+
+* Absolute path is recommended to specify directory and file, if you
+  are not accustomed to Apache setting.
+
+* It is necessary to set each directory of `FileDirectory`,
+  `ThumbDirectory`, and `TempDirectory` to the permission that Apache
+  can read and write.
+
+* Please do not put any files on `FileDirectory` and `ThumbDirectory`
+  excluding those that mod_uploader generates.
+
+* You can not include "~" in the path specified for `<Location>`.
+
+* Do not make directory or file at the path specified by `<Loadtion>`,
+  where mod_uploader is set up.
+
+  For example, if DocumentRoot is `/var/www` and sets up mod_uploader
+  at `/up`, directory must not exist at `/var/www/up`.
+  
+* According to the setting, it is not normally displayed.  Please
+  modify templates properly.
+
+
+Run
+----------------------------------------------------------------------  
+
+Star `Apache`_ as usual. Access the address you set up mod_uploader.
+
+
+Troubleshooting
+``````````````````````````````````````````````````````````````````````
+
+Apache did not start
+......................................................................
+
+Please check error log of Apache.  The error messages you see may be
+self-explanatory enough to enable you to diagnose and fix the problem.
+
+Progress report is always Server Busy
+......................................................................
+
+This problem occurs, if you access mod_uploader through an address
+different from UploaderBaseUrl. For example, UploaderBaseUrl is set to
+`http://localhost/up` and you access `http://127.0.0.1/up`.
+
+Please access mod_uploader through the address specified for
+UploaderBaseUrl.
+
+Download counter was reset 
+......................................................................
+
+mod_uploader manages download counts on memory for high-speed
+operation, and when Apache is stopped, those data is written file.
+
+Therefore, if Apache does not stop normally, download counter is reset.
+
+Run without installation
+----------------------------------------------------------------------  
+
+You can run mod_uploader without installation.  Use the following
+command, and access http://localhost:8080/up/.
+
+If you access from other computer, modify the part of *localhost* properly.
+
+::
+
+  $ su -
+  # make -f GNUmakefile.apache start
+
+If error related to `LoadModule` occured, please correct conf/en/apache.conf properly.
+To stop mod_uploader, use the following command:
+
+::
+
+  # make -f GNUmakefile.apache stop
+
+
+Tests
+----------------------------------------------------------------------
+
+`Resut of tests <http://acapulco.dyndns.org/mod_uploader/status/>`_
+
+
+API Document
+----------------------------------------------------------------------
+
+http://acapulco.dyndns.org/mod_uploader/api/
+
+Reference
+----------------------------------------------------------------------
+
+|Saber|_ |Secure|_
+
+.. _`Apache`:                         http://httpd.apache.org/
+.. _`Debian`:                         http://www.debian.org/
+.. _`GNU Compiler Collection`:        http://gcc.gnu.org/
+.. _`Intel C++ Compiler`:             http://www.intel.com/cd/software/products/asmo-na/eng/compilers/clin/
+.. _`GNU Make`:                       http://www.gnu.org/software/make/
+.. _`GNU Libtool`:                    http://www.gnu.org/software/libtool/
+.. _`ImageMagick`:                    http://www.imagemagick.org/
+.. _`ffmpeg`:                         http://ffmpeg.sourceforge.net/index.php
+.. _`Cygwin`:                         http://www.cygwin.com/
+.. _`The zlib/libpng License`:        http://www.opensource.org/licenses/zlib-license.php
+.. _`Gentoo Linux`:                   http://www.gentoo.org/
+.. _`FreeBSD`:                        http://www.freebsd.org/
+.. _`Mac OSX Tiger`:                  http://www.apple.com/macosx/
+
+.. |Saber| image:: img/saber.png
+   :width: 120
+   :height: 155
+   :alt: The Apache Modules Book
+.. _`Saber`: http://www.amazon.com/exec/obidos/ASIN/0132409674/cstation-22
+
+.. |Secure| image:: img/secure.png
+   :width: 120
+   :height: 151
+   :alt: Secure Coding in C And C++
+.. _`Secure`: http://www.amazon.com/exec/obidos/ASIN/0321335724/cstation-22
+
+.. |GoogleAdSense| raw:: html
+
+  <script type="text/javascript"><!--
+    google_ad_client = "pub-4095857718593292";
+    google_ad_width = 728;
+    google_ad_height = 90;
+    google_ad_format = "728x90_as";
+    google_ad_type = "text_image";
+    google_ad_channel = "4386274577";
+    google_ad_channel = "4386274577";
+    google_color_border = "FFFFFF";
+    google_color_bg = "FFFFFF";
+    google_color_link = "11593C";
+    google_color_text = "000000";
+    google_color_url = "008000";
+    //-->
+  </script>
+  <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+ </script>
+
+|GoogleAdSense|
+ 
+.. raw:: html
+
+  <hr />
+
+  <div class="footer">
+   <p>
+    <a href="http://acapulco.dyndns.org">[HOME]</a>
+   </p>
+   <p class="id">
+    $Id: apache.txt 2109 2006-11-26 23:11:04Z svn $
+   </p>
+
+   <address><img src="img/mail_address.png" width="204" height="16" alt="kimata&#64;acapulco.dyndns.org" /></address>
+
+   <p class="validator">
+    <a href="http://validator.w3.org/check?uri=referer">
+     <img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31" width="88" />
+    </a>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">
+     <img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" />
+    </a>
+   </p>
+  </div>
+
+.. Local Variables:
+.. mode: rst
+.. coding: utf-8-unix
+.. End:

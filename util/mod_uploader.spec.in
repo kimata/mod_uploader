@@ -1,0 +1,82 @@
+%define name mod_uploader
+%define version @PACKAGE_VERSION@
+%define source mod_uploader-@PACKAGE_VERSION@.tgz
+
+Summary: A file upload application works as Apache module
+Name: %{name}
+Version: %{version}
+Release: 1
+License: The zlib/libpng License
+Group: System Environment/Daemons
+Vendor: Tetsuya Kimata
+URL: http://acapulco.dyndns.org/mod_uploader/
+
+Source: %{source}
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+BuildRequires: gcc-c++, make, libtool, httpd-devel, ImageMagick-c++-devel 
+Requires: httpd, ImageMagick-c++
+
+%description
+mod_uploader is a file upload application works as Apache module.
+The following features are provided:
+- It works faster than the thing made with Perl or PHP or Ruby,
+  because it is made with C++ and works as Apache module. 
+- It includes simple template engine, so you can change page layouts
+  without re-compilation. 
+- it can show progress report when uploading. 
+
+%prep
+%setup -q -n %{name}-%{version}
+
+%{__cat} <<EOF >uploader.conf
+LoadModule uploader_module modules/mod_uploader.so
+
+# <Location /up>
+#     SetHandler uploader
+
+#     UploaderBaseUrl                 
+#     UploaderDataDirectory           
+#     UploaderFileDirectory           
+#     UploaderThumbDirectory          
+#     UploaderTempDirectory           
+
+#     UploaderTotalFileSizeLimit      
+#     UploaderTotalFileNumberLimit    
+#     UploaderFileSizeLimit           
+#     UploaderPerPageItemNumber       
+
+#     UploaderIndexViewTemplate       
+#     UploaderInfoViewTemplate        
+#     UploaderProgressViewTemplate    
+#     UploaderDownloadViewTemplate    
+#     UploaderThumbnailViewTemplate   
+#     UploaderAdminViewTemplate       
+#     UploaderErrorViewTemplate       
+# </Location>
+EOF
+
+%build
+%configure --enable-thumbnail
+%{__make} clean
+%{__make} all
+
+%install
+%{__rm} -rf %{buildroot}
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/httpd/conf.d
+%{__mkdir} -p %{buildroot}%{_libdir}/httpd/modules
+%{__install} -m0644 uploader.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/uploader.conf
+%{__install} -m0755 mod_uploader.so %{buildroot}%{_libdir}/httpd/modules/mod_uploader.so
+
+%clean
+%{__rm} -rf %{buildroot}
+
+%files
+%defattr(-, root, root)
+%doc AUTHORS ChangeLog COPYING
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/uploader.conf
+%{_libdir}/httpd/modules/mod_uploader.so
+
+%changelog
+* Sun Feb 17 2008 Tetsuya Kimata <kimata@acapulco.dyndns.org> - 3.0.4-1
+- Initial package.

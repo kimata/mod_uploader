@@ -1,0 +1,342 @@
+/* include/mod_uploader_config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* サイズの単位の表記(Byte)． */
+#undef BYTE_UNIT
+
+/* ． */
+#undef DEFAULT_FILE_SIZE_LIMIT
+
+/* ． */
+#undef DEFAULT_PER_PAGE_ITEM_NUMBER
+
+/* ． */
+#undef DEFAULT_TOTAL_FILE_NUMBER_LIMIT
+
+/* ． */
+#undef DEFAULT_TOTAL_FILE_SIZE_LIMIT
+
+/* ダウンロードセッションの合計の最大数． */
+#undef DLD_MAX_SESSION_COUNT
+
+/* 1 IP 当りのダウンロードセッションの最大数． */
+#undef DLD_MAX_SESSION_COUNT_PER_IP
+
+/* 空のコメントを受け付けるかどうか． */
+#undef EMPTY_COMMENT
+
+/* 空のパスワードによる削除を受け付けるかどうか． */
+#undef EMPTY_PASSWORD
+
+/* 動作時のテンプレートチェックを行うかどうか． */
+#undef FASTEST
+
+/* サイズの単位の表記(GByte)． */
+#undef GBYTE_UNIT
+
+/* GCC Atomic Builts が使えるかどうか． */
+#undef GCC_ATOMIC_BUILTINS
+
+/* Define to 1 if you have the <ctype.h> header file. */
+#undef HAVE_CTYPE_H
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the `fork' function. */
+#undef HAVE_FORK
+
+/* Define to 1 if you have the `getpagesize' function. */
+#undef HAVE_GETPAGESIZE
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `isalnum' function. */
+#undef HAVE_ISALNUM
+
+/* Define to 1 if you have the `isalpha' function. */
+#undef HAVE_ISALPHA
+
+/* Define to 1 if you have the `isdigit' function. */
+#undef HAVE_ISDIGIT
+
+/* Define to 1 if you have the `isxdigit' function. */
+#undef HAVE_ISXDIGIT
+
+/* Define to 1 if you have the `z' library (-lz). */
+#undef HAVE_LIBZ
+
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the `madvise' function. */
+#undef HAVE_MADVISE
+
+/* Define to 1 if you have the `malloc' function. */
+#undef HAVE_MALLOC
+
+/* Define to 1 if you have the `memchr' function. */
+#undef HAVE_MEMCHR
+
+/* Define to 1 if you have the `memcpy' function. */
+#undef HAVE_MEMCPY
+
+/* Define to 1 if you have the `memmem' function. */
+#undef HAVE_MEMMEM
+
+/* Define to 1 if you have the `memmove' function. */
+#undef HAVE_MEMMOVE
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
+
+/* Define to 1 if you have the `mprotect' function. */
+#undef HAVE_MPROTECT
+
+/* Define to 1 if you have the `realloc' function. */
+#undef HAVE_REALLOC
+
+/* Define to 1 if you have the <sched.h> header file. */
+#undef HAVE_SCHED_H
+
+/* Define to 1 if you have the <setjmp.h> header file. */
+#undef HAVE_SETJMP_H
+
+/* Define to 1 if you have the <signal.h> header file. */
+#undef HAVE_SIGNAL_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strcmp' function. */
+#undef HAVE_STRCMP
+
+/* Define to 1 if you have the `strcpy' function. */
+#undef HAVE_STRCPY
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlen' function. */
+#undef HAVE_STRLEN
+
+/* Define to 1 if you have the `strncmp' function. */
+#undef HAVE_STRNCMP
+
+/* Define to 1 if you have the `strndup' function. */
+#undef HAVE_STRNDUP
+
+/* Define to 1 if you have the `strstr' function. */
+#undef HAVE_STRSTR
+
+/* Define to 1 if you have the <sys/mman.h> header file. */
+#undef HAVE_SYS_MMAN_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <sys/wait.h> header file. */
+#undef HAVE_SYS_WAIT_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <utime.h> header file. */
+#undef HAVE_UTIME_H
+
+/* Define to 1 if you have the `wait' function. */
+#undef HAVE_WAIT
+
+/* PATH_INFO の最大長． */
+#undef HDL_MAX_PATH_INFO_SIZE
+
+/* iconv の第二引数の型 */
+#undef ICONV_2ND_ARG_TYPE
+
+/* アップロードアイテムの投稿日時のフォーマット */
+#undef ITM_DATE_FORMAT
+
+/* アップロードアイテムのコメントの最大長 */
+#undef ITM_MAX_COMMENT_SIZE
+
+/* アップロードアイテムの投稿日時の最大長 */
+#undef ITM_MAX_DATE_SIZE
+
+/* アップロードアイテムのダウンロードパスワードの最大長 */
+#undef ITM_MAX_DOWNLOAD_PASS_SIZE
+
+/* アップロードファイルの MD5 値の最大長 */
+#undef ITM_MAX_FILE_DIGEST_SIZE
+
+/* アップロードファイルの拡張子の最大長 */
+#undef ITM_MAX_FILE_EXT_SIZE
+
+/* アップロードファイルの MIME タイプの最大長 */
+#undef ITM_MAX_FILE_MIME_SIZE
+
+/* アップロードファイルの名前の最大長 */
+#undef ITM_MAX_FILE_NAME_SIZE
+
+/* アップロードアイテムの識別子の最大長 */
+#undef ITM_MAX_IDENTIFIER_SIZE
+
+/* アップロードアイテムの投稿者の IP アドレスの最大長 */
+#undef ITM_MAX_IP_ADDRESS_SIZE
+
+/* アップロードアイテムの削除パスワードの最大長 */
+#undef ITM_MAX_REMOVE_PASS_SIZE
+
+/* アップロードアイテムのバージョンの最大長 */
+#undef ITM_MAX_VERSION_SIZE
+
+/* サイズの単位の表記(KByte)． */
+#undef KBYTE_UNIT
+
+/* ロックをタイムアウトにするまでの時間(秒) */
+#undef LCK_TIMEOUT_SEC
+
+/* サムネイルを作成するかどうか． */
+#undef MAKE_THUMBNAIL
+
+/* サイズの単位の表記(MByte)． */
+#undef MBYTE_UNIT
+
+/* ダウンロード時のファイル名の接頭辞． */
+#undef NUMNAME
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* 連続投稿を制御するのに使うバッファのサイズ */
+#undef PST_FLOW_CONTROL_BUFFER_SIZE
+
+/* 再投稿可能になるまでの時間(秒) */
+#undef PST_INTERVAL_SEC
+
+/* 投稿する項目の最大数 */
+#undef PST_MAX_ITEM_COUNT
+
+/* リクエストの進捗情報を保持する時間(秒) */
+#undef PST_PROGRESS_HOLD_SEC
+
+/* アクセスが無いファイルから先に削除するかどうか． */
+#undef REMOVE_UNPOPULAR
+
+/* 投稿データの読み出しに使うブロックサイズ (Byte) */
+#undef REQ_READ_BLOCK_SIZE
+
+/* 投稿データの読み出しタイムアウト時間(秒) */
+#undef REQ_READ_TIMEOUT_SEC
+
+/* 出力用 iovec のサイズ */
+#undef RES_IO_VECTOR_SIZE
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* データの文字コード */
+#undef SYS_CHARACTER_CODE
+
+/* MMAP する単位 (Byte) */
+#undef SYS_MMAP_BLOCK_SIZE
+
+/* ページサイズ (KB) */
+#undef SYS_PAGE_SIZE
+
+/* 世界標準時からのオフセット表記 */
+#undef SYS_TIMEZONE_OFFSET
+
+/* 世界標準時からのオフセット表記 */
+#undef SYS_TIMEZONE_OFFSET_SUFFIX
+
+/* トークンのデフォルト数． */
+#undef TPL_DEFAULT_TOKEN_POOL_COUNT
+
+/* ファイルを圧縮するかどうか． */
+#undef USE_GZIP
+
+/* ファイルキャッシュのの有効時間 */
+#undef VIW_EXPIRES
+
+/* サムネイル画像の形式 */
+#undef VIW_THUMBNAIL_EXT
+
+/* サムネイル画像の最大縦サイズ */
+#undef VIW_THUMBNAIL_HEIGHT_LIMIT
+
+/* サムネイル画像の作成を試みる最大ファイルサイズ (Byte) */
+#undef VIW_THUMBNAIL_SIZE_LIMIT
+
+/* サムネイル画像の名前の接尾辞 */
+#undef VIW_THUMBNAIL_SUFFIX
+
+/* サムネイル画像の最大横サイズ */
+#undef VIW_THUMBNAIL_WIDTH_LIMIT
+
+/* ZIP 圧縮のバッファサイズ (Byte) */
+#undef ZIP_BUFFER_SIZE
+
+/* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef was allowed, the
+   #define below would cause a syntax error. */
+#undef _UINT32_T
+
+/* Define for Solaris 2.5.1 so the uint8_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef was allowed, the
+   #define below would cause a syntax error. */
+#undef _UINT8_T
+
+/* Define to empty if `const' does not conform to ANSI C. */
+#undef const
+
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+#undef inline
+#endif
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#undef size_t
+
+/* Define to the type of an unsigned integer type of width exactly 16 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint16_t
+
+/* Define to the type of an unsigned integer type of width exactly 32 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint32_t
+
+/* Define to the type of an unsigned integer type of width exactly 8 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint8_t
+
+/* Define to empty if the keyword `volatile' does not work. Warning: valid
+   code using `volatile' can become incorrect without. Disable with care. */
+#undef volatile

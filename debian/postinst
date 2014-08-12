@@ -1,0 +1,36 @@
+#! /bin/sh
+set -e
+
+reload_apache()
+{
+    if /usr/sbin/apache2ctl configtest 2>/dev/null; then
+        invoke-rc.d apache2 force-reload || true
+    else
+        echo "Your apache2 configuration is broken, so we're not restarting it for you."
+    fi
+}
+
+case "$1" in
+    configure)
+        if [ -n "$2" ]; then
+            if [ -e /etc/apache2/mods-enabled/uploader.load ]; then
+               reload_apache
+            fi
+        else 
+            if [ -e /etc/apache2/apache2.conf ]; then
+               a2enmod uploader >/dev/null || true
+               reload_apache
+            fi
+        fi
+     ;;
+     abort-upgrade|abort-remove|abort-deconfigure)
+     ;;
+     *)
+         echo "postinst called with unknown argument \`$1'" >&2
+         exit 1
+     ;;
+esac
+
+#DEBHELPER#
+
+exit 0

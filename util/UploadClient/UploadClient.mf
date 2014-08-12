@@ -1,0 +1,2 @@
+Main-Class: org.dyndns.acapulco.UploadClient
+Class-Path: commons-codec.jar commons-httpclient.jar commons-logging.jar junit.jar

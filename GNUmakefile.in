@@ -1,0 +1,128 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1012 2006-04-11 15:32:28Z svn $
+###############################################################################
+#
+# * 動作
+#   - make config           : configure スクリプトを実行
+#   - make configure        : configure スクリプトを生成
+# 
+#   - make apache-module    : Apache 用の mod_uploader をコンパイル
+#   - make apache-module-win: Apache (Windows) 用の mod_uploader をコンパイル
+# 
+#   - make env              : コンピュータの環境を表示
+#
+#   - make test-win         : Windows でテストを実行
+#   - make test-win-status  : Windows でのテスト結果を表示
+#
+#   - make TAGS             : TAGS ファイルを作成
+#   - make doc              : ドキュメントを生成 (要 docutils)
+#   - make doc-api          : API ドキュメントを生成 (要 Doxygen)
+#   - make clean            : 生成ファイルおよび中間生成ファイルを削除
+#
+###############################################################################
+
+###############################################################################
+# ターゲット
+all: compile
+
+configure: configure.ac acinclude.m4
+	autoreconf
+
+config.status: configure
+	CC=$(CC) ./configure --cache-file=config.cache --no-create
+
+config: config.status
+	./config.status
+
+compile: apache-module
+
+apache-module-win:
+	./util/win_build.pl
+
+apache-module:
+	cd src && $(MAKE) -f GNUmakefile
+	cp -f src/mod_uploader.so ./
+
+env:
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mmod_uploader:\033[0m"
+	@echo @PACKAGE_VERSION@
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mOperatin System:\033[0m"
+	@uname -a
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mApache:\033[0m"
+	@`@APXS@ -q SBINDIR`/`@APXS@ -q TARGET` -v | head -n 1
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mApache Portable Runtime:\033[0m"
+	@@APRCONF@ --version
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mGNU Compiler Collection:\033[0m"
+	@gcc -v 2>&1 | tail -n 1
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mGNU Libtool:\033[0m"
+	@@LIBTOOL@ --version 2>&1 | head -n 1
+	@echo ------------------------------------------------------------
+	@echo -e "\033[1;37mRuby:\033[0m"
+	@@RUBY@ --version 2>&1 | head -n 1
+	@echo ------------------------------------------------------------
+
+###############################################################################
+# その他
+GNUmakefile: GNUmakefile.in
+	./config.status
+
+tags:
+	gtags
+
+doc:
+	cd doc && make $@
+
+doc-api:
+	cd doc && make $@
+
+distclean: clean
+	@rm -rf GNUmakefile GNUmakefile.apache GNUmakefile.dist
+	@rm -rf src/GNUmakefile bin/GNUmakefile
+	@rm -rf doc/doxygen.conf
+	@rm -rf autom4te.cache autoscan.log config.log config.status config.cache
+
+clean-obj:
+	cd src && $(MAKE) $@
+
+clean:
+	cd src && $(MAKE) $@
+	@rm -f *.so
+	@rm -f *~ \#*\#
+
+.SUFFIXES: 
+.PHONY: config compile apache-module apache-module-win \
+	env tags doc doc-api distclean clean clean-obj
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

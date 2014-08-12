@@ -1,0 +1,72 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# 引数
+UploadItemManager.run UploadItemManager.dbg: \
+	ARGUMENTS := $(TESTDIR)/data
+UploadItemListReader.run UploadItemListReader.dbg: \
+	ARGUMENTS := $(TESTDIR)/data
+UploadItemWriter.run UploadItemWriter.dbg: \
+	ARGUMENTS := $(TESTDIR)/data $(TESTDIR)/file $(TESTDIR)/thumb $(firstword $(TESTIMAGES))
+TemplateLexer.run TemplateLexer.dbg: \
+	ARGUMENTS := $(TESTTMPLDIR)/item.txt
+TemplateParser.run TemplateParser.dbg: \
+	ARGUMENTS := $(TESTTMPLDIR)/item.txt
+UploadItemVariableCreator.run UploadItemVariableCreator.dbg: \
+	ARGUMENTS := $(TESTDIR)/data $(TESTTMPLDIR)/item.txt
+ThumbnailVariableCreator.run ThumbnailVariableCreator.dbg: \
+	ARGUMENTS := $(TESTDIR)/data $(TESTTMPLDIR)/item.txt
+
+TemplateExecutor.run TemplateExecutor.dbg: \
+	ARGUMENTS := $(TESTDIR)/data $(TESTTMPLDIR)/item.txt
+ConfigReader.run ConfigReader.dbg: \
+	ARGUMENTS := $(TESTCONF)
+MmapFileWriter.run MmapFileWriter.dbg: \
+	ARGUMENTS := $(TESTDIR)/data/match.pdf $(TESTDIR)/temp/mmap_file_writer.pdf
+BasicFileWriter.run BasicFileWriter.dbg: \
+	ARGUMENTS := $(TESTDIR)/data/match.pdf $(TESTDIR)/temp/basic_file_writer.pdf
+Base64FileWriter.run Base64FileWriter.dbg: \
+	ARGUMENTS := $(TESTDIR)/data/base64.dat $(TESTDIR)/temp/base64_file_writer.jpg
+ZipFileWriter.run Base64FileWriter.dbg: \
+	ARGUMENTS := $(TESTDIR)/data/match.pdf $(TESTDIR)/temp/gzip_file_writer.pdf
+RFC1867Parser.run RFC1867Parser.dbg: \
+	ARGUMENTS := $(TESTPOST) $(TESTPOSTB) $(TESTFILEDIR) $(TESTPOSTD)
+RFC2822Parser.run RFC28227Parser.dbg: \
+	ARGUMENTS := $(TESTMAIL) $(TESTFILEDIR) $(TESTMAILD) $(TESTMAILD)
+
+CharCodeConverter.run CharCodeConverter.dbg: \
+	ARGUMENTS := utf-8 euc-jp $(TESTSTRING)
+
+ImageFile.run ImageFile.dbg: \
+	ARGUMENTS := $(TESTIMAGEW) $(TESTIMAGEH) $(TESTDIR)/temp $(TESTIMAGES)
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:
+

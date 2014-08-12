@@ -1,0 +1,72 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: Makefile.in 119 2005-03-12 17:26:37Z svn $
+###############################################################################
+
+###############################################################################
+# 設定
+DOXYGEN     := @DOXYGEN@
+
+DOCS        := apache.htm apache.en.htm apache.de.htm apache-win.htm
+CSS         := css/doc.css
+
+###############################################################################
+# ターゲット
+doc: html-doc
+
+html-doc: $(DOCS)
+
+doc-api:
+	$(DOXYGEN) doxygen.conf
+
+doc-update:
+	cat apache.txt | perl -I ../util ../util/sf_upload.pl > apache.tmp
+	cat apache.en.txt | perl -I ../util ../util/sf_upload.pl > apache.en.tmp
+	cat apache.de.txt | perl -I ../util ../util/sf_upload.pl > apache.de.tmp
+	cat apache-win.txt | perl -I ../util ../util/sf_upload.pl > apache-win.tmp
+	mv apache.tmp apache.txt
+	mv apache.en.tmp apache.en.txt
+	mv apache.de.tmp apache.de.txt
+	mv apache-win.tmp apache-win.txt
+	$(MAKE) html-doc
+
+clean:
+	@rm -Rf api/*.htm api/*.png api/*.map api/*.md5 api/*.dot
+	@rm -f *~ \#*\#
+
+###############################################################################
+# 型ルール
+%.htm: %.txt
+	@RST2HTML@ --stylesheet=$(CSS) $< > $@
+
+###############################################################################
+# その他
+.SUFFIXES: .txt .htm
+.PHONY: doc html-doc doc-api doc-update clean
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

@@ -1,0 +1,202 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 726 2005-09-24 14:19:32Z svn $
+###############################################################################
+#
+# * 動作
+#   - make dist     : 配布アーカイブの作成
+#
+###############################################################################
+
+###############################################################################
+# 基本設定
+PACKAGE     	:= @PACKAGE_NAME@
+VERSION     	:= @PACKAGE_VERSION@
+
+TARGET      	:= $(PACKAGE).so
+PKGDIR   		:= $(PACKAGE)-$(VERSION)
+DISTFILE 		:= $(PKGDIR).tgz
+DISTWINTFILE	:= $(PACKAGE)-$(VERSION).msi
+
+SVN         	:= @SVN@
+TAR         	:= @TAR@
+
+LINUX_DISTS     := centos debian fedora ubuntu
+WINDOWS_COMPS   := cl icc
+
+###############################################################################
+# ターゲット
+all: dist
+
+dist: TMPDIR := $(shell mktemp -d -t $(PACKAGE).XXXXXX 2>/dev/null)
+dist:
+	svn export . $(TMPDIR)/$(PKGDIR)
+	rm -rf $(TMPDIR)/$(PKGDIR)/pseudo
+	touch -t `date "+%m%d"`0000 `find $(TMPDIR)`
+	tar zcvf $(DISTFILE) -C $(TMPDIR) $(PKGDIR)
+	rm -Rf $(TMPDIR)
+
+dist-sf: DIST_FILE = $(shell ls -t | grep -E 'mod_uploader-.*\.tgz' | head -n 1)
+dist-sf: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/mod_uploader-\(.*\)\.tgz/\1/')
+dist-sf: dist
+	perl -I util util/sf_upload.pl --mode=release --package=mod_uploader --version=$(DIST_VERSION) --file=$(DIST_FILE)
+
+dist-sf-rpm: DIST_FILE = $(shell ls -t | grep -E 'mod_uploader-.*\.rpm' | grep -v src.rpm | head -n 1)
+dist-sf-rpm: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/mod_uploader-\(.*\)-1\..*\.rpm/\1/')
+dist-sf-rpm:
+	perl -I util util/sf_upload.pl --mode=release --package=mod_uploader-rpm --version=$(DIST_VERSION) --file=$(DIST_FILE)
+
+dist-sf-srpm: DIST_FILE = $(shell ls -t | grep -E 'mod_uploader-.*\.src\.rpm' | head -n 1)
+dist-sf-srpm: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/mod_uploader-\(.*\)-1\.src\.rpm/\1/')
+dist-sf-srpm:
+	perl -I util util/sf_upload.pl --mode=release --package=mod_uploader-rpm --version=$(DIST_VERSION) --file=$(DIST_FILE)
+
+dist-sf-deb: DIST_FILE = $(shell ls -t | grep -E 'libapache2-mod-uploader_.*\.deb' | head -n 1)
+dist-sf-deb: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/libapache2-mod-uploader_\(.*\)-1_.*\.deb/\1/')
+dist-sf-deb:
+	perl -I util util/sf_upload.pl --mode=release --package=mod_uploader-deb --version=$(DIST_VERSION) --file=$(DIST_FILE)
+
+dist-sf-win: DIST_FILE = $(shell ls -t | grep -E 'mod_uploader-.*\.msi' | head -n 1)
+dist-sf-win: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/mod_uploader-\(.*\)\.msi/\1/')
+dist-sf-win:
+	perl -I util util/sf_upload.pl --mode=release --package=mod_uploader-win32 --version=$(DIST_VERSION) --file=$(DIST_FILE)
+
+cvs-check:
+	./util/cvs_check.sh
+	@echo -e "\033[1;32mOK\033[0m"
+
+test:
+	@for i in linux bsd win mac; \
+	do \
+		$(MAKE) -f GNUmakefile.dist -s test-$$i; \
+	done
+
+test-linux:
+	@for i in $(LINUX_DISTS); \
+	do \
+		./test/util/test_linux.pl $$i | @TEE@ test/log/linux_$$i.log; \
+	done
+	$(MAKE) -f GNUmakefile.dist test-linux-status
+
+test-bsd:
+	@./test/util/test_bsd.pl freebsd | @TEE@ test/log/freebsd.log
+	$(MAKE) -f GNUmakefile.dist test-bsd-status
+
+test-win:
+	@echo -n "pass: "; \
+	read -s pass; \
+	echo; \
+	export WIN_PASS=$$pass; \
+	for i in $(WINDOWS_COMPS); \
+	do \
+		./test/util/test_win.pl $$i  | @TEE@ test/log/win_$$i.log; \
+	done
+	$(MAKE) -f GNUmakefile.dist test-win-status
+
+test-mac:
+	./test/util/test_mac.pl cl | @TEE@ test/log/mac_gcc.log
+	$(MAKE) -f GNUmakefile.dist test-mac-status
+
+test-configure:
+	./test/util/test_configure.pl | @TEE@ test/log/configure.log
+
+test-linux-status:
+	@for i in $(LINUX_DISTS); \
+	do \
+		@CAT@ test/log/linux_$$i.log | sed -ne '/\*\*\*\*\*\*\*\*\*\*/,/\*\*\*\*\*\*\*\*\*\*/p'; \
+	done
+
+test-bsd-status:
+	@@CAT@ test/log/freebsd.log | sed -ne '/\*\*\*\*\*\*\*\*\*\*/,/\*\*\*\*\*\*\*\*\*\*/p' 
+
+test-win-status:
+	@for i in $(WINDOWS_COMPS); \
+	do \
+		@CAT@ test/log/win_$$i.log | sed -ne '/\*\*\*\*\*\*\*\*\*\*/,/\*\*\*\*\*\*\*\*\*\*/p'; \
+	done
+
+test-mac-status:
+	@@CAT@ test/log/mac_gcc.log | sed -ne '/\*\*\*\*\*\*\*\*\*\*/,/\*\*\*\*\*\*\*\*\*\*/p' 
+
+test-all-html-status:
+	@for i in linux bsd win mac; \
+	do \
+		$(MAKE) -f GNUmakefile.dist -s test-$$i-status; \
+	done  | \
+	./util/ansi2html.pl 'Test Status' > test/status/stat.htm
+#
+	@@CAT@ test/log/linux_centos.log | \
+	./util/ansi2html.pl 'Test Log (Centos Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_centos.htm
+	@@CAT@ test/log/linux_debian.log | \
+	./util/ansi2html.pl 'Test Log (Debian Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_debian.htm
+	@@CAT@ test/log/linux_fedora.log | \
+	./util/ansi2html.pl 'Test Log (Fedora Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_fedora.htm
+	@@CAT@ test/log/linux_ubuntu.log | \
+	./util/ansi2html.pl 'Test Log (Ubuntu Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_ubuntu.htm
+	@@CAT@ test/log/linux_opensuse.log | \
+	./util/ansi2html.pl 'Test Log (openSUSE Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_opensuse.htm
+	@@CAT@ test/log/linux_mandriva.log | \
+	./util/ansi2html.pl 'Test Log (Mandriva Linux, GNU Compiler Collection)' > \
+	test/status/log_linux_mandriva.htm
+	@@CAT@ test/log/freebsd.log | \
+	./util/ansi2html.pl 'Test Log (FreeBSD, GNU Compiler Collection)' > \
+	test/status/log_freebsd.htm
+	@@CAT@ test/log/win_cl.log | \
+	./util/ansi2html.pl 'Test Log (Windows, Microsoft C/C++ Optimizing Compiler)' > \
+	test/status/log_win_cl.htm
+	@@CAT@ test/log/win_icc.log | \
+	./util/ansi2html.pl 'Test Log (Windows, Intel C++ Compiler)' > \
+	test/status/log_win_icc.htm
+	@@CAT@ test/log/mac_gcc.log | \
+	./util/ansi2html.pl 'Test Log (Mac OSX Tiger, GNU Compiler Collection)' > \
+	test/status/log_mac_gcc.htm
+	@@CAT@ test/log/configure.log | ./util/ansi2html.pl 'Test Configure' > test/status/log_configure.htm
+
+distclean: clean
+	@ls -1 | egrep '$(PACKAGE)-.*\.tgz' | xargs rm -f
+	@ls -1 | egrep '$(PACKAGE)-.*\.msi' | xargs rm -f
+
+clean:
+	@rm -f *~ \#*\#
+	@find /tmp -maxdepth 1 -name "@PACKAGE_NAME@.*" -user `whoami` -mmin +5 2>/dev/null | xargs rm -rf {}
+
+.SUFFIXES: 
+.PHONY: dist dist-sf dist-sf-rpm dist-sf-srpm dist-sf-deb dist-sf-win cvs-check \
+	test test-linux test-linux-status \
+	test-bsd test-bsd-status \
+	test-win test-win-status \
+	test-mac test-mac-status \
+	test-all-html-status \
+	distclean clean
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:

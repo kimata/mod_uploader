@@ -1,0 +1,134 @@
+/******************************************************************************
+ * Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+ *
+ * All rights reserved.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any
+ * damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any
+ * purpose, including commercial applications, and to alter it and
+ * redistribute it freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must
+ *    not claim that you wrote the original software. If you use this
+ *    software in a product, an acknowledgment in the product
+ *    documentation would be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must
+ *    not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ * $Id: ZipFileWriter.h.in 2886 2008-05-04 15:42:20Z svn $
+ *****************************************************************************/
+
+#ifndef ZIP_FILE_WRITER_H
+#define ZIP_FILE_WRITER_H
+
+#include "Environment.h"
+
+#include <cstdlib>
+
+#include "apr_file_io.h"
+
+#include "FileWriter.h"
+#include "@ORIG_WRITER_NAME@.h"
+#include "Macro.h"
+#include "Uncopyable.h"
+
+typedef struct z_stream_s z_stream;
+class File;
+
+/**
+ * @brief gzip 形式で圧縮しながらファイルへデータを書き出すクラス．
+ */
+template<class W=@ORIG_WRITER_CLASS@>
+class ZipFileWriter: public Uncopyable
+{
+public:
+    static const apr_int32_t OPEN_FLAG  = W::OPEN_FLAG;
+    /**
+     * コンストラクタ．
+     *
+     * @param[in] pool プール
+     * @param[in] file ファイルハンドラ
+     * @param[in] offset 書き出しを開始する位置
+     */
+    ZipFileWriter(apr_pool_t *pool, apr_file_t *file, apr_size_t offset=0);
+    /**
+     * ファイルへの書き出しを行います．
+     * 実際の書き込み処理は write_impl に委譲します．
+     *
+     * @param[in] buffer 書き出すデータ
+     * @param[in] size 書き出すサイズ
+     * @exception const char * 書き出しに失敗した場合
+     */
+    ~ZipFileWriter()
+    {
+        close();
+    };
+    void write(const void *buffer, apr_size_t size)
+    {
+        if (size == 0) {
+            return;
+        }
+
+        if (write_impl(buffer, size) != size) {
+            THROW(MESSAGE_FILE_WRITE_FAILED);
+        }
+    };
+    void write(const void *buffer, apr_size_t *size)
+    {
+        *size = write_impl(buffer, *size);
+    };
+    /**
+     * ファイルを閉じます．
+     *
+     * @exception const char * 閉じるのに失敗した場合
+     */
+    apr_uint64_t get_write_size() const
+    {
+        return writer_impl_.get_write_size();
+    };
+    /**
+     * ファイルを閉じます．
+     *
+     * @exception const char * 閉じるのに失敗した場合
+     */
+    void close();
+
+private:
+    typedef W FileWriterClass;
+
+    static const apr_byte_t HEADER[];
+
+    /**
+     * ファイルへの書き出しを実際に行います．
+     *
+     * @param[in] buffer 書き出すデータ
+     * @param[in] size 書き出すサイズ
+     * @return 実際に書き出したサイズ
+     * @exception const char * 書き出しに失敗した場合
+     */
+    apr_size_t write_impl(const void *buffer, apr_size_t size);
+    void update_buffer();
+    void flush_buffer();
+    void write_wrapper(const void *buffer, apr_size_t size);
+
+    FileWriterClass writer_impl_;
+
+    bool is_closed_;
+    z_stream *z_state_;
+    unsigned long crc_;
+    apr_byte_t buffer_[ZIP_BUFFER_SIZE];
+};
+
+#endif
+
+// Local Variables:
+// mode: c++
+// coding: utf-8-dos
+// End:

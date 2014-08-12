@@ -1,0 +1,5 @@
+libapache2-mod-uploader (3.0.4-1) stable; urgency=low
+
+  * Initial release.
+
+ -- Tetsuya Kimata <kimata@acapulco.dyndns.org>  Sun, 17 Feb 2008 01:57:27 +0900

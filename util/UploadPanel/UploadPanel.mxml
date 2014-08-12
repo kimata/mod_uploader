@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ModUploader="org.dyndns.acapulco.*" 
+	            layout="absolute" height="112" width="616" alpha="1.0" backgroundGradientColors="[#ffffff, #ffffff]"
+	            creationComplete="controller.init(Application.application.parameters.uploaderURL,
+	            	                              new Number(Application.application.parameters.maxFileSize))"
+	            viewSourceURL="http://acapulco.dyndns.org/mod_uploader/UploadPanel/">
+    <ModUploader:UploadController id="controller"
+    							  fileInput="{fileInput}" progressBar="{progressBar}" />
+    
+	<mx:Label text="file:" id="fileLabel" x="4" y="12"/>
+	<mx:TextInput id="fileInput" x="39" y="10" width="368" editable="false"/>
+	<mx:Button label="参照..." id="fileInputButton" x="415" y="10" click="controller.browseFile(event)"/>
+
+	<mx:Label text="comment:" id="commentLabel" x="4" y="38"/>
+	<mx:TextInput id="commentInput" maxChars="256" x="65" y="36" width="206"/>
+
+	<mx:TextInput width="78" maxChars="8" id="downloadPassInput" x="341" y="36" displayAsPassword="true"/>
+	<mx:Label text="DL pass:" id="downloadPassLabel" x="279" y="38"/>
+
+	<mx:Label text="RM pass:" id="removePassLabel" x="427" y="38"/>
+	<mx:TextInput width="56" maxChars="8" id="removePassInput" x="492" y="36" displayAsPassword="true"/>
+
+	<mx:Button label="送信" id="sendButton" x="556" y="36"
+		click="controller.startUpload(event, commentInput.text, downloadPassInput.text, removePassInput.text, validators)"/>
+	
+	<mx:Array id="validators">
+		<mx:StringValidator source="{commentInput}" property="text" minLength="1" trigger="{sendButton}" triggerEvent="click" />
+		<mx:StringValidator source="{fileInput}" property="text" minLength="1" trigger="{sendButton}" triggerEvent="click" />
+	</mx:Array>
+
+	<mx:ProgressBar x="4" y="67" id="progressBar" width="600" mode="manual" visible="false" />
+</mx:Application>

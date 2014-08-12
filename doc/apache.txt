@@ -1,0 +1,809 @@
+======================================================================
+README for mod_uploader
+======================================================================
+
+.. image:: img/title.png
+   :width: 440
+   :height: 89
+   :alt: mod_uploader: Apache のモジュールとして動作する高速アップローダ
+
+.. raw:: html
+
+  <div class="navi_lang">
+   (言語: 
+    <a href="apache.en.htm"><img src="img/icon_en.png" width="16" height="11" alt="English" /></a> |
+    <a href="apache.de.htm"><img src="img/icon_de.png" width="16" height="11" alt="German" /></a> |
+    <a href="apache.htm"><img src="img/icon_ja.png" width="16" height="11" alt="Japanese" /></a>
+   )
+  </div>
+ 
+.. contents::
+
+|GoogleAdSense|
+
+
+mod_uploader とは?
+----------------------------------------------------------------------
+
+mod_uploader は，よくあるアップローダを `Apache`_ のモジュールとして実
+装したものです．以下のような特長があります．
+
+* `Apache`_ のモジュールとして C++ で記述されているので，Perl や PHP で
+  作られた物に比べて高速．
+
+* 独自の簡易スクリプト言語によるテンプレート機能があるので，再コンパイ
+  ル無しで手軽に見た目を変更可能．
+
+* アップロード時の進捗状況をリアルタイムに表示可能．
+
+.. image:: img/upload_window.png
+   :width: 683
+   :height: 145
+   :alt: アップロード画面のスクリーンショット
+
+
+機能比較
+----------------------------------------------------------------------
+
+他のアップローダとの機能比較を下記に示します．
+
+.. image:: img/func_comparison.png
+   :width: 822
+   :height: 151
+   :alt: 他のアップローダとの機能比較
+
+   
+動作サンプル
+----------------------------------------------------------------------
+
+http://acapulco.dyndns.org:7070/up/
+
+
+動作環境
+----------------------------------------------------------------------
+
+.. |IconWindows| image:: img/icon_windows.png
+   :width: 16
+   :height: 16
+   :alt: WIndows
+
+mod_uploader は，UNIX 系 OS で動作します．(|IconWindows| `Windows 版はこちら <http://acapulco.dyndns.org/mod_uploader/apache-win.htm>`_)
+
+* `Apache`_ 2.0 以上
+
+* `GNU Compiler Collection`_ 3.3 以上，または， `Intel C++ Compiler`_
+  for Linux 9.1 以上
+
+* `GNU Make`_ 3.8 以上
+
+* `GNU Libtool`_ 1.5 以上
+
+* `ImageMagick`_ 6.0 以上
+  
+開発は， `Gentoo Linux`_ Kernel **2.6.20** ，GCC **3.4.5** ，Apache
+**2.0.58** ，ImageMagick **6.3.3** で行っています．
+
+各環境で必要になる主なパッケージ
+``````````````````````````````````````````````````````````````````````
+
+CentOS
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* httpd-devel
+* ImageMagick-c++-devel
+
+Debian
+......................................................................
+
+* libtool
+* apache2-mpm-prefork
+* apache2-prefork-dev
+* libmagick++6-dev
+
+FedoraCore
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* httpd-devel
+* ImageMagick-c++-devel
+* freetype-devel
+* fontconfig-devel
+
+FreeBSD
+......................................................................
+
+* www/apache20 or www/apache22
+* graphics/ImageMagick
+
+Gentoo Linux
+......................................................................
+
+* gcc
+* make
+* libtool
+* apache
+* imagemagick
+
+Ubuntu Linux
+......................................................................
+
+* g++
+* make
+* libtool
+* apache2-mpm-prefork
+* apache2-prefork-dev
+* libmagick++9-dev
+
+openSUSE
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* apache2-devel
+
+Mandriva
+......................................................................
+
+* gcc-c++
+* make
+* libtool
+* apache-mpm-prefork
+* apache-devel
+
+
+ライセンス
+----------------------------------------------------------------------
+
+`The zlib/libpng License`_ （ `The zlib/libpng License の翻訳`_ ）に従いま
+す．
+
+
+|download|
+----------------------------------------------------------------------
+
+* `mod_uploader-3.1.0.tgz <http://sourceforge.jp/projects/mod-uploader/downloads/32076/mod_uploader-3.1.0.tgz>`_
+
+* `mod_uploader-3.1.0-1.x86_64.rpm <http://sourceforge.jp/projects/mod-uploader/downloads/32077/mod_uploader-3.1.0-1.x86_64.rpm>`_  (for CentOS, FedoraCore 64bit)
+
+* `mod_uploader-3.1.0-1.src.rpm <http://sourceforge.jp/projects/mod-uploader/downloads/32078/mod_uploader-3.1.0-1.src.rpm>`_  (for CentOS, FedoraCore)
+
+* `libapache2-mod-uploader_3.1.0-1_amd64.deb <http://sourceforge.jp/projects/mod-uploader/downloads/32121/libapache2-mod-uploader_3.1.0-1_amd64.deb>`_  (for Debian, Ubuntu 64bit)
+
+
+CVS リポジトリ
+----------------------------------------------------------------------
+
+下記のようにすることで check out できます．（パスワードは空）
+
+::
+
+  $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader checkout -P mod_uploader
+
+また， `ViewCVS 経由で参照
+<http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/>`_
+することもできます．
+
+
+変更履歴
+----------------------------------------------------------------------
+
+`ChangeLog <http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup>`_
+
+
+コンパイル方法
+----------------------------------------------------------------------
+
+コンパイルの前に， `各環境で必要になる主なパッケージ`_ に書かれているパッ
+ケージがインストールされていることを確認してください．
+
+`GNU Compiler Collection`_ でコンパイルする場合は，
+
+::
+
+ $ ./configure
+ $ make
+
+とします． `Intel C++ Compiler`_ でコンパイルする場合は，
+
+::
+
+  $ env CC=icc ./configure
+  $ make
+
+とします．
+
+configure は次のオプションを受け付けます．エラーがでた場合は，
+`--with-apxs`_ ， `--with-apctl2`_ や `--with-aprconf`_ を試してみてく
+ださい．
+
+_`--with-apxs` = `APXS`
+  `apxs` コマンドのパスを指定します．自動的に検出されない場合に使用して下
+  さい．
+
+_`--with-apctl2` = `APCTL`
+  `apachectl` コマンドのパスを指定します．自動的に検出されない場合に使用
+  して下さい．
+
+_`--with-aprconf` = `APRCONF`
+  `apr-config` コマンドのパスを指定します．自動的に検出されない場合に使
+  用して下さい．
+
+_`--with-libtool` = `LIBTOOL`
+  `libtool` コマンドのパスを指定します．自動的に検出されない場合に使用
+  して下さい．
+
+_`--with-march` = `CPU`
+  特定の CPU 向けに最適化したい場合に使用します．例えば，Pentium 4 に最
+  適化したい場合は， `--with-march`_ = pentium4 とします．
+
+_`--enable-empty-comment`
+  空のコメントを受け付ける場合に指定してください．
+
+_`--enable-empty-password`
+  空のパスワードによる削除を受け付ける場合に指定してください．
+
+_`--enable-remove-unpopular` 容量が満杯になった場合の挙動を変更します．
+  指定すると，アップロードされた日時が古いものではなく，最近ダウンロー
+  ドされていないものから順番に削除されるようになります．
+  
+_`--enable-thumbnail`
+  ファイルのサムネイル画像を生成したい場合に指定してください．
+
+_`--enable-numname` = `NAME`
+  ダウンロード時のファイル名を `NAMEファイル番号.拡張子` のように，ファ
+  イル番号を使用したものにします．
+  
+_`--with-mconf` = `MCONF`
+  `Magick++-config` コマンドのパスを指定します．自動的に検出されない場
+  合に使用してください．
+
+各環境での例
+``````````````````````````````````````````````````````````````````````
+
+CentOS, FedoraCore, Gentoo Linux, Ubuntu Linux, openSUSE Linux
+......................................................................
+
+::
+
+  $ ./configure
+  $ make
+
+FreeBSD
+......................................................................
+
+::
+
+  $ ./configure
+  $ gmake
+
+Mac OSX Tiger + Fink
+......................................................................
+
+::
+
+  $ ./configure
+  $ env MACOSX_DEPLOYMENT_TARGET=10.4 make
+
+
+トラブルシューティング
+``````````````````````````````````````````````````````````````````````
+
+/usr/bin/ld: cannot find  -lxxx
+......................................................................
+
+必要なライブラリがインストールされていないのが原因です．cannot find -l
+`xxx` というエラーの場合，lib `xxx` がインストールされていません．通常，
+これらのライブラリは，パッケージ管理システムが依存関係に基づいて自動的
+にインストールされるものですが，何らかの事情によりうまくインストールさ
+れなかった場合このエラーが発生します．
+
+ライブラリを手動でインストールすることでエラーを解決できます．例えば，
+cannot find -lgs というエラーの場合，Ghostscript をインストールします．
+CentOS/FedoraCore では下記のようにします．
+
+::
+
+  $ su
+  # yum install ghostscript
+
+
+インストール
+----------------------------------------------------------------------
+
+次のコマンドを実行するだけで OK です．
+
+::
+
+  $ su
+  # make -f GNUmakefile.apache install
+
+
+設定
+----------------------------------------------------------------------
+
+設定は，Apache の設定ファイル（ `.htaccess` は不可）に，以下のように記
+述します．（ ***** 印がついているものは必須）
+
+::
+
+  <Location アップローダを設置する場所>
+      SetHandler                     uploader
+      
+      UploaderBaseUrl                アップローダの URL *
+      
+      UploaderDataDirectory          データを保存するフォルダ *
+      UploaderFileDirectory          ファイルを保存するフォルダ *
+      UploaderThumbDirectory         サムネイルを保存するフォルダ *
+      UploaderTempDirectory          一時ファイルを保存するフォルダ *
+      
+      UploaderTotalFileSizeLimit     ファイルサイズの合計の上限 (KB)
+      UploaderTotalFileNumberLimit   ファイルの個数の上限
+      UploaderFileSizeLimit          一回にアップロードできるファイルの最大サイズ (KB)
+      UploaderPerPageItemNumber      1 ページあたりに表示するアイテム数
+      
+      UploaderIndexViewTemplate      トップページのテンプレート *
+      UploaderInfoViewTemplate       アップロード完了通知ページのテンプレート *
+      UploaderProgressViewTemplate   アップロード進捗ページのテンプレート *
+      UploaderDownloadViewTemplate   ダウンロードページのテンプレート *
+      UploaderThumbnailViewTemplate  サムネイルページのテンプレート *
+      UploaderAdminViewTemplate      管理ページのテンプレート *
+      UploaderErrorViewTemplate      エラーページのテンプレート *
+  </Location>
+  <Location アップローダを設置する場所/admin>
+      Order                   Deny,Allow
+      Deny                    From All
+      Allow                   From 127.0.0.1
+  </Location>
+
+テンプレートは，tmpl ディレクトリに入っている `index.htm` ，
+`info.htm` ， `progress.htm` ， `download.htm` ， `thumbnail.htm` ，
+`admin.htm` ， `error.htm` を利用してください．
+
+`http://foo/up/` に設置する場合の設定例は以下のようになります．
+`/up_img` ， `/up_css` ， `/up_js` の Alias は必須ではありません．テン
+プレートを書き換えたくない場合に指定してください．（これはあくまでも例
+です．ディレクトリやファイルのパスは環境よって違ってきます）
+
+::
+
+  <Location /up>
+      SetHandler                     uploader
+      
+      UploaderBaseUrl                "http://foo/up"
+      UploaderDataDirectory          "/path/to/mod_uploader/test/data"
+      UploaderFileDirectory          "/path/to/mod_uploader/test/file"
+      UploaderThumbDirectory         "/path/to/mod_uploader/test/thumb"
+      UploaderTempDirectory          "/path/to/mod_uploader/test/temp"
+      
+      UploaderTotalFileSizeLimit     10485760
+      UploaderTotalFileNumberLimit   200
+      UploaderFileSizeLimit          1048576
+      UploaderPerPageItemNumber      30
+      
+      UploaderIndexViewTemplate      "/path/to/mod_uploader/tmpl/index.htm"
+      UploaderInfoViewTemplate       "/path/to/mod_uploader/tmpl/info.htm"
+      UploaderProgressViewTemplate   "/path/to/mod_uploader/tmpl/progress.htm"
+      UploaderDownloadViewTemplate   "/path/to/mod_uploader/tmpl/download.htm"
+      UploaderThumbnailViewTemplate  "/path/to/mod_uploader/tmpl/thumbnail.htm"
+      UploaderAdminViewTemplate      "/path/to/mod_uploader/tmpl/admin.htm"
+      UploaderErrorViewTemplate      "/path/to/mod_uploader/tmpl/error.htm"
+  </Location>
+  
+  <Location /up/admin>
+      Order                   Deny,Allow
+      Deny                    From All
+      Allow                   From 127.0.0.1
+  </Location>
+  
+  Alias /up_img                  "/path/to/mod_uploader/img"
+  Alias /up_css                  "/path/to/mod_uploader/css"
+  Alias /up_js                   "/path/to/mod_uploader/js"
+
+
+注意事項
+``````````````````````````````````````````````````````````````````````
+
+* Apache の動作に不慣れなうちは，ディレクトリやファイルの指定には絶対パ
+  スを使用してください．
+
+* `FileDirectory` ， `ThumbDirectory` ， `TempDirectory` の各ディレクト
+  リは， Apache が読み書き実行できるパーミッションに設定されている必要
+  があります．
+
+* `FileDirectory` ， `ThumbDirectory` には mod_uploader が生成するファ
+  イル以外を置かないでください．
+
+* `<Location>` で指定するパスには「~」を含めないでください．
+
+* `<Loadtion>` で設定した mod_uploader の設置場所と同じパスにディレクト
+  リやファイルを置かないでください．例えば，DocumentRoot が `/var/www`
+  で，`/up` に mod_uploader を設置する場合，`/var/www/up` というディレ
+  クトリが存在するとエラー (MESSAGE_ENVIRONMENT_LOCATION_DIR_EXIST) に
+  なります．
+
+* 設定によっては，テンプレートを一部書き換えないと正常に表示されません．
+  適宜書き換えてください．
+
+
+起動
+----------------------------------------------------------------------  
+
+Apache を普通に起動すれば OK です．設置した場所にブラウザでアクセス
+してみましょう．
+
+
+トラブルシューティング
+``````````````````````````````````````````````````````````````````````
+
+Apache が起動しなくなった
+......................................................................
+
+Apache のエラーログにエラー内容が出力されているので，内容を確認して設定
+を見直してください．
+
+進捗情報が常に Server Busy となる
+......................................................................
+
+UploaderBaseUrl と違うアドレスでアップローダにアクセスした場合に発生し
+ます．例えば，UploaderBaseUrl では `http://localhost/up` と指定している
+のに，ブラウザでは `http://127.0.0.1/up` にアクセスしている場合がこれに
+該当します．
+
+UploaderBaseUrl で指定したアドレスでアクセスしてください．
+
+ダウンロードカウンタがリセットされた
+......................................................................
+
+mod_uploader は，高速動作のため，ダウンロードカウンタのカウントアップを
+メモリ上でのみ行っており，Apache の終了時にデータをファイルに書き出すよ
+うになっています．そのため，Apache が正常に終了しなかった場合，ファイル
+への書き出しが行われずダウンロードカウンタが以前の状態にリセットされて
+しまいます．
+
+
+お試し実行
+----------------------------------------------------------------------  
+
+次のコマンドを入力して，http://localhost:8080/up/ にアクセスすることで
+することでインストールせずに動作を確認できます．
+
+他のホストからアクセスする場合は， *localhost* の部分を適当に置き換えて
+ください．
+
+::
+
+  $ su -
+  # make -f GNUmakefile.apache start
+
+もし， `LoadModule` 関連のエラーが出た場合は，conf/apache.conf を適宜修
+正してください．
+
+停止は，次のようにします．
+
+::
+
+  # make -f GNUmakefile.apache stop
+
+
+高度な設定
+----------------------------------------------------------------------  
+
+アップロードの記録
+```````````````````````````````````````````````````````````````````````
+
+mod_uploader はファイルのアップロード時に環境変数 `uploader_upload` を
+定義するので，以下の様な設定を追加することで投稿者の IP アドレスをログ
+に記録する事が出来ます．
+
+::
+
+  LogFormat "%t HOST: %h ID: %{uploader_item_id}e AGENT: %{User-agent}i" uploader
+  CustomLog log/apache.upload_log uploader env=uploader_upload
+
+uploader_item_id は，ファイルの ID に展開されます．その他の書式について
+は， `mod_log_config のドキュメント
+<http://httpd.apache.org/docs/2.0/ja/mod/mod_log_config.html>`_ を参照
+してください．
+
+なお，ファイルのダウンロード時と削除時にも，環境変数
+`uploader_download` ， `uploader_remove` を定義するので，同様の方法でロ
+グをとることが可能です．
+
+直リンクの禁止
+```````````````````````````````````````````````````````````````````````
+
+`mod_rewrite`_ というモジュールと組み合わせることでファイルの直リンクを禁
+止することが可能です．以下のような設定を追加します．
+`http://columbia:8080/up/` はアップローダを設置した URL に書き換えてく
+ださい．
+
+::
+
+  RewriteEngine on
+  RewriteCond %{HTTP_REFERER} !^$
+  RewriteCond %{HTTP_REFERER} !^http://columbia:8080/up/ [NC]
+  RewriteRule . - [F]
+
+また，単純にアクセスを禁止するだけでなく，直リンクされた場合に特定の
+URL に飛ばしたい場合は，以下のような設定を追加します．
+`http://www.yahoo.co.jp/` は飛ばしたい URL です．
+
+::
+
+  RewriteEngine on
+  RewriteCond %{HTTP_REFERER} !^$
+  RewriteCond %{HTTP_REFERER} !^http://columbia:8080/up/ [NC]
+  RewriteRule ^.*$ http://www.yahoo.co.jp/
+
+なお，これらの設定を追加することで Apache が起動しなくなった場合，お使
+いの環境で `mod_rewrite`_ が利用できないことが原因と考えられます．ます，
+`mod_rewrite`_ を使えるようにしてください．
+
+テンプレートの調整
+``````````````````````````````````````````````````````````````````````
+`-X` オプションもしくは`-DUPLOADER_DEBUG` オプションをつけて Apache を
+起動すると再起動なしでテンプレートの修正が反映されます．テンプレートの
+内容を調整する場合に利用すると便利です．
+
+なお，通常モードで起動した場合，テンプレートを書き換えても Apache を再
+起動するまでその内容は反映されません．
+
+
+パフォーマンス
+----------------------------------------------------------------------
+
+高速な表示
+```````````````````````````````````````````````````````````````````````
+
+.. image:: img/speed.png
+   :width: 460
+   :height: 248
+   :alt: 一秒間に処理できるリクエスト数
+   :align: right
+               
+mod_uploader は，表示を非常に高速に行うことができます．
+
+右に他のアップローダとの速度比較を示します．HTML は，静的な HTML で表示
+を行うもの，Perl および PHP はそれぞれの言語で作られたアップローダを指
+しています．測定には ApacheBench を用い，5 並列で 10,000 リクエスト発行
+した場合の値をプロットしました．
+
+mod_uploader は Perl の約 100 倍，PHP の約 10 倍高速に動作しています．
+Perl や PHP を使用する場合， `mod_perl`_ （ModPerl::Registry）や
+`APC`_ を使用すればある程度速度を改善することが可能でが，それでも
+mod_uploader には及びません．
+
+.. 補足：
+.. 
+.. なんか，使用言語がパフォーマンスのキーになるような書き方になってます
+.. が，もちろん，言語よりも他の要素に負うところの方が大きいです．
+.. mod_perl や APC 使っていればなおさらです．
+..
+.. アジテーションが目的の文章ですんで，軽く読み流して頂けると幸いです．
+.. (やっぱりダメ？)
+
+また，mod_uploader は，静的な HTML を用いるものと比べてもわずかながら高
+速に動作します．これは，表示に静的な HTML を用いる場合でもアップロード
+処理のためには libphp4.so をロードする必要があるので，そのためのオーバー
+ヘッドがかかっているのが原因と思われます．libphp4.so のロードを無くした
+場合，HTML の値は 2,800 を超えて最速になります．
+
+省メモリのアップロード
+```````````````````````````````````````````````````````````````````````
+
+mod_uploader は，巨大なファイルのアップロードにもわずかなメモリしか消費
+しません．
+
+それに対してアップローダの多くは，アップロードされたデータを一旦全てメ
+モリに入れて処理するため，アップロードにはファイルサイズに比例したサイ
+ズのメモリを消費してしまいます．
+
+.. 補足：
+.. 
+.. サイズが小さいファイルをアップロードするだけだったら，全部メモリに読
+.. み込んで処理するのは良い選択だと思います．でも，数十メガバイト以上の
+.. サイズを扱うには無理があります．
+
+
+テスト結果
+----------------------------------------------------------------------
+
+`テスト結果一覧 <http://acapulco.dyndns.org/mod_uploader/status/>`_
+
+
+API ドキュメント
+----------------------------------------------------------------------
+
+http://acapulco.dyndns.org/mod_uploader/api/
+
+
+ツール
+----------------------------------------------------------------------
+
+プログラムの作成にあたってお世話になったツールを紹介します．
+
+`Valgrind`_
+  メモリの不正な参照や解放し忘れなどをチェックしてくれるツール．デバッ
+  グでかなりお世話になりました．
+
+  
+寄付
+----------------------------------------------------------------------
+
+PayPal 経由での寄付を受け付けています．mod_uploader が気に入った場合は
+よろしくお願いします．いただいたお金は開発のための書籍購入などにあてさ
+せていただきます．
+
+.. raw:: html
+
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+   <input type="hidden" name="cmd" value="_s-xclick" />
+   <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
+   <img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+   <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+   " />
+  </form>
+
+
+参考文献
+----------------------------------------------------------------------
+
+プログラムの作成にあたってお世話になった文献を紹介します．
+
+|Saber|_ |Panda|_ |Secure|_
+
+`The Apache Modules Book: Application Development With Apache`_
+  `Apache`_ 2.x のモジュール作成に必要になるのモジュール作成に必要にな
+  る事柄を一通り説明した本．トップダウンで全体を眺めた後，ボトムアップ
+  で詳しい説明がされているので非常に理解しやすいです．
+
+`Apacheモジュール プログラミングガイド`_
+  `Apache`_ 1.x のモジュール作成に必要になる事柄を一通り説明した本．痒
+  いところに手が届いているので，手元に置いておくと重宝します．
+
+`Secure Coding in C And C++`_
+  C/C++ でプログラムを作るときにセキュリティホールが発生してしまう原理と
+  その対策について詳しく説明した本です．丁寧に書かれているので内容を
+  しっかりと理解することができます．
+  
+`Advanced Topics in Module Design: Threadsafety and Portability`_
+  `Apache`_ 2.0 でモジュールを作成するときに必要になってくるテクニック
+  が解説されたパワポ．そんなに長くないので，モジュール書く前にさらっと
+  読んでおきましょう．
+
+`Apache API C++ Cookbook`_
+  C++ を使って `Apache`_ のモジュールを作成する際の注意事項について説明
+  したサイト．
+
+`libapr (apache portable runtime) programming tutorial`_
+  APR のチュートリアル．サンプルコードおよび，間違いやすい点についての
+  記述が多いので重宝します．
+
+`Using libavformat and libavcodec: An Update`_
+  libavformat と libavcodec を使って動画からフレーム画像を取り出す方法
+  を解説したページ．丁寧に書かれています．
+
+`STL のページ`_
+  C++ の標準テンプレートライブラリである STL について簡潔にまとめられた
+  サイト．
+
+`RubyExtensionProgrammingGuide`_
+  Ruby の拡張ライブラリの書き方を解説したサイト．基本的な事項から少し高
+  度な話題まで非常に良くまとまってます．
+
+`Compiler Construction Lecture`_
+  コンパイラ作成に関する実践的な内容が簡潔にまとめられたサイト．簡単な
+  インタプリタもどきを作るんだったら，このサイトだけで十分かも．
+
+.. _`Apache`:                         http://httpd.apache.org/
+.. _`mod_rewrite`:                    http://httpd.apache.org/docs/2.0/rewrite/
+.. _`Debian`:                         http://www.debian.org/
+.. _`GNU Compiler Collection`:        http://gcc.gnu.org/
+.. _`Intel C++ Compiler`:             http://www.intel.com/cd/software/products/asmo-na/eng/compilers/clin/
+.. _`GNU Make`:                       http://www.gnu.org/software/make/
+.. _`GNU Libtool`:                    http://www.gnu.org/software/libtool/
+.. _`ImageMagick`:                    http://www.imagemagick.org/
+.. _`ffmpeg`:                         http://ffmpeg.sourceforge.net/index.php
+.. _`Visual C++ .NET`:                http://www.microsoft.com/japan/msdn/visualc/
+.. _`Cygwin`:                         http://www.cygwin.com/
+.. _`The zlib/libpng License`:        http://www.opensource.org/licenses/zlib-license.php
+.. _`The zlib/libpng License の翻訳`: http://japan.linux.com/docs/licenses/zlib-license.shtml
+.. _`Gentoo Linux`:                   http://www.gentoo.org/
+.. _`FreeBSD`:                        http://www.freebsd.org/
+.. _`Mac OSX Tiger`:                  http://www.apple.com/macosx/
+.. _`mod_perl`:                       http://perl.apache.org/
+.. _`APC`:                            http://pecl.php.net/package/APC/
+.. _`Valgrind`:                       http://valgrind.org/
+
+.. _`The Apache Modules Book: Application Development With Apache`: http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22
+.. _`Apacheモジュール プログラミングガイド`: http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22
+.. _`Secure Coding in C And C++`: http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22
+.. _`Advanced Topics in Module Design: Threadsafety and Portability`: http://www.clove.org/~aaron/presentations/apachecon2004/ac2004advancedmodules.ppt
+.. _`Apache API C++ Cookbook`:       http://zach.chambana.net/apache-cplusplus/ 
+.. _`libapr (apache portable runtime) programming tutorial`: http://dev.ariel-networks.com/apr/apr-tutorial/html/apr-tutorial.html             
+.. _`Using libavformat and libavcodec: An Update`: http://www.inb.uni-luebeck.de/~boehme/libavcodec_update.html
+.. _`STL のページ`:                   http://www.wakhok.ac.jp/~sumi/stl/
+.. _`RubyExtensionProgrammingGuide`:  http://i.loveruby.net/w/RubyExtensionProgrammingGuide.html
+.. _`Compiler Construction Lecture`:  http://rananim.ie.u-ryukyu.ac.jp/~kono/lecture/compiler/
+
+.. |Saber| image:: img/saber.png
+   :width: 120
+   :height: 155
+   :class: icon-book
+   :alt: The Apache Modules Book
+.. _`Saber`: http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22
+
+.. |Panda| image:: img/panda.png
+   :width: 120
+   :height: 151
+   :class: icon-book
+   :alt: Apacheモジュール プログラミングガイド
+.. _`Panda`: http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22
+
+.. |Secure| image:: img/secure.png
+   :width: 120
+   :height: 151
+   :class: icon-book
+   :alt: Secure Coding in C And C++
+.. _`Secure`: http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22
+
+.. |download| replace:: ダウンロード
+.. |GoogleAdSense| raw:: html
+
+  <script type="text/javascript"><!--
+    google_ad_client = "pub-4095857718593292";
+    google_ad_width = 728;
+    google_ad_height = 90;
+    google_ad_format = "728x90_as";
+    google_ad_type = "text_image";
+    google_ad_channel = "4386274577";
+    google_ad_channel = "4386274577";
+    google_color_border = "FFFFFF";
+    google_color_bg = "FFFFFF";
+    google_color_link = "11593C";
+    google_color_text = "000000";
+    google_color_url = "008000";
+    //-->
+  </script>
+  <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+
+|GoogleAdSense|
+ 
+.. raw:: html
+
+  <hr />
+
+  <div class="footer">
+   <p>
+    <a href="http://acapulco.dyndns.org">[HOME]</a>
+   </p>
+   <p class="id">
+    $Id: apache.txt 2109 2006-11-26 23:11:04Z svn $
+   </p>
+
+   <address><img src="img/mail_address.png" width="204" height="16" alt="kimata&#64;acapulco.dyndns.org" /></address>
+
+   <p class="validator">
+    <a href="http://validator.w3.org/check?uri=referer">
+     <img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31" width="88" />
+    </a>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">
+     <img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" />
+    </a>
+   </p>
+  </div>
+
+.. Local Variables:
+.. mode: rst
+.. coding: utf-8-unix
+.. End:
+

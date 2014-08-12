@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>README for mod_uploader (Windows)</title>
+<link rel="stylesheet" href="css/doc.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="readme-for-mod-uploader-windows">
+<h1 class="title">README for mod_uploader (Windows)</h1>
+<div class="image"><img alt="mod_uploader: Apache のモジュールとして動作する高速アップローダ" height="89" src="img/title.png" width="440" /></div>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#mod-uploader" id="id31" name="id31">mod_uploader とは?</a></li>
+<li><a class="reference" href="#id1" id="id32" name="id32">機能比較</a></li>
+<li><a class="reference" href="#id2" id="id33" name="id33">動作サンプル</a></li>
+<li><a class="reference" href="#id3" id="id34" name="id34">動作環境</a></li>
+<li><a class="reference" href="#id4" id="id35" name="id35">ライセンス</a></li>
+<li><a class="reference" href="#download" id="id36" name="id36">ダウンロード</a><ul>
+<li><a class="reference" href="#apache-2-0" id="id37" name="id37">Apache 2.0 系を使用している方へ</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#cvs" id="id38" name="id38">CVS リポジトリ</a></li>
+<li><a class="reference" href="#id5" id="id39" name="id39">変更履歴</a></li>
+<li><a class="reference" href="#id6" id="id40" name="id40">インストール</a><ul>
+<li><a class="reference" href="#id7" id="id41" name="id41">注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id10" id="id42" name="id42">設定</a></li>
+<li><a class="reference" href="#id11" id="id43" name="id43">起動</a><ul>
+<li><a class="reference" href="#id12" id="id44" name="id44">トラブルシューティング</a><ul>
+<li><a class="reference" href="#id13" id="id45" name="id45">Apache が起動しなくなった</a></li>
+<li><a class="reference" href="#server-busy" id="id46" name="id46">進捗情報が常に Server Busy となる</a></li>
+<li><a class="reference" href="#id14" id="id47" name="id47">ダウンロードカウンタがリセットされた</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#id15" id="id48" name="id48">コンパイル方法</a><ul>
+<li><a class="reference" href="#id16" id="id49" name="id49">準備</a></li>
+<li><a class="reference" href="#id17" id="id50" name="id50">コンパイル</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id18" id="id51" name="id51">アンインストール</a><ul>
+<li><a class="reference" href="#id19" id="id52" name="id52">注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id20" id="id53" name="id53">パフォーマンス</a><ul>
+<li><a class="reference" href="#id21" id="id54" name="id54">高速な表示</a></li>
+<li><a class="reference" href="#id22" id="id55" name="id55">省メモリのアップロード</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#id23" id="id56" name="id56">テスト結果</a></li>
+<li><a class="reference" href="#api" id="id57" name="id57">API ドキュメント</a></li>
+<li><a class="reference" href="#id25" id="id58" name="id58">寄付</a></li>
+<li><a class="reference" href="#id26" id="id59" name="id59">参考文献</a></li>
+</ul>
+</div>
+<p> <script type="text/javascript"><!--
+   google_ad_client = "pub-4095857718593292";
+   google_ad_width = 728;
+   google_ad_height = 90;
+   google_ad_format = "728x90_as";
+   google_ad_type = "text_image";
+   google_ad_channel = "4386274577";
+   google_ad_channel = "4386274577";
+   google_color_border = "FFFFFF";
+   google_color_bg = "FFFFFF";
+   google_color_link = "11593C";
+   google_color_text = "000000";
+   google_color_url = "008000";
+   //-->
+ </script>
+ <script type="text/javascript"
+   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+<div class="section" id="mod-uploader">
+<h1><a class="toc-backref" href="#id31" name="mod-uploader">mod_uploader とは?</a></h1>
+<p>mod_uploader は，よくあるアップローダを <a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールとして実
+装したものです．以下のような特長があります．</p>
+<ul class="simple">
+<li>依存しているライブラリ等が少ないので初心者でも設置が簡単．
+(Perl や PHP のインストールは不要です)</li>
+<li><a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールとして C++ で記述されているので，Perl や PHP で
+作られた物に比べて高速．</li>
+<li>独自の簡易スクリプト言語によるテンプレート機能があるので，再コンパイ
+ル無しで手軽に見た目を変更可能．</li>
+<li>アップロード時の進捗状況をリアルタイムに表示可能．</li>
+</ul>
+<div class="image"><img alt="アップロード画面のスクリーンショット" height="145" src="img/upload_window.png" width="683" /></div>
+</div>
+<div class="section" id="id1">
+<h1><a class="toc-backref" href="#id32" name="id1">機能比較</a></h1>
+<p>他のアップローダとの機能比較を下記に示します．</p>
+<div class="image"><img alt="他のアップローダとの機能比較" height="151" src="img/func_comparison.png" width="822" /></div>
+</div>
+<div class="section" id="id2">
+<h1><a class="toc-backref" href="#id33" name="id2">動作サンプル</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org:7070/up/">http://acapulco.dyndns.org:7070/up/</a></p>
+</div>
+<div class="section" id="id3">
+<h1><a class="toc-backref" href="#id34" name="id3">動作環境</a></h1>
+<p>mod_uploader は，Windows で動作します．(<img alt="Linux" height="16" src="img/icon_linux.png" width="16" /> <a class="reference" href="http://acapulco.dyndns.org/mod_uploader/">UNIX 版はこちら</a>)</p>
+<p>詳細を以下に示します．</p>
+<ul class="simple">
+<li><a class="reference" href="http://www.microsoft.com/japan/windows/">Microsoft Windows</a> XP 以上</li>
+<li><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.0 以上
+[ <a class="reference" href="install_apache.htm">Apache インストール手順</a> ]</li>
+<li><a class="reference" href="http://www.imagemagick.org/">ImageMagick</a>  6.0 以上 (<tt class="docutils literal"><span class="pre">Dynamic</span> <span class="pre">at</span> <span class="pre">8</span> <span class="pre">bits-per-pixel</span></tt>)
+[ <a class="reference" href="install_imagemagick.htm">ImageMagick インストール手順</a> ]</li>
+<li><a class="reference" href="http://www.microsoft.com/japan/msdn/netframework/">.NET Framework</a> 2.0 以上 (設定情報生成ツールを使用しない場合は不要)</li>
+<li><a class="reference" href="http://www.microsoft.com/japan/msdn/visualc/">Visual C++ .NET</a> 2005 以上（コンパイルしない場合は不要）</li>
+<li><a class="reference" href="http://www.cygwin.com/">Cygwin</a> 版 <a class="reference" href="http://www.gnu.org/software/make/">GNU Make</a> 3.8 以上（コンパイルしない場合は不要）</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h1><a class="toc-backref" href="#id35" name="id4">ライセンス</a></h1>
+<p><a class="reference" href="http://www.opensource.org/licenses/zlib-license.php">The zlib/libpng License</a> （ <a class="reference" href="http://japan.linux.com/docs/licenses/zlib-license.shtml">The zlib/libpng License の翻訳</a> ）に従
+います．</p>
+</div>
+<div class="section" id="download">
+<h1><a class="toc-backref" href="#id36" name="download">ダウンロード</a></h1>
+<ul class="simple">
+<li><a class="reference" href="http://sourceforge.jp/projects/mod-uploader/downloads/32080/mod_uploader-3.1.0.msi">mod_uploader-3.1.0.msi</a></li>
+</ul>
+<div class="section" id="apache-2-0">
+<h2><a class="toc-backref" href="#id37" name="apache-2-0">Apache 2.0 系を使用している方へ</a></h2>
+<p>Apache 2.0 系を使用している方は， <a class="reference" href="http://acapulco.dyndns.org/mod_uploader/file/mod_uploader-ap2.0.so">mod_uploader-ap2.0.so</a> をダウ
+ンロードして，mod_uploader.so の代わりに使用してください．</p>
+</div>
+</div>
+<div class="section" id="cvs">
+<h1><a class="toc-backref" href="#id38" name="cvs">CVS リポジトリ</a></h1>
+<p>下記のようにすることで check out できます．（パスワードは空）</p>
+<pre class="literal-block">
+$ cvs -d:pserver:anonymous&#64;cvs.sourceforge.jp:/cvsroot/mod-uploader login
+$ cvs -z3 -d:pserver:anonymous&#64;cvs.sourceforge.jp:/cvsroot/mod-uploader co mod_uploader
+</pre>
+<p>また， <a class="reference" href="http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/">ViewCVS 経由で参照</a>
+することもできます．</p>
+</div>
+<div class="section" id="id5">
+<h1><a class="toc-backref" href="#id39" name="id5">変更履歴</a></h1>
+<p><a class="reference" href="http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup">ChangeLog</a></p>
+</div>
+<div class="section" id="id6">
+<h1><a class="toc-backref" href="#id40" name="id6">インストール</a></h1>
+<p>mod_uploader-3.1.0.msi を実行すれば OK です．デフォルトでは
+<cite>C:/Program Files/mod_uploader</cite> 以下にインストールされます．</p>
+<div class="section" id="id7">
+<h2><a class="toc-backref" href="#id41" name="id7">注意事項</a></h2>
+<p><a class="reference" href="#id3">動作環境</a> にも書いてありますが，あらかじめ Apache 及び ImageMagick を
+インストールしておく必要があります．(参考: <a class="reference" href="install_apache.htm">Apache インストール手順</a>, <a class="reference" href="install_imagemagick.htm">ImageMagick インストール手順</a>)</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h1><a class="toc-backref" href="#id42" name="id10">設定</a></h1>
+<ol class="arabic simple">
+<li>[スタート] - [プログラム] - [mod_uploader] からたどれる
+UploaderConfig を起動します．起動すると下図の様なウィンドウが現れます．</li>
+</ol>
+<div class="image"><img alt="UploaderConfig のスクリーンショット" height="572" src="img/config_window.png" width="463" /></div>
+<ol class="arabic simple" start="2">
+<li>アップローダの URL を必要にあわせて変更します．他にも設定項目があり
+ますが，通常は変更する必要ありません．</li>
+<li>エラー <img alt="エラーアイコン" height="20" src="img/icon_error.png" width="20" /> が表示されていれば，その項目を修正します．
+アイコンの上にカーソルをあわせると詳しい説明が表示されます．</li>
+<li>「設定をコピー」ボタンを押して設定をクリップボードにコピーします．</li>
+<li>Apache の設定ファイル (<cite>httpd.conf</cite>) を開きます．設定ファイルは，[ス
+タート]-[プログラム]-[Apache HTTP Server 2.2.x]-[Configure Apache
+Server]-[Edit the Apache httpd.conf Configuration File] をクリックす
+ることで開くことができます．</li>
+<li>コピーしたものを Apache の設定ファイルの末尾に貼り付けます．</li>
+</ol>
+</div>
+<div class="section" id="id11">
+<h1><a class="toc-backref" href="#id43" name="id11">起動</a></h1>
+<p><a class="reference" href="http://httpd.apache.org/">Apache</a> を普通に起動すれば OK です．設置した場所にブラウザでアクセス
+してみましょう．</p>
+<div class="section" id="id12">
+<h2><a class="toc-backref" href="#id44" name="id12">トラブルシューティング</a></h2>
+<div class="section" id="id13">
+<h3><a class="toc-backref" href="#id45" name="id13">Apache が起動しなくなった</a></h3>
+<p>Apache のエラーログにエラー内容が出力されているので，内容を確認して設定
+を見直してください．</p>
+</div>
+<div class="section" id="server-busy">
+<h3><a class="toc-backref" href="#id46" name="server-busy">進捗情報が常に Server Busy となる</a></h3>
+<p>UploaderBaseUrl と違うアドレスでアップローダにアクセスした場合に発生し
+ます．例えば，UploaderBaseUrl では <a class="reference" href="http://localhost/up">http://localhost/up</a> と指定しているの
+に，ブラウザでは <a class="reference" href="http://127.0.0.1/up">http://127.0.0.1/up</a> にアクセスしている場合がこれに該当
+します．</p>
+<p>UploaderBaseUrl で指定したアドレスでアクセスしてください．</p>
+</div>
+<div class="section" id="id14">
+<h3><a class="toc-backref" href="#id47" name="id14">ダウンロードカウンタがリセットされた</a></h3>
+<p>mod_uploader は，高速動作のため，ダウンロードカウンタのカウントアップを
+メモリ上でのみ行っており，Apache の終了時にデータをファイルに書き出すよ
+うになっています．そのため，Apache が正常に終了しなかった場合，ファイル
+への書き出しが行われずダウンロードカウンタが以前の状態にリセットされて
+しまいます．</p>
+</div>
+</div>
+</div>
+<div class="section" id="id15">
+<h1><a class="toc-backref" href="#id48" name="id15">コンパイル方法</a></h1>
+<p>通常はコンパイル作業は不要です．ソースを編集して細かくカスタマイズした
+い方のみ読んでください．</p>
+<div class="section" id="id16">
+<h2><a class="toc-backref" href="#id49" name="id16">準備</a></h2>
+<p>Windoes 用 Apache のバイナリ版には，apr_iconv.h というファイルが抜けて
+いるという問題があるので，Apache の Windows 用ソースコード Win32
+Source をダウンロードします．</p>
+<p>ダウンロードしたものを解凍し，srclib/apr-iconv/include/apr_iconv.h を
+<a class="reference" href="http://httpd.apache.org/">Apache</a> の include ディレクトリにコピーします．</p>
+</div>
+<div class="section" id="id17">
+<h2><a class="toc-backref" href="#id50" name="id17">コンパイル</a></h2>
+<p>最初に，UNIX 系 OS で configure します．</p>
+<pre class="literal-block">
+$ ./configure
+</pre>
+<p>次に，ディレクトリを丸ごと Windows にコピーし，src/GNUmakefile.win32 の
+次の部分を， <a class="reference" href="http://httpd.apache.org/">Apache</a> をインストールしたディレクトリおよび
+<a class="reference" href="http://www.imagemagick.org/">ImageMagick</a> をインストールしたディレクトリに書き換えます．</p>
+<pre class="literal-block">
+APACHE_DIR  := C:/Server/Apache2
+MAGICK_DIR  := C:/Application/Image/Edit/ImageMagick
+</pre>
+<p>上が完了したら，src/GNUmakefile.win32 を使って make します．</p>
+<pre class="literal-block">
+&gt; cd src
+&gt; vsvars32.bat
+&gt; make -f GNUmakefile.win32
+</pre>
+<p><cite>vsvars32.bat</cite> は，コマンドラインから <a class="reference" href="http://www.microsoft.com/japan/msdn/visualc/">Visual C++ .NET</a> を使うための環
+境設定を行うスクリプトです． <a class="reference" href="http://www.microsoft.com/japan/msdn/visualc/">Visual C++ .NET</a> をインストールしたディ
+レクトリ以下の Common7/Tools にあります．</p>
+</div>
+</div>
+<div class="section" id="id18">
+<h1><a class="toc-backref" href="#id51" name="id18">アンインストール</a></h1>
+<p>[スタート] - [設定] - [コントロールパネル] にある「プログラムの追加と削
+除」から行えます．掲示板のデータは自動的には消去されませんので完全に消
+去したい場合は手動でフォルダ (デフォルトでは <cite>C:/Program
+Files/mod_uploader</cite>) を削除してください．</p>
+<div class="section" id="id19">
+<h2><a class="toc-backref" href="#id52" name="id19">注意事項</a></h2>
+<p>mod_uploader が動作中だとアンインストールが行えません．アンインストール
+作業が途中で止まってしまう場合は，httpd.conf から mod_uploader の設定を
+削除した後 Apache を再起動し，再度試してみてください．</p>
+</div>
+</div>
+<div class="section" id="id20">
+<h1><a class="toc-backref" href="#id53" name="id20">パフォーマンス</a></h1>
+<div class="section" id="id21">
+<h2><a class="toc-backref" href="#id54" name="id21">高速な表示</a></h2>
+<div align="right" class="image align-right"><img align="right" alt="一秒間に処理できるリクエスト数" height="248" src="img/speed.png" width="460" /></div>
+<p>mod_uploader は，表示を非常に高速に行うことができます．</p>
+<p>右に他のアップローダとの速度比較を示します．HTML は，表示を静的な HTML
+で行うもの，Perl および PHP はそれぞれの言語で作られたアップローダを指
+しています．測定には ApacheBench を用い，5 並列で 10,000 リクエスト発行
+した場合の値をプロットしました．</p>
+<p>mod_uploader は Perl の約 100 倍，PHP の約 10 倍高速に動作しています．
+これらの言語を使った場合， <a class="reference" href="http://perl.apache.org/">mod_perl</a> （ModPerl::Registry）や <a class="reference" href="http://pecl.php.net/package/APC/">APC</a>
+を使用すればある程度速度を改善することが可能です．それでも，
+mod_uploader には及びません．</p>
+<!-- 補足： -->
+<!--  -->
+<!-- なんか，使用言語がパフォーマンスのキーになるような書き方になってます -->
+<!-- が，もちろん，言語よりも他の要素に負うところの方が大きいです． -->
+<!-- mod_perl や APC 使っていればなおさらです． -->
+<!--  -->
+<!-- アジテーションが目的の文章ですんで，軽く読み流して頂けると幸いです． -->
+<!-- (やっぱりダメ？) -->
+<p>また，mod_uploader は，静的な HTML を用いるものと比べてもわずかながら高
+速に動作します．これは，表示に静的な HTML を用いる場合でも，アップロー
+ド処理のためには libphp4.so をロードする必要があるので，そのためのオー
+バーヘッドがかかっているのが原因と思われます．libphp4.so のロードを無く
+した場合，HTML の値は 2,800 を超えて最速になります．</p>
+</div>
+<div class="section" id="id22">
+<h2><a class="toc-backref" href="#id55" name="id22">省メモリのアップロード</a></h2>
+<p>mod_uploader は，巨大なファイルのアップロードにもわずかなメモリしか消費
+しません．</p>
+<p>それに対してアップローダの多くは，アップロードされたデータを一旦全てメ
+モリに入れて処理するため，アップロードにはファイルサイズに比例したサイ
+ズのメモリを消費してしまいます．</p>
+<!-- 補足： -->
+<!--  -->
+<!-- サイズが小さいファイルをアップロードするだけだったら，全部メモリに読 -->
+<!-- み込んで処理するのは良い選択だと思います．でも，数十メガバイト以上の -->
+<!-- サイズを扱うには無理があります． -->
+</div>
+</div>
+<div class="section" id="id23">
+<h1><a class="toc-backref" href="#id56" name="id23">テスト結果</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org/mod_uploader/status/">テスト結果一覧</a></p>
+</div>
+<div class="section" id="api">
+<h1><a class="toc-backref" href="#id57" name="api">API ドキュメント</a></h1>
+<p><a class="reference" href="http://acapulco.dyndns.org/mod_uploader/api/">http://acapulco.dyndns.org/mod_uploader/api/</a></p>
+</div>
+<div class="section" id="id25">
+<h1><a class="toc-backref" href="#id58" name="id25">寄付</a></h1>
+<p>PayPal 経由での寄付を受け付けています．mod_uploader が気に入った場合は
+よろしくお願いします．いただいたお金は開発のための書籍購入などにあてさ
+せていただきます．</p>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+ <input type="hidden" name="cmd" value="_s-xclick">
+ <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+ <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+ <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+ ">
+</form></div>
+<div class="section" id="id26">
+<h1><a class="toc-backref" href="#id59" name="id26">参考文献</a></h1>
+<p>プログラムの作成にあたってお世話になった文献を紹介します．</p>
+<p><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22"><img alt="The Apache Modules Book" class="icon-book" height="155" src="img/saber.png" width="120" /></a> <a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22"><img alt="Apacheモジュール プログラミングガイド" class="icon-book" height="151" src="img/panda.png" width="120" /></a> <a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22"><img alt="Secure Coding in C And C++" class="icon-book" height="151" src="img/secure.png" width="120" /></a></p>
+<dl class="docutils">
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0132409674/cstation-22">The Apache Modules Book: Application Development With Apache</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.x のモジュール作成に必要になるのモジュール作成に必要にな
+る事柄を一通り説明した本．トップダウンで全体を眺めた後，ボトムアップ</dd>
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/4774117994/cstation-22">Apacheモジュール プログラミングガイド</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュール作成に必要になる事柄を一通り説明した本．痒いと
+ころに手が届いているので，手元に置いておくと重宝します．</dd>
+<dt><a class="reference" href="http://www.amazon.co.jp/exec/obidos/ASIN/0321335724/cstation-22">Secure Coding in C And C++</a></dt>
+<dd>C/C++ でプログラムを作るときにセキュリティホールが発生してしまう原理と
+その対策について詳しく説明した本です．丁寧に書かれているので内容を
+しっかりと理解することができます．</dd>
+<dt><a class="reference" href="http://www.clove.org/~aaron/presentations/apachecon2004/ac2004advancedmodules.ppt">Advanced Topics in Module Design: Threadsafety and Portability</a></dt>
+<dd><a class="reference" href="http://httpd.apache.org/">Apache</a> 2.0 でモジュールを作成するときに必要になってくるテクニック
+が解説されたパワポ．そんなに長くないので，モジュール書く前にさらっと
+読んでおきましょう．</dd>
+<dt><a class="reference" href="http://zach.chambana.net/apache-cplusplus/">Apache API C++ Cookbook</a></dt>
+<dd>C++ を使って <a class="reference" href="http://httpd.apache.org/">Apache</a> のモジュールを作成する際の注意事項について説明
+したサイト．</dd>
+<dt><a class="reference" href="http://dev.ariel-networks.com/apr/apr-tutorial/html/apr-tutorial.html">libapr (apache portable runtime) programming tutorial</a></dt>
+<dd>APR のチュートリアル．サンプルコードおよび，間違いやすい点についての
+記述が多いので重宝します．</dd>
+<dt><a class="reference" href="http://www.inb.uni-luebeck.de/~boehme/libavcodec_update.html">Using libavformat and libavcodec: An Update</a></dt>
+<dd>libavformat と libavcodec を使って動画からフレーム画像を取り出す方法
+を解説したページ．丁寧に書かれています．</dd>
+<dt><a class="reference" href="http://www.wakhok.ac.jp/~sumi/stl/">STL のページ</a></dt>
+<dd>C++ の標準テンプレートライブラリである STL について簡潔にまとめられた
+サイト．</dd>
+<dt><a class="reference" href="http://i.loveruby.net/w/RubyExtensionProgrammingGuide.html">RubyExtensionProgrammingGuide</a></dt>
+<dd>Ruby の拡張ライブラリの書き方を解説したサイト．基本的な事項から少し高
+度な話題まで非常に良くまとまってます．</dd>
+<dt><a class="reference" href="http://rananim.ie.u-ryukyu.ac.jp/~kono/lecture/compiler/">Compiler Construction Lecture</a></dt>
+<dd>コンパイラ作成に関する実践的な内容が簡潔にまとめられたサイト．簡単な
+インタプリタもどきを作るんだったら，このサイトだけで十分かも．</dd>
+</dl>
+<p> <script type="text/javascript"><!--
+   google_ad_client = "pub-4095857718593292";
+   google_ad_width = 728;
+   google_ad_height = 90;
+   google_ad_format = "728x90_as";
+   google_ad_type = "text_image";
+   google_ad_channel = "4386274577";
+   google_ad_channel = "4386274577";
+   google_color_border = "FFFFFF";
+   google_color_bg = "FFFFFF";
+   google_color_link = "11593C";
+   google_color_text = "000000";
+   google_color_url = "008000";
+   //-->
+ </script>
+ <script type="text/javascript"
+   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+<hr />
+
+<div class="footer">
+ <p>
+  <a href="http://acapulco.dyndns.org">[HOME]</a>
+ </p>
+ <p class="id">
+  $Id: apache.txt 1248 2006-08-05 05:51:43Z svn $
+ </p>
+
+ <address>
+  <img src="img/mail_address.png" width="204" height="16" alt="&#107;&#105;&#109;&#97;&#116;&#97;&#64;&#97;&#99;&#97;&#112;&#117;&#108;&#99;&#111;&#46;&#100;&#121;&#110;&#100;&#110;&#115;&#46;&#111;&#114;&#103;" />
+ </address>
+
+ <p class="validator">
+  <a href="http://validator.w3.org/check?uri=referer">
+   <img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31" width="88" />
+  </a>
+  <a href="http://jigsaw.w3.org/css-validator/check/referer">
+   <img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" />
+  </a>
+ </p>
+</div><!-- Local Variables: -->
+<!-- mode: rst -->
+<!-- coding: utf-8-unix -->
+<!-- End: -->
+</div>
+</div>
+</body>
+</html>

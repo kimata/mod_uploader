@@ -1,0 +1,112 @@
+/******************************************************************************
+ * Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+ *
+ * All rights reserved.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any
+ * damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any
+ * purpose, including commercial applications, and to alter it and
+ * redistribute it freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must
+ *    not claim that you wrote the original software. If you use this
+ *    software in a product, an acknowledgment in the product
+ *    documentation would be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must
+ *    not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ * $Id: RFC1867Parser.h.in 2757 2007-12-11 10:59:22Z svn $
+ *****************************************************************************/
+
+#ifndef RFC1867_PARSER_H
+#define RFC1867_PARSER_H
+
+#include "Environment.h"
+
+#include <cstdlib>
+
+#include "apr_pools.h"
+#include "apr_tables.h"
+
+#include "MultipartMessageParser.h"
+#include "MessageDigest5.h"
+
+
+@WRITER_DECL@;
+template<class R, class W> class MultipartMessageParser;
+
+/**
+ * @brief RFC1867 形式の入力をパースするクラス．
+ */
+template<class R, class W=@WRITER_CLASS@ >
+class RFC1867Parser: public MultipartMessageParser<R, W>
+{
+public:
+    typedef typename MultipartMessageParser<R, W>::content_t        content_t;
+    typedef typename MultipartMessageParser<R, W>::file_content_t   file_content_t;
+
+    /**
+     * コンストラクタです．
+     *
+     * @param[in] pool プール
+     * @param[in] reader POST リクエストを読み込むオブジェクト
+     * @param[in] boundary 区切り文字
+     * @param[in] file_dir_path 一時ファイルを作成するディレクトリ
+     * @param[in] max_text_size テキストの最大サイズ
+     * @param[in] max_file_size ファイルの最大サイズ
+     * @param[in] max_item_num マルチパートのの最大個数
+     * @param[in] file_offset ファイルを書き込む際のオフセット
+     */
+    RFC1867Parser(apr_pool_t *pool, R& reader,
+                  const char *file_dir_path, apr_size_t max_text_size,
+                  apr_uint64_t max_file_size, apr_size_t max_item_num,
+                  apr_size_t file_offset=0);
+    /**
+     * マルチパートを全て読み込みます．
+     *
+     * @param[in] content_type Content-Type
+     * @param[in] content_size Content-Length
+     */
+    apr_array_header_t *parse(const char *content_type,
+                              apr_uint64_t content_size);
+
+private:
+    typedef R PostReaderClass;
+    typedef W FileWriterClass;
+
+    typedef MultipartMessageParser<R, W>    M;
+
+    static const char MULTIPART_FORM_DATA[];
+    static const char FORM_DATA[];
+    static const char FILENAME_PARAM[];
+
+    /**
+     * 次のマルチパートを読み込みます．
+     *
+     * @param[out] content マルチパートの内容
+     */
+    void get_content(content_t *content);
+    /**
+     * マルチパートの区切り文字列を取得します．
+     *
+     * 入力中にNULL 文字が含まれている場合は正しく動作しません．
+     *
+     * @param[in] content_type Content-Type ヘッダ
+     * @return 区切り文字列
+     */
+    const char *get_boundary(const char *content_type);
+};
+
+#endif
+
+// Local Variables:
+// mode: c++
+// coding: utf-8-dos
+// End:

@@ -1,0 +1,197 @@
+###############################################################################
+# Copyright (C) 2007 Tetsuya Kimata <kimata@acapulco.dyndns.org>
+#
+# All rights reserved.
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any
+# damages arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any
+# purpose, including commercial applications, and to alter it and
+# redistribute it freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must
+#    not claim that you wrote the original software. If you use this
+#    software in a product, an acknowledgment in the product
+#    documentation would be appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must
+#    not be misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# $Id: GNUmakefile.in 1007 2006-03-14 14:23:17Z svn $
+###############################################################################
+
+###############################################################################
+# 基本設定
+ifeq ($(NO_COLOR),)
+CR_LB       := \033[1;34m
+CR_LC       := \033[1;36m
+CR_LG       := \033[1;32m
+CR_LP       := \033[1;35m
+CR_LR       := \033[1;31m
+CR_LW       := \033[1;37m
+CR_NC       := \033[0;36m
+CR_NG       := \033[0;32m
+CR_NP       := \033[0;35m
+CR_ED       := \033[0m
+endif
+
+APACHE_DIR  := C:/Server/Apache-2.2
+MAGICK_DIR  := C:/Application/Image/Edit/ImageMagick
+
+OS          := Windows
+APACHE      := Apache/2.2
+COMPILER    := Microsoft C/C++ Optimizing Compiler
+
+CC          := cl.exe
+CXX         := $(CC)
+LINK        := link.exe
+RC          := rc.exe
+
+CC_ORIG     := $(CC)
+CXX_ORIG    := $(CXX)
+
+HEADERDIR   := ../include
+UTILDIR     := ../util
+
+INCLUDES    = /I"$(HEADERDIR)" /I"$(APACHE_DIR)/include" /I"$(MAGICK_DIR)/include"
+DEFS        := /DWIN32 /D_WINDOWS /DLOCALE_JA /DCONV_CHAR_CODE
+CFLAGS      := /O2 /arch:SSE /GL /GR- /MD /EHsc /W3 /WX /wd4819 /nologo \
+	/YuEnvironment.h
+CXXFLAGS    = $(CFLAGS)
+LDFLAGS     := /LTCG /OPT:REF /INCREMENTAL:NO /SUBSYSTEM:CONSOLE \
+	/NODEFAULTLIB:library /WX /nologo
+LIBS        = /LIBPATH:"$(APACHE_DIR)/lib" /LIBPATH:"$(MAGICK_DIR)/lib" \
+	kernel32.lib ole32.lib \
+	libapr-1.lib libaprutil-1.lib libapriconv-1.lib libhttpd.lib \
+	core_rl_magick++_.lib core_rl_magick_.lib
+
+DEPENDS     := $(wildcard *.d)
+
+MAKE        := $(MAKE) -f GNUmakefile.win32
+
+DEF_OPT     := /D
+
+OUT_OPT     := /Fo
+LOUT_OPT    := /OUT:
+NOLINK_OPT  := /c
+DEBUG_OPT   := /RTCcsu /Zi /GS-
+
+OBJ_EXT	    := obj
+EXE_EXT     := .exe
+PCH_OBJ     := Environment.$(OBJ_EXT)
+
+DGB         := devenv
+DBG_OPT     := /debugexe
+
+###############################################################################
+# コンパイラ
+ifeq ($(CC_ORIG),icc)
+COMPILER    := Intel C++ Compiler
+CC          := icl
+CXX         := icl
+CXX_ORIG    := $(CXX)
+LINK        := xilink
+CFLAGS      := $(filter-out /YuEnvironment.h, $(CFLAGS)) /Qipo
+LDFLAGS     := $(filter-out /LTCG, $(LDFLAGS)) /Qipo
+DEBUG_OPT   := /Od /RTCcs /DEBUG
+endif
+
+###############################################################################
+# デバッグ
+ifeq (@DEBUG@,on)
+DEFS        += /DDEBUG
+ifeq ($(CC_ORIG),icc)
+CFLAGS      := $(filter-out /Qipo, $(CFLAGS))
+LDFLAGS     := $(filter-out /Qipo, $(LDFLAGS))
+endif
+CFLAGS      := $(filter-out /O2, $(CFLAGS)) $(DEBUG_OPT)
+LDFLAGS     += /DEBUG
+endif
+
+###############################################################################
+# 依存関係
+include GNUmakefile.dep
+ifneq ($(DEPENDS),)
+include $(DEPENDS)
+endif
+
+mod_uploader-ap2.2.so: APACHE_DIR := C:/Server/Apache-2.2
+mod_uploader-ap2.2.so: mod_uploader.so
+	@cp -f $< $@
+
+mod_uploader-ap2.0.so: APACHE_DIR := C:/Server/Apache-2.0/Apache2
+mod_uploader-ap2.0.so: LIBS := $(filter-out libapr-1.lib, \
+	$(filter-out libaprutil-1.lib, $(filter-out libapriconv-1.lib, $(LIBS)))) \
+	libapr.lib libaprutil.lib libapriconv.lib
+mod_uploader-ap2.0.so: mod_uploader.so
+	@cp -f $< $@
+
+mod_uploader.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+
+ApacheLogger.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+ApacheResponseWriter.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+ApacheTemplateExecutor.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+ApacheRFC1867Parser.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+ApacheRFC2822Parser.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+ApacheRequestReader.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+MultipartMessageParser.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS))
+
+ifneq ($(CC),icc)
+Environment.$(OBJ_EXT): CFLAGS := $(filter-out /YuEnvironment.h, $(CFLAGS)) \
+	/YcEnvironment.h
+endif
+# circular dependency が発生するけど無視
+Environment.pch: $(wildcard $(HEADERDIR)/*.h) Environment.$(OBJ_EXT)
+	@touch $@ -r $(HEADERDIR)/Environment.h
+
+.pre-compile: Environment.pch
+	@touch $@
+
+###############################################################################
+# テスト
+include GNUmakefile.tst
+TESTS       := $(filter-out @PACKAGE_NAME@, $(TESTS))
+
+###############################################################################
+# 引数
+include GNUmakefile.arg
+
+###############################################################################
+# 掃除
+include GNUmakefile.cln
+
+###############################################################################
+# 型ルール
+%.so: DEFS += /DUPLOADER_TYPE_APACHE
+%.so: %.$(OBJ_EXT) %.res Environment.$(OBJ_EXT)
+	@echo -e "$(CR_LB)Generating $(CR_LR)$@$(CR_ED)"
+	$(LINK) /DLL $(LDFLAGS) $(LIBS) $(LOUT_OPT)$@ $^
+%.res: %.rc
+	$(RC) /l 0x411 /fo$@ $<
+# ここで .exe の代わりに $(EXE_EXT) を使うとうまくいかない
+%.app.exe: CFLAGS := $(filter-out /O2, $(filter-out /Qipo, \
+       $(filter-out /YuEnvironment.h, $(CFLAGS)))) $(DEBUG_OPT) /Wp64
+%.app.exe: LDFLAGS := $(filter-out /Qipo, $(LDFLAGS)) /DEBUG
+%.app.exe: DEFS += /DUPLOADER_TYPE_CGI
+%.test.exe: CFLAGS := $(filter-out /O2, $(filter-out /Qipo, \
+       $(filter-out /YuEnvironment.h, $(CFLAGS)))) $(DEBUG_OPT) /Wp64
+%.test.exe: LDFLAGS := $(filter-out /Qipo, $(LDFLAGS)) /DEBUG
+
+vpath %.rc $(UTILDIR)
+
+###############################################################################
+# その他
+.SUFFIXES: .c .cpp .d .in .h.gch .h .$(OBJ_EXT) .test$(EXE_EXT).$(OBJ_EXT) \
+	.rc .res .app .so .test$(EXE_EXT) .run .dot .pdf .dbg
+.PRECIOUS: %.test$(EXE_EXT) %.test$(EXE_EXT).$(OBJ_EXT) %.$(OBJ_EXT) %.dot
+.PHONY: all compile $(TEST_TARGETS)	$(CLEAN_TARGETS)
+
+# Local Variables:
+# mode: makefile
+# coding: utf-8-unix
+# End:
