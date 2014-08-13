@@ -42,12 +42,6 @@ following features are provided:
    :alt: Screenshot of progress report
 
 
-Demo
-----------------------------------------------------------------------
-
-http://acapulco.dyndns.org:7070/up/ (in Japanese)
-
-
 Preparing system
 ----------------------------------------------------------------------
 
@@ -57,7 +51,7 @@ Preparing system
    :alt: Windows
 
 mod_uploader works on Unix-like systems such as Linux, FreeBSD, and Max OSX.
-(|IconWindows| `Windows edition is here <http://acapulco.dyndns.org/mod_uploader/apache-win.htm>`_)
+(|IconWindows| `Windows edition is here <http://green-rabbit.sakura.ne.jp/mod_uploader/apache-win.htm>`_)
 
 * `Apache`_ 2.0 or later
 
@@ -396,13 +390,13 @@ To stop mod_uploader, use the following command:
 Tests
 ----------------------------------------------------------------------
 
-`Resut of tests <http://acapulco.dyndns.org/mod_uploader/status/>`_
+`Resut of tests <http://green-rabbit.sakura.ne.jp/mod_uploader/status/>`_
 
 
 API Document
 ----------------------------------------------------------------------
 
-http://acapulco.dyndns.org/mod_uploader/api/
+http://green-rabbit.sakura.ne.jp/mod_uploader/api/
 
 Reference
 ----------------------------------------------------------------------
@@ -464,13 +458,13 @@ Reference
 
   <div class="footer">
    <p>
-    <a href="http://acapulco.dyndns.org">[HOME]</a>
+    <a href="http://green-rabbit.sakura.ne.jp/">[HOME]</a>
    </p>
    <p class="id">
     $Id: apache.txt 2109 2006-11-26 23:11:04Z svn $
    </p>
 
-   <address><img src="img/mail_address.png" width="204" height="16" alt="kimata&#64;acapulco.dyndns.org" /></address>
+   <address><img src="img/mail_address.png" width="204" height="16" alt="kimata&#64;green-rabbit.sakura.ne.jp" /></address>
 
    <p class="validator">
     <a href="http://validator.w3.org/check?uri=referer">

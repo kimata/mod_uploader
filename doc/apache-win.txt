@@ -48,7 +48,7 @@ mod_uploader は，よくあるアップローダを `Apache`_ のモジュー�
 動作サンプル
 ----------------------------------------------------------------------
 
-http://acapulco.dyndns.org:7070/up/
+http://green-rabbit.sakura.ne.jp:7070/up/
 
 
 動作環境
@@ -59,7 +59,7 @@ http://acapulco.dyndns.org:7070/up/
    :height: 16
    :alt: Linux
 
-mod_uploader は，Windows で動作します．(|IconLinux| `UNIX 版はこちら <http://acapulco.dyndns.org/mod_uploader/>`_)
+mod_uploader は，Windows で動作します．(|IconLinux| `UNIX 版はこちら <http://green-rabbit.sakura.ne.jp/mod_uploader/>`_)
 
 詳細を以下に示します．
 
@@ -92,7 +92,7 @@ mod_uploader は，Windows で動作します．(|IconLinux| `UNIX 版はこち�
 Apache 2.0 系を使用している方へ
 ``````````````````````````````````````````````````````````````````````
 Apache 2.0 系を使用している方は， `mod_uploader-ap2.0.so
-<http://acapulco.dyndns.org/mod_uploader/file/mod_uploader-ap2.0.so>`_ をダウ
+<http://green-rabbit.sakura.ne.jp/mod_uploader/file/mod_uploader-ap2.0.so>`_ をダウ
 ンロードして，mod_uploader.so の代わりに使用してください．
 
 
@@ -338,13 +338,13 @@ mod_uploader は，巨大なファイルのアップロードにもわずかな�
 テスト結果
 ----------------------------------------------------------------------
 
-`テスト結果一覧 <http://acapulco.dyndns.org/mod_uploader/status/>`_
+`テスト結果一覧 <http://green-rabbit.sakura.ne.jp/mod_uploader/status/>`_
 
 
 API ドキュメント
 ----------------------------------------------------------------------
 
-http://acapulco.dyndns.org/mod_uploader/api/
+http://green-rabbit.sakura.ne.jp/mod_uploader/api/
 
 
 寄付
@@ -493,7 +493,7 @@ PayPal 経由での寄付を受け付けています．mod_uploader が気に入
 
   <div class="footer">
    <p>
-    <a href="http://acapulco.dyndns.org">[HOME]</a>
+    <a href="http://green-rabbit.sakura.ne.jp/">[HOME]</a>
    </p>
    <p class="id">
     $Id: apache.txt 1248 2006-08-05 05:51:43Z svn $

@@ -144,11 +144,11 @@
   <hr class="footer" />
 
   <div class="footer">
-   Copyright(C) 2008 acapulco.dyndns.org
+   Copyright(C) 2008 green-rabbit.sakura.ne.jp
   </div>
 
   <div class="package_info">
-   <a href="http://acapulco.dyndns.org/mod_uploader/">@PACKAGE_NAME@/@PACKAGE_VERSION@ is Free!</a>
+   <a href="http://green-rabbit.sakura.ne.jp/mod_uploader/">@PACKAGE_NAME@/@PACKAGE_VERSION@ is Free!</a>
   </div>
 
   <div class="validator">
