@@ -156,6 +156,10 @@ public:
     {
         std::cout << "Content-Disposition: " << dispos << "\r\n";
     };
+    static void set_header(Handle *r, const char *name, const char *value)
+    {
+        std::cout << name << ": " << value << "\r\n";
+    }
     static void header_end(Handle *r)
     {
         std::cout << "\r\n";

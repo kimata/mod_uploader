@@ -28,7 +28,10 @@
 #ifndef APACHE_RESPONSE_H
 #define APACHE_RESPONSE_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
 #include "http_protocol.h"
+#pragma GCC diagnostic pop
 #include "http_request.h"
 
 #include "Environment.h"
@@ -140,7 +143,11 @@ public:
     };
     static const char *get_remote_ip(Handle *r)
     {
+#ifdef AP_SERVER_VERSION_2_4_OR_HIGHER
+        return r->connection->client_ip;
+#else
         return r->connection->remote_ip;
+#endif
     };
     static apr_sockaddr_t *get_remote_addr(Handle *r)
     {
@@ -157,7 +164,11 @@ public:
 
         return remote_addr;
 #else
+#ifdef AP_SERVER_VERSION_2_4_OR_HIGHER
+        return r->connection->client_addr;
+#else
         return r->connection->remote_addr;
+#endif
 #endif
     };
     static const char *get_user_agent(Handle *r)
@@ -289,6 +300,10 @@ public:
     {
         apr_table_set(r->headers_out, "Content-Disposition", dispos);
     };
+    static void set_header(Handle *r, const char *name, const char *value)
+    {
+        apr_table_setn(r->headers_out, name, value);
+    }
     static void header_end(Handle *r)
     {
 

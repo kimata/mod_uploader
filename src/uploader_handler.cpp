@@ -714,6 +714,7 @@ static int progress_data(typename Response::Handle *r, UploaderConfig *config,
         (apr_atoi64(get_word(r->pool, &arg, ARG_SEPARATE_STR[0])));
 
     Response::set_content_type(r, "text/plain");
+    Response::set_header(r, "Access-Control-Allow-Origin", "*");
     Response::header_end(r);
 
     typename Response::Writer o(r);
