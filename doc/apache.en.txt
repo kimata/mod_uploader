@@ -139,26 +139,10 @@ Download
 
 * `mod_uploader-3.1.0.tgz <http://sourceforge.jp/projects/mod-uploader/downloads/32076/mod_uploader-3.1.0.tgz>`_
 
-
-Getting a CVS checkout 
+GitHub
 ----------------------------------------------------------------------
 
-You can checkout mod_uploader from SoutceForge.  To do so, simply use the following commands:
-
-::
-
-  $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader checkout -P mod_uploader
-
-And, you can `Browse the CVS repository of this project
-<http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/>`_
-with your web browser.
-
-ChangeLog
-----------------------------------------------------------------------
-
-`ChangeLog <http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup>`_
-
+* `mod_uploader <https://github.com/kimata/mod_uploader>`_
 
 Building
 ----------------------------------------------------------------------

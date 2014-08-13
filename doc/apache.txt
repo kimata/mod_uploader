@@ -80,8 +80,8 @@ mod_uploader は，UNIX 系 OS で動作します．(|IconWindows| `Windows 版�
 
 * `ImageMagick`_ 6.0 以上
   
-開発は， `Gentoo Linux`_ Kernel **2.6.20** ，GCC **3.4.5** ，Apache
-**2.0.58** ，ImageMagick **6.3.3** で行っています．
+開発は， `Ubuntu`_ Server **14.04.1 LTS** ，GCC **4.8.1** ，Apache
+**2.4.6** で行っています．
 
 各環境で必要になる主なパッケージ
 ``````````````````````````````````````````````````````````````````````
@@ -167,35 +167,12 @@ Mandriva
 |download|
 ----------------------------------------------------------------------
 
-* `mod_uploader-3.1.0.tgz <http://sourceforge.jp/projects/mod-uploader/downloads/32076/mod_uploader-3.1.0.tgz>`_
+* `mod_uploader-3.2.0.tgz <http://green-rabbit.sakura.ne.jp/mod_uploader/dist/mod_uploader-3.2.0.tgz>`_
 
-* `mod_uploader-3.1.0-1.x86_64.rpm <http://sourceforge.jp/projects/mod-uploader/downloads/32077/mod_uploader-3.1.0-1.x86_64.rpm>`_  (for CentOS, FedoraCore 64bit)
-
-* `mod_uploader-3.1.0-1.src.rpm <http://sourceforge.jp/projects/mod-uploader/downloads/32078/mod_uploader-3.1.0-1.src.rpm>`_  (for CentOS, FedoraCore)
-
-* `libapache2-mod-uploader_3.1.0-1_amd64.deb <http://sourceforge.jp/projects/mod-uploader/downloads/32121/libapache2-mod-uploader_3.1.0-1_amd64.deb>`_  (for Debian, Ubuntu 64bit)
-
-
-CVS リポジトリ
+GitHub
 ----------------------------------------------------------------------
 
-下記のようにすることで check out できます．（パスワードは空）
-
-::
-
-  $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/mod-uploader checkout -P mod_uploader
-
-また， `ViewCVS 経由で参照
-<http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/>`_
-することもできます．
-
-
-変更履歴
-----------------------------------------------------------------------
-
-`ChangeLog <http://cvs.sourceforge.jp/cgi-bin/viewcvs.cgi/mod-uploader/mod_uploader/ChangeLog?view=markup>`_
-
+* `mod_uploader <https://github.com/kimata/mod_uploader>`_
 
 コンパイル方法
 ----------------------------------------------------------------------
@@ -716,6 +693,7 @@ PayPal 経由での寄付を受け付けています．mod_uploader が気に入
 .. _`The zlib/libpng License`:        http://www.opensource.org/licenses/zlib-license.php
 .. _`The zlib/libpng License の翻訳`: http://japan.linux.com/docs/licenses/zlib-license.shtml
 .. _`Gentoo Linux`:                   http://www.gentoo.org/
+.. _`Ubuntu`:                         http://www.ubuntu.com/
 .. _`FreeBSD`:                        http://www.freebsd.org/
 .. _`Mac OSX Tiger`:                  http://www.apple.com/macosx/
 .. _`mod_perl`:                       http://perl.apache.org/
