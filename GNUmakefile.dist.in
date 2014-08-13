@@ -52,11 +52,7 @@ all: dist
 
 dist: TMPDIR := $(shell mktemp -d -t $(PACKAGE).XXXXXX 2>/dev/null)
 dist:
-	svn export . $(TMPDIR)/$(PKGDIR)
-	rm -rf $(TMPDIR)/$(PKGDIR)/pseudo
-	touch -t `date "+%m%d"`0000 `find $(TMPDIR)`
-	tar zcvf $(DISTFILE) -C $(TMPDIR) $(PKGDIR)
-	rm -Rf $(TMPDIR)
+	git archive --prefix $(PKGDIR)/ master | gzip > $(DISTFILE)
 
 dist-sf: DIST_FILE = $(shell ls -t | grep -E 'mod_uploader-.*\.tgz' | head -n 1)
 dist-sf: DIST_VERSION = $(shell echo $(DIST_FILE) | sed 's/mod_uploader-\(.*\)\.tgz/\1/')

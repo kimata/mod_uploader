@@ -32,7 +32,7 @@ AC_PREREQ(2.59)
 ###############################################################################
 # パッケージ
 AC_COPYRIGHT([Copyright (C) 2006-2009 Tetsuya Kimata. All Rights Reserved.])
-AC_INIT([mod_uploader],[3.1.1],[kimata@acapulco.dyndns.org])
+AC_INIT([mod_uploader],[3.2.0],[kimata@acapulco.dyndns.org])
 AC_REVISION($Revision$)
 
 AC_CONFIG_AUX_DIR(build)

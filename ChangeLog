@@ -1,3 +1,9 @@
+2014-08-13  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
+
+	* : Support Apache 2.4.x or higher.
+
+	* : Add Access-Control-Allow-Origin header.
+
 2009-01-10  Tetsuya Kimata  <kimata@acapulco.dyndns.org>
 
 	* tmpl/index.htm.in: Add feature: file extension selection.
