@@ -102,13 +102,13 @@ void get_upload_param(apr_pool_t *pool, apr_array_header_t *content_array,
     *file_temp_path = file_content->file.temp_path;
 
     *comment = is_text_content(comment_content) ?
-        *comment = comment_content->text : "";
+        comment_content->text : "";
     *remove_pass = is_text_content(remove_pass_content) ?
-        *remove_pass = remove_pass_content->text : "";
+        remove_pass_content->text : "";
     *download_pass = is_text_content(download_pass_content) ?
-        *download_pass = download_pass_content->text : "";
+        download_pass_content->text : "";
     *code_pat = is_text_content(code_pat_content) ?
-        *code_pat = code_pat_content->text : "";
+        code_pat_content->text : "";
 }
 
 template<class R>

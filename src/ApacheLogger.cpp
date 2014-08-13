@@ -37,6 +37,10 @@
 
 SOURCE_INFO_ADD("$Id: ApacheLogger.cpp 2756 2007-12-11 10:57:59Z svn $");
 
+#ifdef APLOG_USE_MODULE
+APLOG_USE_MODULE(uploader);
+#endif
+
 ApacheLogger logger;
 
 ////////// Apache 1.x 用 //////////////////////////////////////////////
@@ -47,8 +51,16 @@ ApacheLogger logger;
     ap_log_rerror(file, line, level, r_wrapper->r, fmt, __VA_ARGS__)
 ////////// Apache 2.x 用 //////////////////////////////////////////////
 #else
+#ifdef AP_SERVER_VERSION_2_4_OR_HIGHER
+
+#define AP_LOG_ERROR(file, line, level, status, s, fmt, ...)   \
+    ap_log_error(file, line, APLOG_MODULE_INDEX, level, status, s, fmt, __VA_ARGS__)
+#define AP_LOG_RERROR(file, line, level, status, r, fmt, ...)   \
+    ap_log_rerror(file, line, APLOG_MODULE_INDEX, level, status, r, fmt, __VA_ARGS__)
+#else
 #define AP_LOG_ERROR ap_log_error
 #define AP_LOG_RERROR ap_log_rerror
+#endif
 #endif
 ///////////////////////////////////////////////////////////////////////
 

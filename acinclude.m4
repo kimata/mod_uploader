@@ -36,7 +36,7 @@ else
     CFLAGS_OLD=$CFLAGS
     CFLAGS="-mcpu=$MCPU"
     AC_LANG(C)
-    AC_COMPILE_IFELSE([int i = 0;], , [MCPU='no'])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i = 0;])], , [MCPU='no'])
     if test "$MCPU" = no; then
         AC_MSG_RESULT([ignored])
     else
@@ -59,7 +59,7 @@ else
     CFLAGS_OLD=$CFLAGS
     CFLAGS="$CFLAGS -march=$MARCH"
     AC_LANG(C)
-    AC_COMPILE_IFELSE([int i = 0;], , [MARCH='no'])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i = 0;])], , [MARCH='no'])
     if test "$MARCH" = no; then
         AC_MSG_RESULT([ignored])
     else
@@ -132,8 +132,12 @@ if test "$APACHE_MAJOR_VERSION" = $APACHE_REQ_VERSION; then
     else
         if test "$APACHE_MINOR_VERSION" = 0; then
             ACCESS_MODULE_NAME=access
+        elif test "$APACHE_MINOR_VERSION" -lt 4; then
+	     echo $APACHE_MINOR_VERSION
+	    ACCESS_MODULE_NAME=authz_host
         else
-            ACCESS_MODULE_NAME=authz_host
+            ACCESS_MODULE_NAME=authz_core
+            ACCESS_PERMISSION="Require all granted"
         fi
     fi
 else
@@ -143,6 +147,7 @@ AC_SUBST(APXS)
 AC_SUBST(APACHE_BIN)
 AC_SUBST(APACHE_VERSION)
 AC_SUBST(ACCESS_MODULE_NAME)
+AC_SUBST(ACCESS_PERMISSION)
 ])
 
 AC_DEFUN([AC_CHECK_APACHE_MOD_DSO], [

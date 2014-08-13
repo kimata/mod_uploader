@@ -83,8 +83,10 @@ function setProgresssInfo(text)
 function updateProgress()
 {
     var progress;
+    var now;
 
-    progress = getProgress(uploaderURL + '/progress_data/' + uploadID);
+    now = new Date();
+    progress = getProgress(uploaderURL + '/progress_data/' + uploadID + '?' + now.getTime());
 
     if (progress == null) {
         if (++failCount > 10) {

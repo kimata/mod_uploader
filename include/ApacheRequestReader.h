@@ -29,7 +29,10 @@
 #define APACHE_REQUEST_READER_H
 
 #include "httpd.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
 #include "http_protocol.h"
+#pragma GCC diagnostic pop
 #include "http_request.h"
 
 #include "Environment.h"

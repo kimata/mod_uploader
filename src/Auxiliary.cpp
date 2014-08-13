@@ -442,7 +442,7 @@ const char *strnchr(const char *s, size_t length, int c)
         }
     }
 
-    word_pos = reinterpret_cast<const unsigned long *>(AVOID_ALIGN_WARN pos);
+    word_pos = reinterpret_cast<const unsigned long *>(AVOID_ALIGN_WARN const_cast<char *>(pos));
 
     if (sizeof(long) == 4) {
         magic = 0x7EFEFEFFL;

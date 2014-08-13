@@ -135,7 +135,7 @@ void RFC2822Parser<R, W>::get_content(content_t *content)
         DUMP_INPUT_AND_THROW(MESSAGE_RFC2822_FORMAT_INVALID);
     }
 
-    if (!start_with(M::buffer_.get_data(), M::CR_LF)) {
+    if (!M::start_with(M::buffer_.get_data(), M::CR_LF)) {
         DUMP_INPUT_AND_THROW(MESSAGE_RFC2822_FORMAT_INVALID);
     }
 
@@ -143,7 +143,7 @@ void RFC2822Parser<R, W>::get_content(content_t *content)
 
     content_type = get_one_header();
 
-    if (!start_with(content_type, M::CONTENT_TYPE)) {
+    if (!M::start_with(content_type, M::CONTENT_TYPE)) {
         DUMP_INPUT_AND_THROW(MESSAGE_RFC2822_FORMAT_INVALID);
     }
 
@@ -155,8 +155,8 @@ void RFC2822Parser<R, W>::get_content(content_t *content)
         content->file.mime = AS_CONST_CHAR
             (apr_pstrmemdup(M::pool_, content_type+strlen(M::CONTENT_TYPE),
                             start-content_type-strlen(M::CONTENT_TYPE)));
-        start = get_param(start, content_type+strlen(content_type),
-                          M::NAME_PARAM, &(content->file.name));
+        start = M::get_param(start, content_type+strlen(content_type),
+			     M::NAME_PARAM, &(content->file.name));
     }
 
     content->name = "";
@@ -177,12 +177,12 @@ void RFC2822Parser<R, W>::skip_header()
 {
     // 残りのヘッダを読み飛ばす
     while ((M::fill() != 0) || (M::buffer_.get_size() != 0)) {
-        if (start_with(M::buffer_.get_data(), M::CR_LF)) {
+        if (M::start_with(M::buffer_.get_data(), M::CR_LF)) {
             M::buffer_.erase(strlen(M::CR_LF));
             return;
         }
 
-        M::buffer_.erase(skip_line(M::buffer_.get_data()) -
+        M::buffer_.erase(M::skip_line(M::buffer_.get_data()) -
                          M::buffer_.get_data());
     }
 
@@ -229,21 +229,21 @@ void RFC2822Parser<R, W>::parse_header()
     content_type = NULL;
     content_type_end = NULL;
     while ((M::fill() != 0) || (M::buffer_.get_size() != 0)) {
-        if (start_with(M::buffer_.get_data(), M::CR_LF)) {
+        if (M::start_with(M::buffer_.get_data(), M::CR_LF)) {
             // ヘッダの終わり
             THROW(MESSAGE_RFC2822_HEADER_INVALID);
         }
 
-        if (start_with(M::buffer_.get_data(), M::CONTENT_TYPE)) {
+        if (M::start_with(M::buffer_.get_data(), M::CONTENT_TYPE)) {
             if (content_type == NULL)  {
                 content_type = M::buffer_.get_data();
-                content_type_end = skip_line(M::buffer_.get_data()) -
+                content_type_end = M::skip_line(M::buffer_.get_data()) -
                     strlen(M::CR_LF);
                 break;
             }
         }
 
-        start = skip_line(M::buffer_.get_data());
+        start = M::skip_line(M::buffer_.get_data());
         M::buffer_.erase(start - M::buffer_.get_data());
     }
 
@@ -252,8 +252,8 @@ void RFC2822Parser<R, W>::parse_header()
     }
 
     start = M::skip(content_type + strlen(M::CONTENT_TYPE), MULTIPART_MIXED);
-    if (get_param(start, content_type_end, M::BOUNDARY_PARAM,
-                  &boundary) == NULL) {
+    if (M::get_param(start, content_type_end, M::BOUNDARY_PARAM,
+		     &boundary) == NULL) {
         THROW(MESSAGE_RFC2822_CONTENT_TYPE_INVALID);
     }
 

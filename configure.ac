@@ -159,11 +159,13 @@ AC_PATH_PROG(LSB_RELEASE,   lsb_release,    lsb_release)
 UNAME=`uname`
 HOSTNAME=`hostname`
 USER=`whoami`
+GROUP=`groups | cut -d ' ' -f 1`
 PWD=`pwd`
 LIBEXECDIR=`$APXS -q LIBEXECDIR`
 
 AC_SUBST(PWD)
 AC_SUBST(USER)
+AC_SUBST(GROUP)
 AC_SUBST(HOSTNAME)
 AC_SUBST(LIBEXECDIR)
 

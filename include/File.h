@@ -432,6 +432,10 @@ public:
 
         status = apr_stat(&info, path, APR_FINFO_TYPE|APR_FINFO_UPROT, pool);
 
+	if (APR_STATUS_IS_ENOSTAT(status)) {
+	    return false;
+	}
+
         if (info.filetype & APR_DIR) { // ディレクトリ
             return ((info.protection & (APR_UREAD|APR_UWRITE|APR_UEXECUTE)) ==
                     (APR_UREAD|APR_UWRITE|APR_UEXECUTE));

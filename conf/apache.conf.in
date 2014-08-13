@@ -33,10 +33,11 @@ ServerRoot                      @PWD@
 
 PidFile                         log/apache.pid
 
-Listen                          8080
+Listen                          8888
 ServerName                      @HOSTNAME@
 DocumentRoot                    @PWD@
 User                            @USER@
+Group                           @GROUP@
 
 ErrorLog                        log/apache.error_log
 LogLevel                        debug
@@ -44,6 +45,9 @@ LogLevel                        debug
 ServerTokens                    full
 ServerSignature                 on
 
+<IfModule !mpm_prefork.c>
+LoadModule mpm_prefork_module   @LIBEXECDIR@/mod_mpm_prefork.so
+</IfModule>
 <IfModule !mod_mime.c>
 LoadModule mime_module          @LIBEXECDIR@/mod_mime.so
 </IfModule>
@@ -67,7 +71,9 @@ LoadModule uploader_module      @PWD@/src/mod_uploader.so
 <Location /up>
     SetHandler                      uploader
 
-    UploaderBaseUrl                 "http://@HOSTNAME@:8080/up"
+    @ACCESS_PERMISSION@
+
+    UploaderBaseUrl                 "http://@HOSTNAME@:8888/up"
     UploaderDataDirectory           "@PWD@/test/data"
     UploaderFileDirectory           "@PWD@/test/file"
     UploaderThumbDirectory          "@PWD@/test/thumb"
@@ -85,19 +91,6 @@ LoadModule uploader_module      @PWD@/src/mod_uploader.so
     UploaderThumbnailViewTemplate   "@PWD@/tmpl/thumbnail.htm"
     UploaderAdminViewTemplate       "@PWD@/tmpl/admin.htm"
     UploaderErrorViewTemplate       "@PWD@/tmpl/error.htm"
-</Location>
-
-<Location /up/mail>
-    Order                   Deny,Allow
-    Deny                    From All
-    Allow                   From 127.0.0.1
-</Location>
-
-<Location /up/admin>
-    Order                   Deny,Allow
-    Deny                    From All
-    Allow                   From 127.0.0.1
-    Allow                   From 192.168.2. # LAN мя
 </Location>
 
 Alias   /up_img     "@PWD@/img"
