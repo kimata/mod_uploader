@@ -27,9 +27,11 @@
 
 ###############################################################################
 # 基本設定
+SHELL=/bin/bash
+
 top_builddir:= ..
 
-ifneq ($(WITH_COLOR),)
+ifeq ($(WITH_PLAIN),)
 CR_LB       := \033[1;34m
 CR_LC       := \033[1;36m
 CR_LG       := \033[1;32m
@@ -180,7 +182,7 @@ $(HEADERDIR)/Environment.h.gch: $(wildcard $(HEADERDIR)/*.h)
 	@touch $@
 
 $(HEADERDIR)/MessageJA.h: $(HEADERDIR)/MessageJA.h.in
-	@echo -e "$(CR_NC)Generating $(CR_LC)$<$(CR_ED)"
+	@echo "$(CR_NC)Generating $(CR_LC)$<$(CR_ED)"
 	../util/unpack_literal.pl < $< > $@
 
 ###############################################################################
@@ -202,10 +204,10 @@ include GNUmakefile.cln
 
 clean-sem: # 取扱注意
 	@if [ $$USER = root ]; then \
-		echo -e "$(CR_LR)root can not exec clean-sem. it's dangerous.$(CR_ED)"; \
+		echo "$(CR_LR)root can not exec clean-sem. it's dangerous.$(CR_ED)"; \
 		exit -1; \
 	fi
-	@echo -e "$(CR_LG)Remove all semaphores. OK? [N/y]$(CR_ED)"; \
+	@echo "$(CR_LG)Remove all semaphores. OK? [N/y]$(CR_ED)"; \
 	read answer; \
 	if [ $$answer == 'y' -o $$answer == 'Y' ]; then \
 		for i in `@IPCS@ -s | @GREP@ $$USER | @AWK@ '{print $$2}' | \
@@ -237,16 +239,16 @@ endif
 %.test$(EXE_EXT): LDFLAGS += $(DEBUG_OPT) -pg
 
 %.s: %.cpp $(HEADERDIR)/%.h
-	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	@echo "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
 	$(CXX_ORIG) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
 %.s: %.cpp
-	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	@echo "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
 	$(CXX_ORIG) $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
 %.test$(EXE_EXT).s: %.cpp $(HEADERDIR)/%.h
-	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	@echo "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
 	$(CXX_ORIG) -DDEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
 %.test$(EXE_EXT).s: %.cpp
-	@echo -e "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
+	@echo "$(CR_NC)Compiling $(CR_LC)$<$(CR_ED)"
 	$(CXX_ORIG) -DDEBUG_$* $(DEFS) $(NOLINK_OPT) $(INCLUDES) $(CXXFLAGS) -S $(OUT_OPT) $@ $<
 
 %.svg: %.dot

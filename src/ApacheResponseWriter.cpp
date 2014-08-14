@@ -28,7 +28,10 @@
 // Apache の config.h を先に処理させるため，util_filter.h の
 // インクルードはこの位置
 #include "httpd.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
 #include "http_protocol.h"
+#pragma GCC diagnostic pop
 
 #include "Environment.h"
 
