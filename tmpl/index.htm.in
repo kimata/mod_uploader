@@ -58,7 +58,7 @@
    {
        var disabled = false;
 
-       if ("@ENPTY_COMMENT@" != "on") {
+       if ("@EMPTY_COMMENT@" != "on") {
            disabled |= (document.getElementById('upload_comment').value.length == 0);
        }
 
